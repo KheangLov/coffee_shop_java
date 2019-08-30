@@ -6,9 +6,16 @@
 package coffee_shop_java.project;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
@@ -87,12 +94,12 @@ public class LoginForm extends javax.swing.JFrame {
         });
         jpanelBackground.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 40, -1));
 
-        jtxtUsername.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
+        jtxtUsername.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtUsername.setForeground(new java.awt.Color(255, 255, 255));
         jtxtUsername.setBorder(null);
         jpanelBackground.add(jtxtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 340, 40));
 
-        jtxtPass.setFont(new java.awt.Font("Agency FB", 0, 18)); // NOI18N
+        jtxtPass.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtPass.setForeground(new java.awt.Color(255, 255, 255));
         jtxtPass.setBorder(null);
         jpanelBackground.add(jtxtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, 340, 40));
@@ -160,26 +167,31 @@ public class LoginForm extends javax.swing.JFrame {
         String username = jtxtUsername.getText().trim();
         String password = String.valueOf(jtxtPass.getPassword()).trim();
 
-        String sql = "SELECT * FROM `users` WHERE LOWER(fullname) = ? AND password = ?";
+        if(username.equals("") || password.equals("")) {
+            JOptionPane.showMessageDialog(null, "Username and password can't be blank!");
+            jtxtUsername.requestFocus();
+        } else {
+            String sql = "SELECT * FROM `users` WHERE LOWER(fullname) = ? AND password = ?";
 
-        try {
-            st = DbConn.getConnection().prepareStatement(sql);
-            st.setString(1, username);
-            st.setString(2, password);
-            rs = st.executeQuery();
+            try {
+                st = DbConn.getConnection().prepareStatement(sql);
+                st.setString(1, username.toLowerCase());
+                st.setString(2, PasswordEncryption.MD5(password));
+                rs = st.executeQuery();
 
-            if(rs.next()) {
-                MainForm main = new MainForm();
-                main.setVisible(true);
-                this.setVisible(false);
-            } else {
-                JOptionPane.showMessageDialog(null, "Wrong username or password!");
-                jtxtPass.setText("");
-                jtxtUsername.setText("");
-                jtxtUsername.requestFocus();
+                if(rs.next()) {
+                    MainForm main = new MainForm();
+                    main.setVisible(true);
+                    this.setVisible(false);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Wrong username or password!");
+                    jtxtPass.setText("");
+                    jtxtUsername.setText("");
+                    jtxtUsername.requestFocus();
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
         }
     }//GEN-LAST:event_jbtnLoginActionPerformed
 

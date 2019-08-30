@@ -393,7 +393,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JPasswordField" name="jtxtPass">
+        <Component class="javax.swing.JPasswordField" name="jtxtConPass">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Agency FB" size="18" style="1"/>
@@ -411,7 +411,7 @@
             </Constraint>
           </Constraints>
         </Component>
-        <Component class="javax.swing.JPasswordField" name="jtxtConPass">
+        <Component class="javax.swing.JPasswordField" name="jtxtPass">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Agency FB" size="18" style="1"/>

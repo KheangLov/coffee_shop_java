@@ -6,8 +6,12 @@
 package coffee_shop_java.project;
 
 import java.awt.Color;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,11 +26,11 @@ public class RegisterForm extends javax.swing.JFrame {
         initComponents();
         jbtnExit.setBackground(new Color(0, 0, 0, 0));
         jbtnLogin.setBackground(new Color(0, 0, 0, 0));
-        jtxtConPass.setBackground(new Color(0, 0, 0, 0));
+        jtxtPass.setBackground(new Color(0, 0, 0, 0));
         jtxtEmail.setBackground(new Color(0, 0, 0, 0));
         jtxtFirstname.setBackground(new Color(0, 0, 0, 0));
         jtxtLastname.setBackground(new Color(0, 0, 0, 0));
-        jtxtPass.setBackground(new Color(0, 0, 0, 0));
+        jtxtConPass.setBackground(new Color(0, 0, 0, 0));
     }
 
     /**
@@ -63,8 +67,8 @@ public class RegisterForm extends javax.swing.JFrame {
         jtxtEmail = new javax.swing.JTextField();
         jSeparator8 = new javax.swing.JSeparator();
         jSeparator9 = new javax.swing.JSeparator();
-        jtxtPass = new javax.swing.JPasswordField();
         jtxtConPass = new javax.swing.JPasswordField();
+        jtxtPass = new javax.swing.JPasswordField();
         jcomboStatus = new javax.swing.JComboBox<>();
         jcomboGender = new javax.swing.JComboBox<>();
         jcomboAdmin = new javax.swing.JComboBox<>();
@@ -175,15 +179,15 @@ public class RegisterForm extends javax.swing.JFrame {
         jSeparator9.setPreferredSize(new java.awt.Dimension(50, 20));
         jPanel1.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 440, 440, 20));
 
-        jtxtPass.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
-        jtxtPass.setForeground(new java.awt.Color(255, 255, 255));
-        jtxtPass.setBorder(null);
-        jPanel1.add(jtxtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 230, 340, 40));
-
         jtxtConPass.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
         jtxtConPass.setForeground(new java.awt.Color(255, 255, 255));
         jtxtConPass.setBorder(null);
-        jPanel1.add(jtxtConPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 230, 340, 40));
+        jPanel1.add(jtxtConPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 230, 340, 40));
+
+        jtxtPass.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
+        jtxtPass.setForeground(new java.awt.Color(255, 255, 255));
+        jtxtPass.setBorder(null);
+        jPanel1.add(jtxtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 230, 340, 40));
 
         jcomboStatus.setFont(new java.awt.Font("Agency FB", 0, 18)); // NOI18N
         jcomboStatus.setForeground(new java.awt.Color(255, 255, 255));
@@ -246,6 +250,8 @@ public class RegisterForm extends javax.swing.JFrame {
 
     private void jbtnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRegisterActionPerformed
         // TODO add your handling code here:
+        PreparedStatement st;
+        ResultSet rs;
         String firstname = jtxtFirstname.getText().trim();
         String lastname = jtxtLastname.getText().trim();
         String fullname = firstname + lastname;
@@ -258,25 +264,64 @@ public class RegisterForm extends javax.swing.JFrame {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String date = dtf.format(now).trim();
-        myUser.setFirstname(firstname);
-        myUser.setLastname(lastname);
-        myUser.setFullname(fullname);
-        myUser.setEmail(email);
-        myUser.setPassword(password);
-        myUser.setStatus(status);
-        myUser.setGender(gender);
-        myUser.setUserType(userType);
-        myUser.setCreatedDate(date);
-        myUser.setUpdatedDate(date);
-        myUser.insert();
-        jtxtConPass.setText("");
-        jtxtEmail.setText("");
-        jtxtFirstname.setText("");
-        jtxtLastname.setText("");
-        jtxtPass.setText("");
-        jcomboAdmin.setSelectedIndex(0);
-        jcomboGender.setSelectedIndex(0);
-        jcomboStatus.setSelectedIndex(0);
+        if(firstname.equals("") || lastname.equals("") || email.equals("") || password.equals("") || conPassword.equals("")) {
+            JOptionPane.showMessageDialog(null, "Please input the required fields!");
+        } else {
+            Boolean checkExist = false;
+            String sql = "SELECT * FROM `users` WHERE LOWER(fullname) = ?";
+            try {
+                st = DbConn.getConnection().prepareStatement(sql);
+                st.setString(1, fullname.toLowerCase());
+                rs = st.executeQuery();
+                if(rs.next()) {
+                    checkExist = true;
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+            if(checkExist.equals(true)) {
+                JOptionPane.showMessageDialog(null, "User already exist!");
+                checkExist = false;
+                jtxtPass.setText("");
+                jtxtEmail.setText("");
+                jtxtFirstname.setText("");
+                jtxtLastname.setText("");
+                jtxtConPass.setText("");
+                jcomboAdmin.setSelectedIndex(0);
+                jcomboGender.setSelectedIndex(0);
+                jcomboStatus.setSelectedIndex(0);
+                jtxtFirstname.requestFocus();
+            } else {
+                if(!password.equals(conPassword)) {
+                    JOptionPane.showMessageDialog(null, "Password and Confirm Password does not match!");
+                    jtxtConPass.setText("");
+                    jtxtPass.setText("");
+                    jtxtConPass.requestFocus();
+                } else {
+                    String hashedPass = PasswordEncryption.MD5(password);
+                    myUser.setFirstname(firstname);
+                    myUser.setLastname(lastname);
+                    myUser.setFullname(fullname);
+                    myUser.setEmail(email);
+                    myUser.setPassword(hashedPass);
+                    myUser.setStatus(status);
+                    myUser.setGender(gender);
+                    myUser.setUserType(userType);
+                    myUser.setCreatedDate(date);
+                    myUser.setUpdatedDate(date);
+                    myUser.insert();
+                    jtxtPass.setText("");
+                    jtxtEmail.setText("");
+                    jtxtFirstname.setText("");
+                    jtxtLastname.setText("");
+                    jtxtConPass.setText("");
+                    jcomboAdmin.setSelectedIndex(0);
+                    jcomboGender.setSelectedIndex(0);
+                    jcomboStatus.setSelectedIndex(0);
+                    jtxtFirstname.requestFocus();
+                }
+            }
+        }
     }//GEN-LAST:event_jbtnRegisterActionPerformed
 
     /**
