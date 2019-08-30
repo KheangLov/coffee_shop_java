@@ -112,7 +112,7 @@ public class RegisterForm extends javax.swing.JFrame {
         jlblFirstname.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/user_48px.png"))); // NOI18N
         jPanel1.add(jlblFirstname, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 140, -1, 50));
 
-        jtxtFirstname.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
+        jtxtFirstname.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtFirstname.setForeground(new java.awt.Color(255, 255, 255));
         jtxtFirstname.setBorder(null);
         jPanel1.add(jtxtFirstname, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 340, 40));
@@ -246,7 +246,7 @@ public class RegisterForm extends javax.swing.JFrame {
         jlblLastname.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/user_48px.png"))); // NOI18N
         jPanel1.add(jlblLastname, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 140, -1, 50));
 
-        jtxtLastname.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
+        jtxtLastname.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtLastname.setForeground(new java.awt.Color(255, 255, 255));
         jtxtLastname.setBorder(null);
         jPanel1.add(jtxtLastname, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 150, 340, 40));
@@ -267,32 +267,32 @@ public class RegisterForm extends javax.swing.JFrame {
         jlblEmail.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/message_48px.png"))); // NOI18N
         jPanel1.add(jlblEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 300, -1, 50));
 
-        jtxtEmail.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
+        jtxtEmail.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtEmail.setForeground(new java.awt.Color(255, 255, 255));
         jtxtEmail.setBorder(null);
         jPanel1.add(jtxtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 310, 340, 40));
 
-        jtxtConPass.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
+        jtxtConPass.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtConPass.setForeground(new java.awt.Color(255, 255, 255));
         jtxtConPass.setBorder(null);
         jPanel1.add(jtxtConPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 230, 340, 40));
 
-        jtxtPass.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
+        jtxtPass.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtPass.setForeground(new java.awt.Color(255, 255, 255));
         jtxtPass.setBorder(null);
         jPanel1.add(jtxtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 230, 340, 40));
 
-        jcomboStatus.setFont(new java.awt.Font("Agency FB", 0, 18)); // NOI18N
+        jcomboStatus.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jcomboStatus.setForeground(new java.awt.Color(255, 255, 255));
         jcomboStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
         jPanel1.add(jcomboStatus, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 390, 340, 40));
 
-        jcomboGender.setFont(new java.awt.Font("Agency FB", 0, 18)); // NOI18N
+        jcomboGender.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jcomboGender.setForeground(new java.awt.Color(255, 255, 255));
         jcomboGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
         jPanel1.add(jcomboGender, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 310, 340, 40));
 
-        jcomboAdmin.setFont(new java.awt.Font("Agency FB", 0, 18)); // NOI18N
+        jcomboAdmin.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jcomboAdmin.setForeground(new java.awt.Color(255, 255, 255));
         jcomboAdmin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Superadmin", "Non-Superadmin" }));
         jPanel1.add(jcomboAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 390, 340, 40));
