@@ -46,16 +46,17 @@ public class LoginForm extends javax.swing.JFrame {
         jlblForm = new javax.swing.JLabel();
         jlblLogo = new javax.swing.JLabel();
         jbtnReg = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JSeparator();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         jbtnExit = new javax.swing.JButton();
         jtxtUsername = new javax.swing.JTextField();
         jtxtPass = new javax.swing.JPasswordField();
-        jSeparator1 = new javax.swing.JSeparator();
-        jSeparator2 = new javax.swing.JSeparator();
+        jPanel4 = new javax.swing.JPanel();
         jbtnLogin = new javax.swing.JButton();
         jlblPass = new javax.swing.JLabel();
         jlblUser = new javax.swing.JLabel();
         jBackground = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -79,7 +80,36 @@ public class LoginForm extends javax.swing.JFrame {
             }
         });
         jpanelBackground.add(jbtnReg, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, -1, -1));
-        jpanelBackground.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 390, 70, 10));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jpanelBackground.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, 440, 3));
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jpanelBackground.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 440, 3));
 
         jbtnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/delete_sign_32px.png"))); // NOI18N
         jbtnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -99,12 +129,20 @@ public class LoginForm extends javax.swing.JFrame {
         jtxtPass.setBorder(null);
         jpanelBackground.add(jtxtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, 340, 40));
 
-        jSeparator1.setPreferredSize(new java.awt.Dimension(50, 20));
-        jpanelBackground.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 320, 440, -1));
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
-        jSeparator2.setMinimumSize(new java.awt.Dimension(2, 2));
-        jSeparator2.setPreferredSize(new java.awt.Dimension(50, 20));
-        jpanelBackground.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 440, 20));
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 70, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jpanelBackground.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 390, 70, 3));
 
         jbtnLogin.setBackground(new java.awt.Color(50, 50, 50));
         jbtnLogin.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
@@ -127,6 +165,21 @@ public class LoginForm extends javax.swing.JFrame {
 
         jBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/Artboard 1.png"))); // NOI18N
         jpanelBackground.add(jBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 460));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jpanelBackground.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 440, 3));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -238,9 +291,10 @@ public class LoginForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jBackground;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JButton jbtnExit;
     private javax.swing.JButton jbtnLogin;
     private javax.swing.JButton jbtnReg;

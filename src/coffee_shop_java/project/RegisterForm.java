@@ -45,35 +45,36 @@ public class RegisterForm extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jbtnLogin = new javax.swing.JButton();
-        jSeparator10 = new javax.swing.JSeparator();
         jbtnExit = new javax.swing.JButton();
         jlblReg = new javax.swing.JLabel();
         jlblLogo = new javax.swing.JLabel();
         jlblFirstname = new javax.swing.JLabel();
         jtxtFirstname = new javax.swing.JTextField();
-        jSeparator2 = new javax.swing.JSeparator();
-        jSeparator3 = new javax.swing.JSeparator();
+        jPanel9 = new javax.swing.JPanel();
+        jPanel8 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         jlblPass = new javax.swing.JLabel();
-        jSeparator4 = new javax.swing.JSeparator();
-        jSeparator5 = new javax.swing.JSeparator();
         jlblConPass = new javax.swing.JLabel();
         jlblLastname = new javax.swing.JLabel();
         jtxtLastname = new javax.swing.JTextField();
         jlblGender = new javax.swing.JLabel();
-        jSeparator6 = new javax.swing.JSeparator();
         jlblUserType = new javax.swing.JLabel();
         jSeparator7 = new javax.swing.JSeparator();
         jlblStatus = new javax.swing.JLabel();
         jlblEmail = new javax.swing.JLabel();
         jtxtEmail = new javax.swing.JTextField();
-        jSeparator8 = new javax.swing.JSeparator();
-        jSeparator9 = new javax.swing.JSeparator();
         jtxtConPass = new javax.swing.JPasswordField();
         jtxtPass = new javax.swing.JPasswordField();
         jcomboStatus = new javax.swing.JComboBox<>();
         jcomboGender = new javax.swing.JComboBox<>();
         jcomboAdmin = new javax.swing.JComboBox<>();
         jbtnRegister = new javax.swing.JButton();
+        jPanel10 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -91,7 +92,6 @@ public class RegisterForm extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jbtnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 500, -1, -1));
-        jPanel1.add(jSeparator10, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 540, 50, 10));
 
         jbtnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/delete_sign_32px.png"))); // NOI18N
         jbtnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -117,24 +117,128 @@ public class RegisterForm extends javax.swing.JFrame {
         jtxtFirstname.setBorder(null);
         jPanel1.add(jtxtFirstname, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 340, 40));
 
-        jSeparator2.setMinimumSize(new java.awt.Dimension(2, 2));
-        jSeparator2.setPreferredSize(new java.awt.Dimension(50, 20));
-        jPanel1.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 440, 20));
+        jPanel9.setBackground(new java.awt.Color(255, 255, 255));
 
-        jSeparator3.setMinimumSize(new java.awt.Dimension(2, 2));
-        jSeparator3.setPreferredSize(new java.awt.Dimension(50, 20));
-        jPanel1.add(jSeparator3, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, 440, 20));
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 440, 440, 3));
+
+        jPanel8.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 440, 440, 3));
+
+        jPanel7.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 360, 440, 3));
+
+        jPanel6.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 360, 440, 3));
+
+        jPanel5.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        jPanel5.setLayout(jPanel5Layout);
+        jPanel5Layout.setHorizontalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel5Layout.setVerticalGroup(
+            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 280, 440, 3));
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 280, 440, 3));
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 200, 440, 3));
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 440, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 200, 440, 3));
 
         jlblPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/lock_48px.png"))); // NOI18N
         jPanel1.add(jlblPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 220, -1, 50));
-
-        jSeparator4.setMinimumSize(new java.awt.Dimension(2, 2));
-        jSeparator4.setPreferredSize(new java.awt.Dimension(50, 20));
-        jPanel1.add(jSeparator4, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 200, 440, 20));
-
-        jSeparator5.setMinimumSize(new java.awt.Dimension(2, 2));
-        jSeparator5.setPreferredSize(new java.awt.Dimension(50, 20));
-        jPanel1.add(jSeparator5, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 280, 440, 20));
 
         jlblConPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/lock_48px.png"))); // NOI18N
         jPanel1.add(jlblConPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 220, -1, 50));
@@ -149,10 +253,6 @@ public class RegisterForm extends javax.swing.JFrame {
 
         jlblGender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/gender_48px.png"))); // NOI18N
         jPanel1.add(jlblGender, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 300, -1, 50));
-
-        jSeparator6.setMinimumSize(new java.awt.Dimension(2, 2));
-        jSeparator6.setPreferredSize(new java.awt.Dimension(50, 20));
-        jPanel1.add(jSeparator6, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 360, 440, 20));
 
         jlblUserType.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/administrator_male_48px.png"))); // NOI18N
         jPanel1.add(jlblUserType, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 380, -1, 50));
@@ -171,14 +271,6 @@ public class RegisterForm extends javax.swing.JFrame {
         jtxtEmail.setForeground(new java.awt.Color(255, 255, 255));
         jtxtEmail.setBorder(null);
         jPanel1.add(jtxtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 310, 340, 40));
-
-        jSeparator8.setMinimumSize(new java.awt.Dimension(2, 2));
-        jSeparator8.setPreferredSize(new java.awt.Dimension(50, 20));
-        jPanel1.add(jSeparator8, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 360, 440, 20));
-
-        jSeparator9.setMinimumSize(new java.awt.Dimension(2, 2));
-        jSeparator9.setPreferredSize(new java.awt.Dimension(50, 20));
-        jPanel1.add(jSeparator9, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 440, 440, 20));
 
         jtxtConPass.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
         jtxtConPass.setForeground(new java.awt.Color(255, 255, 255));
@@ -216,6 +308,21 @@ public class RegisterForm extends javax.swing.JFrame {
             }
         });
         jPanel1.add(jbtnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(889, 490, 140, 60));
+
+        jPanel10.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 50, Short.MAX_VALUE)
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jPanel1.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 540, 50, 3));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -361,15 +468,16 @@ public class RegisterForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JSeparator jSeparator10;
-    private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator4;
-    private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JSeparator jSeparator7;
-    private javax.swing.JSeparator jSeparator8;
-    private javax.swing.JSeparator jSeparator9;
     private javax.swing.JButton jbtnExit;
     private javax.swing.JButton jbtnLogin;
     private javax.swing.JButton jbtnRegister;
