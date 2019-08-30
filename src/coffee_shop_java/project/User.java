@@ -112,8 +112,8 @@ public class User extends Action {
     
     @Override
     public void insert() {
-        String sql = "INSERT INTO users(firstname, lastname, fullname, email, password, gender, status, user_type, created_date, updated_date)"
-                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users(firstname, lastname, fullname, email, password, gender, status, user_type, login_count, created_date, updated_date)"
+                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             stmt = anotherformlogin.DbConn.getConnection().prepareStatement(sql);
             stmt.setString(1, firstname);
@@ -124,8 +124,9 @@ public class User extends Action {
             stmt.setString(6, gender);
             stmt.setString(7, status);
             stmt.setInt(8, user_type);
-            stmt.setString(9, created_date);
-            stmt.setString(10, updated_date);
+            stmt.setInt(9, 0);
+            stmt.setString(10, created_date);
+            stmt.setString(11, updated_date);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 JOptionPane.showMessageDialog(null, "Data saved!");
