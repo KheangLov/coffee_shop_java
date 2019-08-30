@@ -269,6 +269,14 @@ public class RegisterForm extends javax.swing.JFrame {
         myUser.setCreatedDate(date);
         myUser.setUpdatedDate(date);
         myUser.insert();
+        jtxtConPass.setText("");
+        jtxtEmail.setText("");
+        jtxtFirstname.setText("");
+        jtxtLastname.setText("");
+        jtxtPass.setText("");
+        jcomboAdmin.setSelectedIndex(0);
+        jcomboGender.setSelectedIndex(0);
+        jcomboStatus.setSelectedIndex(0);
     }//GEN-LAST:event_jbtnRegisterActionPerformed
 
     /**

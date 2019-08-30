@@ -22,6 +22,7 @@ public class LoginForm extends javax.swing.JFrame {
      */
     public LoginForm() {
         initComponents();
+        jtxtUsername.requestFocus();
         jtxtUsername.setBackground(new Color(0, 0, 0, 0));
         jtxtPass.setBackground(new Color(0, 0, 0, 0));
         jbtnExit.setBackground(new Color(0, 0, 0, 0));
@@ -123,7 +124,7 @@ public class LoginForm extends javax.swing.JFrame {
         jpanelBackground.add(jlblUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, -1, 50));
 
         jBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/Artboard 1.png"))); // NOI18N
-        jpanelBackground.add(jBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 650, 460));
+        jpanelBackground.add(jBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 460));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -173,6 +174,9 @@ public class LoginForm extends javax.swing.JFrame {
                 this.setVisible(false);
             } else {
                 JOptionPane.showMessageDialog(null, "Wrong username or password!");
+                jtxtPass.setText("");
+                jtxtUsername.setText("");
+                jtxtUsername.requestFocus();
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
