@@ -35,6 +35,7 @@ public class MainForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jbtnExit = new javax.swing.JButton();
         jbtnLogout = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -45,7 +46,7 @@ public class MainForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Agency FB", 1, 56)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Main Form");
-        jpanelBackground.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 70, -1, -1));
+        jpanelBackground.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 70, -1, -1));
 
         jbtnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/delete_sign_32px.png"))); // NOI18N
         jbtnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -53,7 +54,7 @@ public class MainForm extends javax.swing.JFrame {
                 jbtnExitActionPerformed(evt);
             }
         });
-        jpanelBackground.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1070, 10, 40, -1));
+        jpanelBackground.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1060, 10, 40, -1));
 
         jbtnLogout.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
         jbtnLogout.setForeground(new java.awt.Color(255, 255, 255));
@@ -66,6 +67,11 @@ public class MainForm extends javax.swing.JFrame {
         });
         jpanelBackground.add(jbtnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, -1, -1));
 
+        jLabel2.setFont(new java.awt.Font("Agency FB", 1, 56)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setText("Welcome to Coffee Shop Management System.");
+        jpanelBackground.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 210, 860, 200));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -74,7 +80,7 @@ public class MainForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpanelBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jpanelBackground, javax.swing.GroupLayout.DEFAULT_SIZE, 480, Short.MAX_VALUE)
         );
 
         pack();
@@ -130,6 +136,7 @@ public class MainForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JButton jbtnExit;
     private javax.swing.JButton jbtnLogout;
     private javax.swing.JPanel jpanelBackground;
