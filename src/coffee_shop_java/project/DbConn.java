@@ -35,7 +35,7 @@ public class DbConn {
         try {
             cnx = dataSource.getConnection();
         } catch (SQLException ex) {
-            Logger.getLogger("Get Connection -> " + anotherformlogin.DbConn.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DbConn.class.getName()).log(Level.SEVERE, null, ex);
         }
         return cnx;
     }

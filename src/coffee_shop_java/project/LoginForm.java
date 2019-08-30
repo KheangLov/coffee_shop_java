@@ -235,7 +235,7 @@ public class LoginForm extends javax.swing.JFrame {
                     String date = dtf.format(now);
                     loginCount++;
                     String update = "UPDATE users SET login_count = ?, last_logged = ? WHERE id = ?";
-                    PreparedStatement stmt = anotherformlogin.DbConn.getConnection().prepareStatement(update);
+                    PreparedStatement stmt = DbConn.getConnection().prepareStatement(update);
                     stmt.setInt(1, loginCount);
                     stmt.setString(2, date);
                     stmt.setInt(3, id);

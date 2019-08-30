@@ -115,7 +115,7 @@ public class User extends Action {
         String sql = "INSERT INTO users(firstname, lastname, fullname, email, password, gender, status, user_type, login_count, created_date, updated_date)"
                 + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
-            stmt = anotherformlogin.DbConn.getConnection().prepareStatement(sql);
+            stmt = DbConn.getConnection().prepareStatement(sql);
             stmt.setString(1, firstname);
             stmt.setString(2, lastname);
             stmt.setString(3, fullname);
