@@ -9,6 +9,8 @@ import java.awt.Color;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 /**
@@ -173,6 +175,19 @@ public class LoginForm extends javax.swing.JFrame {
                 rs = st.executeQuery();
 
                 if(rs.next()) {
+                    int id = rs.getInt("id");
+                    int loginCount = rs.getInt("login_count");
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    String date = dtf.format(now);
+                    loginCount++;
+                    String update = "UPDATE users SET login_count = ?, last_logged = ? WHERE id = ?";
+                    PreparedStatement stmt = anotherformlogin.DbConn.getConnection().prepareStatement(update);
+                    stmt.setInt(1, loginCount);
+                    stmt.setString(2, date);
+                    stmt.setInt(3, id);
+                    stmt.executeUpdate();
+                    
                     MainForm main = new MainForm();
                     main.setVisible(true);
                     this.setVisible(false);

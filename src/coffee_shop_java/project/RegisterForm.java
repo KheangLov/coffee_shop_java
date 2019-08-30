@@ -264,7 +264,7 @@ public class RegisterForm extends javax.swing.JFrame {
         int userType = 0;
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-        String date = dtf.format(now).trim();
+        String date = dtf.format(now);
         if(firstname.equals("") || lastname.equals("") || email.equals("") || password.equals("") || conPassword.equals("")) {
             JOptionPane.showMessageDialog(null, "Please input the required fields!");
             jtxtFirstname.requestFocus();
