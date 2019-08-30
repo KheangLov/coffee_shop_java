@@ -6,16 +6,11 @@
 package coffee_shop_java.project;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
-import java.io.File;
-import java.io.IOException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
 
 /**
@@ -35,7 +30,7 @@ public class LoginForm extends javax.swing.JFrame {
         jbtnExit.setBackground(new Color(0, 0, 0, 0));
         jbtnReg.setBackground(new Color(0, 0, 0, 0));
         jbtnLogin.setBounds(250, 250, 100, 50);
-        jbtnLogin.setBackground(new Color(100, 100, 100));
+        jbtnLogin.setBackground(new Color(104, 179, 200));
     }
 
     /**
@@ -116,7 +111,7 @@ public class LoginForm extends javax.swing.JFrame {
         jbtnLogin.setForeground(new java.awt.Color(255, 255, 255));
         jbtnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/enter_2_32px.png"))); // NOI18N
         jbtnLogin.setText("  Login");
-        jbtnLogin.setBorder(null);
+        jbtnLogin.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jbtnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnLoginActionPerformed(evt);
@@ -180,6 +175,19 @@ public class LoginForm extends javax.swing.JFrame {
                 rs = st.executeQuery();
 
                 if(rs.next()) {
+                    int id = rs.getInt("id");
+                    int loginCount = rs.getInt("login_count");
+                    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+                    LocalDateTime now = LocalDateTime.now();
+                    String date = dtf.format(now);
+                    loginCount++;
+                    String update = "UPDATE users SET login_count = ?, last_logged = ? WHERE id = ?";
+                    PreparedStatement stmt = anotherformlogin.DbConn.getConnection().prepareStatement(update);
+                    stmt.setInt(1, loginCount);
+                    stmt.setString(2, date);
+                    stmt.setInt(3, id);
+                    stmt.executeUpdate();
+                    
                     MainForm main = new MainForm();
                     main.setVisible(true);
                     this.setVisible(false);
