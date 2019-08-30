@@ -24,6 +24,7 @@ public class RegisterForm extends javax.swing.JFrame {
      */
     public RegisterForm() {
         initComponents();
+        jtxtFirstname.requestFocus();
         jbtnExit.setBackground(new Color(0, 0, 0, 0));
         jbtnLogin.setBackground(new Color(0, 0, 0, 0));
         jtxtPass.setBackground(new Color(0, 0, 0, 0));
@@ -98,7 +99,7 @@ public class RegisterForm extends javax.swing.JFrame {
                 jbtnExitActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 20, 40, -1));
+        jPanel1.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 10, 40, -1));
 
         jlblReg.setFont(new java.awt.Font("Agency FB", 1, 48)); // NOI18N
         jlblReg.setForeground(new java.awt.Color(255, 255, 255));
@@ -266,6 +267,7 @@ public class RegisterForm extends javax.swing.JFrame {
         String date = dtf.format(now).trim();
         if(firstname.equals("") || lastname.equals("") || email.equals("") || password.equals("") || conPassword.equals("")) {
             JOptionPane.showMessageDialog(null, "Please input the required fields!");
+            jtxtFirstname.requestFocus();
         } else {
             Boolean checkExist = false;
             String sql = "SELECT * FROM `users` WHERE LOWER(fullname) = ?";
