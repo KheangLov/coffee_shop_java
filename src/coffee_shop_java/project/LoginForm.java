@@ -27,7 +27,8 @@ public class LoginForm extends javax.swing.JFrame {
         jtxtPass.setBackground(new Color(0, 0, 0, 0));
         jbtnExit.setBackground(new Color(0, 0, 0, 0));
         jbtnReg.setBackground(new Color(0, 0, 0, 0));
-        jbtnLogin.setBackground(new Color(38, 38, 38, 255));
+        jbtnLogin.setBounds(250, 250, 100, 50);
+        jbtnLogin.setBackground(new Color(100, 100, 100));
     }
 
     /**
@@ -56,7 +57,6 @@ public class LoginForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(630, 459));
 
         jpanelBackground.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -85,7 +85,7 @@ public class LoginForm extends javax.swing.JFrame {
                 jbtnExitActionPerformed(evt);
             }
         });
-        jpanelBackground.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 10, 40, -1));
+        jpanelBackground.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 10, 40, -1));
 
         jtxtUsername.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
         jtxtUsername.setForeground(new java.awt.Color(255, 255, 255));
@@ -124,7 +124,7 @@ public class LoginForm extends javax.swing.JFrame {
         jpanelBackground.add(jlblUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 170, -1, 50));
 
         jBackground.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/Artboard 1.png"))); // NOI18N
-        jpanelBackground.add(jBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 640, 460));
+        jpanelBackground.add(jBackground, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 610, 460));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
