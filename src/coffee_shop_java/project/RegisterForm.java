@@ -415,9 +415,9 @@ public class RegisterForm extends javax.swing.JFrame {
                     myUser.setPassword(hashedPass);
                     myUser.setStatus(status);
                     myUser.setGender(gender);
-                    myUser.setUserType(userType);
-                    myUser.setCreatedDate(date);
-                    myUser.setUpdatedDate(date);
+                    myUser.setUser_type(userType);
+                    myUser.setCreated_date(date);
+                    myUser.setUpdated_date(date);
                     myUser.insert();
                     jtxtPass.setText("");
                     jtxtEmail.setText("");

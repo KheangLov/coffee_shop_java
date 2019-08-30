@@ -8,11 +8,17 @@ package coffee_shop_java.project;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  *
  * @author KHEANG
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class User extends Action {
     PreparedStatement stmt = null;
     private String firstname;
@@ -25,90 +31,6 @@ public class User extends Action {
     private int user_type;
     private String created_date;
     private String updated_date;
-    
-    public User() {
-        
-    }
-    
-    public String getFirstname() {
-      return firstname;
-    }
-
-    public void setFirstname(String param) {
-      this.firstname = param;
-    }
-    
-    public String getLastname() {
-      return lastname;
-    }
-
-    public void setLastname(String param) {
-      this.lastname = param;
-    }
-    
-    public String getFullname() {
-      return fullname;
-    }
-
-    public void setFullname(String param) {
-      this.fullname = param;
-    }
-    
-    public String getEmail() {
-      return email;
-    }
-
-    public void setEmail(String param) {
-      this.email = param;
-    }
-    
-    public String getPassword() {
-      return password;
-    }
-
-    public void setPassword(String param) {
-      this.password = param;
-    }
-    
-    public String getGender() {
-      return gender;
-    }
-
-    public void setGender(String param) {
-      this.gender = param;
-    }
-    
-    public String getStatus() {
-      return status;
-    }
-    
-    public void setStatus(String param) {
-      this.status = param;
-    }
-    
-    public int getUserType() {
-      return user_type;
-    }
-    
-    public void setUserType(int param) {
-      this.user_type = param;
-    }
-    
-    public String getCreatedDate() {
-      return created_date;
-    }
-    
-    public void setCreatedDate(String param) {
-      this.created_date = param;
-    }
-    
-    public String getUpdatedDate() {
-      return updated_date;
-    }
-    
-    public void setUpdatedDate(String param) {
-      this.updated_date = param;
-    }
     
     @Override
     public void insert() {
