@@ -121,12 +121,30 @@ public class LoginForm extends javax.swing.JFrame {
 
         jtxtUsername.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtUsername.setForeground(new java.awt.Color(255, 255, 255));
+        jtxtUsername.setText("Username...");
         jtxtUsername.setBorder(null);
+        jtxtUsername.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtxtUsernameFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtxtUsernameFocusLost(evt);
+            }
+        });
         jpanelBackground.add(jtxtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 340, 40));
 
         jtxtPass.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtPass.setForeground(new java.awt.Color(255, 255, 255));
+        jtxtPass.setText("Password...");
         jtxtPass.setBorder(null);
+        jtxtPass.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtxtPassFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtxtPassFocusLost(evt);
+            }
+        });
         jpanelBackground.add(jtxtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, 340, 40));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
@@ -255,6 +273,34 @@ public class LoginForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jbtnLoginActionPerformed
+
+    private void jtxtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtUsernameFocusGained
+        // TODO add your handling code here:
+        if(jtxtUsername.getText().equals("Username...")) {
+            jtxtUsername.setText("");
+        }
+    }//GEN-LAST:event_jtxtUsernameFocusGained
+
+    private void jtxtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtUsernameFocusLost
+        // TODO add your handling code here:
+        if(jtxtUsername.getText().equals("")) {
+            jtxtUsername.setText("Username...");
+        }
+    }//GEN-LAST:event_jtxtUsernameFocusLost
+
+    private void jtxtPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusGained
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtPass.getPassword()).equals("Password...")) {
+            jtxtPass.setText("");
+        }
+    }//GEN-LAST:event_jtxtPassFocusGained
+
+    private void jtxtPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusLost
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtPass.getPassword()).equals("")) {
+            jtxtPass.setText("Password...");
+        }
+    }//GEN-LAST:event_jtxtPassFocusLost
 
     /**
      * @param args the command line arguments

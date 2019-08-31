@@ -114,7 +114,16 @@ public class RegisterForm extends javax.swing.JFrame {
 
         jtxtFirstname.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtFirstname.setForeground(new java.awt.Color(255, 255, 255));
+        jtxtFirstname.setText("Firstname...");
         jtxtFirstname.setBorder(null);
+        jtxtFirstname.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtxtFirstnameFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtxtFirstnameFocusLost(evt);
+            }
+        });
         jPanel1.add(jtxtFirstname, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 150, 340, 40));
 
         jPanel9.setBackground(new java.awt.Color(255, 255, 255));
@@ -248,7 +257,16 @@ public class RegisterForm extends javax.swing.JFrame {
 
         jtxtLastname.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtLastname.setForeground(new java.awt.Color(255, 255, 255));
+        jtxtLastname.setText("Lastname...");
         jtxtLastname.setBorder(null);
+        jtxtLastname.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtxtLastnameFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtxtLastnameFocusLost(evt);
+            }
+        });
         jPanel1.add(jtxtLastname, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 150, 340, 40));
 
         jlblGender.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/gender_48px.png"))); // NOI18N
@@ -269,17 +287,44 @@ public class RegisterForm extends javax.swing.JFrame {
 
         jtxtEmail.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtEmail.setForeground(new java.awt.Color(255, 255, 255));
+        jtxtEmail.setText("Email...");
         jtxtEmail.setBorder(null);
+        jtxtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtxtEmailFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtxtEmailFocusLost(evt);
+            }
+        });
         jPanel1.add(jtxtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 310, 340, 40));
 
         jtxtConPass.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtConPass.setForeground(new java.awt.Color(255, 255, 255));
+        jtxtConPass.setText("Password...");
         jtxtConPass.setBorder(null);
+        jtxtConPass.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtxtConPassFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtxtConPassFocusLost(evt);
+            }
+        });
         jPanel1.add(jtxtConPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 230, 340, 40));
 
         jtxtPass.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
         jtxtPass.setForeground(new java.awt.Color(255, 255, 255));
+        jtxtPass.setText("Password...");
         jtxtPass.setBorder(null);
+        jtxtPass.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtxtPassFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtxtPassFocusLost(evt);
+            }
+        });
         jPanel1.add(jtxtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 230, 340, 40));
 
         jcomboStatus.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
@@ -419,11 +464,11 @@ public class RegisterForm extends javax.swing.JFrame {
                     myUser.setCreated_date(date);
                     myUser.setUpdated_date(date);
                     myUser.insert();
-                    jtxtPass.setText("");
-                    jtxtEmail.setText("");
-                    jtxtFirstname.setText("");
-                    jtxtLastname.setText("");
-                    jtxtConPass.setText("");
+                    jtxtPass.setText("Password...");
+                    jtxtEmail.setText("Email...");
+                    jtxtFirstname.setText("Firstname...");
+                    jtxtLastname.setText("Lastname...");
+                    jtxtConPass.setText("Password...");
                     jcomboAdmin.setSelectedIndex(0);
                     jcomboGender.setSelectedIndex(0);
                     jcomboStatus.setSelectedIndex(0);
@@ -432,6 +477,76 @@ public class RegisterForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jbtnRegisterActionPerformed
+
+    private void jtxtFirstnameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtFirstnameFocusGained
+        // TODO add your handling code here:
+        if(jtxtFirstname.getText().equals("Firstname...")) {
+            jtxtFirstname.setText("");
+        }
+    }//GEN-LAST:event_jtxtFirstnameFocusGained
+
+    private void jtxtFirstnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtFirstnameFocusLost
+        // TODO add your handling code here:
+        if(jtxtFirstname.getText().equals("")) {
+            jtxtFirstname.setText("Firstname...");
+        }
+    }//GEN-LAST:event_jtxtFirstnameFocusLost
+
+    private void jtxtLastnameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtLastnameFocusGained
+        // TODO add your handling code here:
+        if(jtxtLastname.getText().equals("Lastname...")) {
+            jtxtLastname.setText("");
+        }
+    }//GEN-LAST:event_jtxtLastnameFocusGained
+
+    private void jtxtLastnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtLastnameFocusLost
+        // TODO add your handling code here:
+        if(jtxtLastname.getText().equals("")) {
+            jtxtLastname.setText("Lastname...");
+        }
+    }//GEN-LAST:event_jtxtLastnameFocusLost
+
+    private void jtxtPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusGained
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtPass.getPassword()).equals("Password...")) {
+            jtxtPass.setText("");
+        }
+    }//GEN-LAST:event_jtxtPassFocusGained
+
+    private void jtxtPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusLost
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtPass.getPassword()).equals("")) {
+            jtxtPass.setText("Password...");
+        }
+    }//GEN-LAST:event_jtxtPassFocusLost
+
+    private void jtxtConPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtConPassFocusGained
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtConPass.getPassword()).equals("Password...")) {
+            jtxtConPass.setText("");
+        }
+    }//GEN-LAST:event_jtxtConPassFocusGained
+
+    private void jtxtConPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtConPassFocusLost
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtConPass.getPassword()).equals("")) {
+            jtxtConPass.setText("Password...");
+        }
+    }//GEN-LAST:event_jtxtConPassFocusLost
+
+    private void jtxtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtEmailFocusGained
+        // TODO add your handling code here:
+        if(jtxtEmail.getText().equals("Email...")) {
+            jtxtEmail.setText("");
+        }
+    }//GEN-LAST:event_jtxtEmailFocusGained
+
+    private void jtxtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtEmailFocusLost
+        // TODO add your handling code here:
+        if(jtxtEmail.getText().equals("")) {
+            jtxtEmail.setText("Email...");
+        }
+    }//GEN-LAST:event_jtxtEmailFocusLost
 
     /**
      * @param args the command line arguments
