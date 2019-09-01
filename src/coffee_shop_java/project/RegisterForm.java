@@ -26,7 +26,6 @@ public class RegisterForm extends javax.swing.JFrame {
         initComponents();
         jtxtFirstname.requestFocus();
         jbtnExit.setBackground(new Color(0, 0, 0, 0));
-        jbtnLogin.setBackground(new Color(0, 0, 0, 0));
         jtxtPass.setBackground(new Color(0, 0, 0, 0));
         jtxtEmail.setBackground(new Color(0, 0, 0, 0));
         jtxtFirstname.setBackground(new Color(0, 0, 0, 0));
@@ -44,7 +43,6 @@ public class RegisterForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jbtnLogin = new javax.swing.JButton();
         jbtnExit = new javax.swing.JButton();
         jlblReg = new javax.swing.JLabel();
         jlblLogo = new javax.swing.JLabel();
@@ -73,8 +71,11 @@ public class RegisterForm extends javax.swing.JFrame {
         jcomboStatus = new javax.swing.JComboBox<>();
         jcomboGender = new javax.swing.JComboBox<>();
         jcomboAdmin = new javax.swing.JComboBox<>();
-        jbtnRegister = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
+        btnReg = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        btnLoginForm = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
@@ -83,23 +84,13 @@ public class RegisterForm extends javax.swing.JFrame {
         jPanel1.setPreferredSize(new java.awt.Dimension(530, 690));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jbtnLogin.setFont(new java.awt.Font("Agency FB", 0, 24)); // NOI18N
-        jbtnLogin.setForeground(new java.awt.Color(255, 255, 255));
-        jbtnLogin.setText("Login");
-        jbtnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnLoginActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jbtnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 500, -1, -1));
-
         jbtnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/delete_sign_32px.png"))); // NOI18N
         jbtnExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jbtnExitActionPerformed(evt);
             }
         });
-        jPanel1.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 10, 40, -1));
+        jPanel1.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1080, 10, 40, -1));
 
         jlblReg.setFont(new java.awt.Font("Agency FB", 1, 48)); // NOI18N
         jlblReg.setForeground(new java.awt.Color(255, 255, 255));
@@ -342,32 +333,73 @@ public class RegisterForm extends javax.swing.JFrame {
         jcomboAdmin.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Superadmin", "Non-Superadmin" }));
         jPanel1.add(jcomboAdmin, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 390, 340, 40));
 
-        jbtnRegister.setBackground(new java.awt.Color(50, 50, 50));
-        jbtnRegister.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
-        jbtnRegister.setForeground(new java.awt.Color(255, 255, 255));
-        jbtnRegister.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/add_user_male_26px.png"))); // NOI18N
-        jbtnRegister.setText(" Register");
-        jbtnRegister.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnRegisterActionPerformed(evt);
-            }
-        });
-        jPanel1.add(jbtnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(889, 490, 140, 60));
-
         jPanel10.setBackground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 50, Short.MAX_VALUE)
+            .addGap(0, 80, Short.MAX_VALUE)
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 3, Short.MAX_VALUE)
         );
 
-        jPanel1.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 540, 50, 3));
+        jPanel1.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 530, 80, 3));
+
+        btnReg.setBackground(new java.awt.Color(43, 43, 43));
+        btnReg.setForeground(new java.awt.Color(255, 255, 255));
+        btnReg.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnRegMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnRegMouseExited(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Register");
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/add_user_male_26px.png"))); // NOI18N
+
+        javax.swing.GroupLayout btnRegLayout = new javax.swing.GroupLayout(btnReg);
+        btnReg.setLayout(btnRegLayout);
+        btnRegLayout.setHorizontalGroup(
+            btnRegLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnRegLayout.createSequentialGroup()
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel1)
+                .addContainerGap(16, Short.MAX_VALUE))
+        );
+        btnRegLayout.setVerticalGroup(
+            btnRegLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnRegLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(btnRegLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel1.add(btnReg, new org.netbeans.lib.awtextra.AbsoluteConstraints(900, 480, 140, 60));
+
+        btnLoginForm.setFont(new java.awt.Font("Agency FB", 0, 24)); // NOI18N
+        btnLoginForm.setForeground(new java.awt.Color(255, 255, 255));
+        btnLoginForm.setText("Login Form");
+        btnLoginForm.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLoginFormMouseClicked(evt);
+            }
+        });
+        jPanel1.add(btnLoginForm, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 490, -1, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -389,19 +421,82 @@ public class RegisterForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     User myUser = new User();
-    private void jbtnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnLoginActionPerformed
-        // TODO add your handling code here:
-        LoginForm login = new LoginForm();
-        login.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_jbtnLoginActionPerformed
-
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_jbtnExitActionPerformed
 
-    private void jbtnRegisterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRegisterActionPerformed
+    private void jtxtFirstnameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtFirstnameFocusGained
+        // TODO add your handling code here:
+        if(jtxtFirstname.getText().equals("Firstname...")) {
+            jtxtFirstname.setText("");
+        }
+    }//GEN-LAST:event_jtxtFirstnameFocusGained
+
+    private void jtxtFirstnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtFirstnameFocusLost
+        // TODO add your handling code here:
+        if(jtxtFirstname.getText().equals("")) {
+            jtxtFirstname.setText("Firstname...");
+        }
+    }//GEN-LAST:event_jtxtFirstnameFocusLost
+
+    private void jtxtLastnameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtLastnameFocusGained
+        // TODO add your handling code here:
+        if(jtxtLastname.getText().equals("Lastname...")) {
+            jtxtLastname.setText("");
+        }
+    }//GEN-LAST:event_jtxtLastnameFocusGained
+
+    private void jtxtLastnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtLastnameFocusLost
+        // TODO add your handling code here:
+        if(jtxtLastname.getText().equals("")) {
+            jtxtLastname.setText("Lastname...");
+        }
+    }//GEN-LAST:event_jtxtLastnameFocusLost
+
+    private void jtxtPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusGained
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtPass.getPassword()).equals("Password...")) {
+            jtxtPass.setText("");
+        }
+    }//GEN-LAST:event_jtxtPassFocusGained
+
+    private void jtxtPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusLost
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtPass.getPassword()).equals("")) {
+            jtxtPass.setText("Password...");
+        }
+    }//GEN-LAST:event_jtxtPassFocusLost
+
+    private void jtxtConPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtConPassFocusGained
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtConPass.getPassword()).equals("Password...")) {
+            jtxtConPass.setText("");
+        }
+    }//GEN-LAST:event_jtxtConPassFocusGained
+
+    private void jtxtConPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtConPassFocusLost
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtConPass.getPassword()).equals("")) {
+            jtxtConPass.setText("Password...");
+        }
+    }//GEN-LAST:event_jtxtConPassFocusLost
+
+    private void jtxtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtEmailFocusGained
+        // TODO add your handling code here:
+        if(jtxtEmail.getText().equals("Email...")) {
+            jtxtEmail.setText("");
+        }
+    }//GEN-LAST:event_jtxtEmailFocusGained
+
+    private void jtxtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtEmailFocusLost
+        // TODO add your handling code here:
+        if(jtxtEmail.getText().equals("")) {
+            jtxtEmail.setText("Email...");
+        }
+    }//GEN-LAST:event_jtxtEmailFocusLost
+
+    private void btnRegMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegMouseClicked
         // TODO add your handling code here:
         PreparedStatement st;
         ResultSet rs;
@@ -476,77 +571,24 @@ public class RegisterForm extends javax.swing.JFrame {
                 }
             }
         }
-    }//GEN-LAST:event_jbtnRegisterActionPerformed
+    }//GEN-LAST:event_btnRegMouseClicked
 
-    private void jtxtFirstnameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtFirstnameFocusGained
+    private void btnLoginFormMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginFormMouseClicked
         // TODO add your handling code here:
-        if(jtxtFirstname.getText().equals("Firstname...")) {
-            jtxtFirstname.setText("");
-        }
-    }//GEN-LAST:event_jtxtFirstnameFocusGained
+        LoginForm login = new LoginForm();
+        login.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnLoginFormMouseClicked
 
-    private void jtxtFirstnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtFirstnameFocusLost
+    private void btnRegMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegMouseEntered
         // TODO add your handling code here:
-        if(jtxtFirstname.getText().equals("")) {
-            jtxtFirstname.setText("Firstname...");
-        }
-    }//GEN-LAST:event_jtxtFirstnameFocusLost
+        btnReg.setBackground(new Color(46, 49, 49));
+    }//GEN-LAST:event_btnRegMouseEntered
 
-    private void jtxtLastnameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtLastnameFocusGained
+    private void btnRegMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegMouseExited
         // TODO add your handling code here:
-        if(jtxtLastname.getText().equals("Lastname...")) {
-            jtxtLastname.setText("");
-        }
-    }//GEN-LAST:event_jtxtLastnameFocusGained
-
-    private void jtxtLastnameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtLastnameFocusLost
-        // TODO add your handling code here:
-        if(jtxtLastname.getText().equals("")) {
-            jtxtLastname.setText("Lastname...");
-        }
-    }//GEN-LAST:event_jtxtLastnameFocusLost
-
-    private void jtxtPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusGained
-        // TODO add your handling code here:
-        if(String.valueOf(jtxtPass.getPassword()).equals("Password...")) {
-            jtxtPass.setText("");
-        }
-    }//GEN-LAST:event_jtxtPassFocusGained
-
-    private void jtxtPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusLost
-        // TODO add your handling code here:
-        if(String.valueOf(jtxtPass.getPassword()).equals("")) {
-            jtxtPass.setText("Password...");
-        }
-    }//GEN-LAST:event_jtxtPassFocusLost
-
-    private void jtxtConPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtConPassFocusGained
-        // TODO add your handling code here:
-        if(String.valueOf(jtxtConPass.getPassword()).equals("Password...")) {
-            jtxtConPass.setText("");
-        }
-    }//GEN-LAST:event_jtxtConPassFocusGained
-
-    private void jtxtConPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtConPassFocusLost
-        // TODO add your handling code here:
-        if(String.valueOf(jtxtConPass.getPassword()).equals("")) {
-            jtxtConPass.setText("Password...");
-        }
-    }//GEN-LAST:event_jtxtConPassFocusLost
-
-    private void jtxtEmailFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtEmailFocusGained
-        // TODO add your handling code here:
-        if(jtxtEmail.getText().equals("Email...")) {
-            jtxtEmail.setText("");
-        }
-    }//GEN-LAST:event_jtxtEmailFocusGained
-
-    private void jtxtEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtEmailFocusLost
-        // TODO add your handling code here:
-        if(jtxtEmail.getText().equals("")) {
-            jtxtEmail.setText("Email...");
-        }
-    }//GEN-LAST:event_jtxtEmailFocusLost
+        btnReg.setBackground(new Color(43, 43, 43));
+    }//GEN-LAST:event_btnRegMouseExited
 
     /**
      * @param args the command line arguments
@@ -582,6 +624,10 @@ public class RegisterForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel btnLoginForm;
+    private javax.swing.JPanel btnReg;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
@@ -594,8 +640,6 @@ public class RegisterForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel9;
     private javax.swing.JSeparator jSeparator7;
     private javax.swing.JButton jbtnExit;
-    private javax.swing.JButton jbtnLogin;
-    private javax.swing.JButton jbtnRegister;
     private javax.swing.JComboBox<String> jcomboAdmin;
     private javax.swing.JComboBox<String> jcomboGender;
     private javax.swing.JComboBox<String> jcomboStatus;
