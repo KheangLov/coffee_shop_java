@@ -5,6 +5,9 @@
  */
 package coffee_shop_java.project;
 
+import coffee_shop_java.project.Helper.PasswordEncryption;
+import coffee_shop_java.project.Model.DbConn;
+import coffee_shop_java.project.Model.User;
 import java.awt.Color;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

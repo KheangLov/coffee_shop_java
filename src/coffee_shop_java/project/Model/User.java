@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package coffee_shop_java.project;
+package coffee_shop_java.project.Model;
 
+import coffee_shop_java.project.Action.Action;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
