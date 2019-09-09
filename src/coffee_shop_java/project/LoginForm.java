@@ -131,6 +131,11 @@ public class LoginForm extends javax.swing.JFrame {
                 jtxtUsernameFocusLost(evt);
             }
         });
+        jtxtUsername.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtxtUsernameActionPerformed(evt);
+            }
+        });
         jpanelBackground.add(jtxtUsername, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 180, 340, 40));
 
         jtxtPass.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
@@ -301,6 +306,10 @@ public class LoginForm extends javax.swing.JFrame {
             jtxtPass.setText("Password...");
         }
     }//GEN-LAST:event_jtxtPassFocusLost
+
+    private void jtxtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtUsernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtxtUsernameActionPerformed
 
     /**
      * @param args the command line arguments
