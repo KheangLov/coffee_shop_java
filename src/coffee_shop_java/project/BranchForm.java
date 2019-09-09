@@ -418,6 +418,7 @@ public class BranchForm extends javax.swing.JFrame {
         getContentPane().add(jpanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 0, 390, 490));
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
     Branch myBranch = new Branch();
     private void txtNameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNameFocusGained
