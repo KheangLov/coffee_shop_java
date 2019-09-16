@@ -8,8 +8,6 @@ package coffee_shop_java.project.Model;
 import coffee_shop_java.project.Action.Action;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -55,5 +53,4 @@ public class Role extends Action {
     public void delete(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
 }
