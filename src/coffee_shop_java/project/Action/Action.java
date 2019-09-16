@@ -11,4 +11,6 @@ package coffee_shop_java.project.Action;
  */
 public abstract class Action {
     public abstract void insert();
+    public abstract void update(int id);
+    public abstract void delete(int id);
 }
