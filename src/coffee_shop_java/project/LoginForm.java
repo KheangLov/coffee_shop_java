@@ -311,7 +311,7 @@ public class LoginForm extends javax.swing.JFrame {
                     stmt.setInt(3, id);
                     stmt.executeUpdate();
                     
-                    MainForm main = new MainForm();
+                    MainMenu main = new MainMenu();
                     main.setVisible(true);
                     this.setVisible(false);
                 } else {
