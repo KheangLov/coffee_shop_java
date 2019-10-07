@@ -310,10 +310,6 @@ public class LoginForm extends javax.swing.JFrame {
                     stmt.setString(2, date);
                     stmt.setInt(3, id);
                     stmt.executeUpdate();
-                    
-                    MainMenu main = new MainMenu();
-                    main.setVisible(true);
-                    this.setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(null, "Wrong username or password!");
                     jtxtPass.setText("");

@@ -6,6 +6,12 @@
 package coffee_shop_java.project;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.Toolkit;
+import javax.swing.JFrame;
+import javax.swing.table.DefaultTableColumnModel;
 
 /**
  *
@@ -16,8 +22,23 @@ public class CoffeeShopForm extends javax.swing.JFrame {
     /**
      * Creates new form CoffeeShopForm
      */
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     public CoffeeShopForm() {
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        this.setMaximizedBounds(env.getMaximumWindowBounds());
         initComponents();
+        setRowIdWidth();
+        tblPermission.getTableHeader().setBackground(new Color(0, 0, 0, 1));
+        tblPermission.setBackground(new Color(0, 0, 0, 1));
+    }
+    
+    public void setRowIdWidth(){
+        DefaultTableColumnModel columnModel = (DefaultTableColumnModel) tblPermission.getColumnModel();
+        columnModel.getColumn(3).setWidth(0);
+        columnModel.getColumn(3).setPreferredWidth(0);
+        columnModel.getColumn(3).setMinWidth(0);
+        columnModel.getColumn(3).setMaxWidth(0);
     }
 
     /**
@@ -29,110 +50,285 @@ public class CoffeeShopForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
-        jPanel6 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        panelSidebar = new javax.swing.JPanel();
+        panelHeader = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
+        btnPermission = new javax.swing.JPanel();
+        lblPermission = new javax.swing.JLabel();
+        lblLogoPms = new javax.swing.JLabel();
+        btnRole = new javax.swing.JPanel();
+        lblLogoRole = new javax.swing.JLabel();
+        lblRole = new javax.swing.JLabel();
+        panelContainer = new javax.swing.JPanel();
+        panelNavbar = new javax.swing.JPanel();
+        jbtnExit = new javax.swing.JButton();
+        lblHeader = new javax.swing.JLabel();
+        panelContent = new javax.swing.JPanel();
+        panelPermission = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tblPermission = new javax.swing.JTable();
+        btnAddPermission = new javax.swing.JPanel();
+        lblAddPermission = new javax.swing.JLabel();
+        panelRole = new javax.swing.JPanel();
+        btnAddRole = new javax.swing.JPanel();
+        lblAddRole = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblRole = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
 
-        jPanel2.setBackground(new java.awt.Color(38, 53, 68));
-        jPanel2.setPreferredSize(new java.awt.Dimension(250, 0));
+        panelSidebar.setBackground(new java.awt.Color(40, 40, 40));
+        panelSidebar.setPreferredSize(null);
 
-        jPanel6.setBackground(new java.awt.Color(0, 0, 0));
+        panelHeader.setBackground(new java.awt.Color(39, 39, 39));
+        panelHeader.setPreferredSize(null);
 
-        jLabel1.setBackground(new Color(0, 0, 0, 0));
-        jLabel1.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/coffee_to_go_64px.png"))); // NOI18N
-
-        jLabel2.setFont(new java.awt.Font("Agency FB", 1, 32)); // NOI18N
+        jLabel2.setFont(new java.awt.Font("Agency FB", 1, 48)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel2.setText("Coffee");
+        jLabel2.setText("Coffee Shop");
 
-        jLabel3.setFont(new java.awt.Font("Agency FB", 1, 32)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel3.setText("Shop MS");
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
+        javax.swing.GroupLayout panelHeaderLayout = new javax.swing.GroupLayout(panelHeader);
+        panelHeader.setLayout(panelHeaderLayout);
+        panelHeaderLayout.setHorizontalGroup(
+            panelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelHeaderLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(9, 9, 9)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                .addComponent(jLabel3)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
-        );
-
-        jPanel1.setBackground(new java.awt.Color(242, 247, 251));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 615, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(241, 241, 241)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        panelHeaderLayout.setVerticalGroup(
+            panelHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelHeaderLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
-            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+
+        btnPermission.setBackground(new java.awt.Color(30, 30, 30));
+        btnPermission.setForeground(new java.awt.Color(30, 30, 30));
+        btnPermission.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnPermissionMouseClicked(evt);
+            }
+        });
+
+        lblPermission.setFont(new java.awt.Font("Agency FB", 1, 32)); // NOI18N
+        lblPermission.setForeground(new java.awt.Color(255, 255, 255));
+        lblPermission.setText("Permission");
+
+        lblLogoPms.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/restriction_shield_34px.png"))); // NOI18N
+
+        javax.swing.GroupLayout btnPermissionLayout = new javax.swing.GroupLayout(btnPermission);
+        btnPermission.setLayout(btnPermissionLayout);
+        btnPermissionLayout.setHorizontalGroup(
+            btnPermissionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnPermissionLayout.createSequentialGroup()
+                .addContainerGap(50, Short.MAX_VALUE)
+                .addComponent(lblLogoPms)
+                .addGap(18, 18, 18)
+                .addComponent(lblPermission, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        btnPermissionLayout.setVerticalGroup(
+            btnPermissionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblPermission, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+            .addComponent(lblLogoPms, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        btnRole.setBackground(new java.awt.Color(40, 40, 40));
+        btnRole.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRoleMouseClicked(evt);
+            }
+        });
+
+        lblLogoRole.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/admin_settings_male_34px.png"))); // NOI18N
+
+        lblRole.setFont(new java.awt.Font("Agency FB", 1, 32)); // NOI18N
+        lblRole.setForeground(new java.awt.Color(255, 255, 255));
+        lblRole.setText("Role");
+
+        javax.swing.GroupLayout btnRoleLayout = new javax.swing.GroupLayout(btnRole);
+        btnRole.setLayout(btnRoleLayout);
+        btnRoleLayout.setHorizontalGroup(
+            btnRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnRoleLayout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addComponent(lblLogoRole)
+                .addGap(18, 18, 18)
+                .addComponent(lblRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+        btnRoleLayout.setVerticalGroup(
+            btnRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblLogoRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblRole, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout panelSidebarLayout = new javax.swing.GroupLayout(panelSidebar);
+        panelSidebar.setLayout(panelSidebarLayout);
+        panelSidebarLayout.setHorizontalGroup(
+            panelSidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelHeader, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+            .addComponent(btnPermission, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        panelSidebarLayout.setVerticalGroup(
+            panelSidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelSidebarLayout.createSequentialGroup()
+                .addComponent(panelHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(btnRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        jPanel6.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        panelNavbar.setBackground(new java.awt.Color(40, 40, 40));
+        panelNavbar.setForeground(new java.awt.Color(27, 27, 27));
+        panelNavbar.setPreferredSize(new java.awt.Dimension(823, 90));
 
-        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jbtnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/delete_sign_32px.png"))); // NOI18N
+        jbtnExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbtnExitActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1043, Short.MAX_VALUE)
+        lblHeader.setFont(new java.awt.Font("Agency FB", 1, 36)); // NOI18N
+        lblHeader.setForeground(new java.awt.Color(255, 255, 255));
+        lblHeader.setText("Permission");
+
+        javax.swing.GroupLayout panelNavbarLayout = new javax.swing.GroupLayout(panelNavbar);
+        panelNavbar.setLayout(panelNavbarLayout);
+        panelNavbarLayout.setHorizontalGroup(
+            panelNavbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelNavbarLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(lblHeader)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 80, Short.MAX_VALUE)
+        panelNavbarLayout.setVerticalGroup(
+            panelNavbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelNavbarLayout.createSequentialGroup()
+                .addContainerGap(22, Short.MAX_VALUE)
+                .addGroup(panelNavbarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jbtnExit, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblHeader))
+                .addGap(24, 24, 24))
         );
 
-        jTable1.setAutoCreateRowSorter(true);
-        jTable1.setFont(new java.awt.Font("Agency FB", 0, 24)); // NOI18N
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jbtnExit.setBackground(new Color(0, 0, 0, 0));
+
+        panelContent.setBackground(new java.awt.Color(0, 0, 0));
+        panelContent.setLayout(new java.awt.CardLayout());
+
+        panelPermission.setBackground(new java.awt.Color(31, 31, 31));
+
+        jScrollPane1.setBackground(new java.awt.Color(0, 0, 0));
+        jScrollPane1.setFont(new java.awt.Font("Agency FB", 0, 22)); // NOI18N
+
+        tblPermission.setBorder(javax.swing.BorderFactory.createEmptyBorder(1, 1, 1, 1));
+        tblPermission.setFont(new java.awt.Font("Agency FB", 0, 22)); // NOI18N
+        tblPermission.setForeground(new java.awt.Color(31, 31, 31));
+        tblPermission.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "#", "Name", "Permission", "id"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        tblPermission.setColumnSelectionAllowed(true);
+        tblPermission.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jScrollPane1.setViewportView(tblPermission);
+        tblPermission.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (tblPermission.getColumnModel().getColumnCount() > 0) {
+            tblPermission.getColumnModel().getColumn(0).setResizable(false);
+            tblPermission.getColumnModel().getColumn(1).setResizable(false);
+            tblPermission.getColumnModel().getColumn(2).setResizable(false);
+            tblPermission.getColumnModel().getColumn(3).setResizable(false);
+        }
+        tblPermission.getTableHeader().setFont(new Font("AgencyFB", Font.BOLD, 22));
+
+        btnAddPermission.setPreferredSize(new java.awt.Dimension(125, 40));
+
+        lblAddPermission.setBackground(new java.awt.Color(255, 255, 255));
+        lblAddPermission.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
+        lblAddPermission.setText("Add Permission");
+        lblAddPermission.setPreferredSize(new java.awt.Dimension(120, 40));
+
+        javax.swing.GroupLayout btnAddPermissionLayout = new javax.swing.GroupLayout(btnAddPermission);
+        btnAddPermission.setLayout(btnAddPermissionLayout);
+        btnAddPermissionLayout.setHorizontalGroup(
+            btnAddPermissionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnAddPermissionLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(lblAddPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        btnAddPermissionLayout.setVerticalGroup(
+            btnAddPermissionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblAddPermission, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout panelPermissionLayout = new javax.swing.GroupLayout(panelPermission);
+        panelPermission.setLayout(panelPermissionLayout);
+        panelPermissionLayout.setHorizontalGroup(
+            panelPermissionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPermissionLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(panelPermissionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelPermissionLayout.createSequentialGroup()
+                        .addComponent(btnAddPermission, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(panelPermissionLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
+                        .addGap(20, 20, 20))))
+        );
+        panelPermissionLayout.setVerticalGroup(
+            panelPermissionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelPermissionLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(btnAddPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
+                .addGap(20, 20, 20))
+        );
+
+        panelContent.add(panelPermission, "card2");
+
+        panelRole.setBackground(new java.awt.Color(31, 31, 31));
+
+        lblAddRole.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
+        lblAddRole.setText("Add Role");
+        lblAddRole.setPreferredSize(new java.awt.Dimension(67, 40));
+
+        javax.swing.GroupLayout btnAddRoleLayout = new javax.swing.GroupLayout(btnAddRole);
+        btnAddRole.setLayout(btnAddRoleLayout);
+        btnAddRoleLayout.setHorizontalGroup(
+            btnAddRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnAddRoleLayout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addComponent(lblAddRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
+        );
+        btnAddRoleLayout.setVerticalGroup(
+            btnAddRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(lblAddRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        tblRole.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -140,48 +336,103 @@ public class CoffeeShopForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane2.setViewportView(tblRole);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+        javax.swing.GroupLayout panelRoleLayout = new javax.swing.GroupLayout(panelRole);
+        panelRole.setLayout(panelRoleLayout);
+        panelRoleLayout.setHorizontalGroup(
+            panelRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRoleLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(panelRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 768, Short.MAX_VALUE)
+                    .addGroup(panelRoleLayout.createSequentialGroup()
+                        .addComponent(btnAddRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGap(20, 20, 20))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 385, javax.swing.GroupLayout.PREFERRED_SIZE))
+        panelRoleLayout.setVerticalGroup(
+            panelRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelRoleLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(btnAddRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 459, Short.MAX_VALUE)
+                .addGap(20, 20, 20))
+        );
+
+        panelContent.add(panelRole, "card3");
+
+        javax.swing.GroupLayout panelContainerLayout = new javax.swing.GroupLayout(panelContainer);
+        panelContainer.setLayout(panelContainerLayout);
+        panelContainerLayout.setHorizontalGroup(
+            panelContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(panelNavbar, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE)
+            .addComponent(panelContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        panelContainerLayout.setVerticalGroup(
+            panelContainerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelContainerLayout.createSequentialGroup()
+                .addComponent(panelNavbar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(panelContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(panelSidebar, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(panelContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 808, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 705, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(panelSidebar, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+            .addComponent(panelContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
         );
-
-        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jbtnExitActionPerformed
+
+    private void btnPermissionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnPermissionMouseClicked
+        // TODO add your handling code here:
+        btnRole.setBackground(new Color(40, 40, 40));
+        btnPermission.setBackground(new Color(30, 30, 30));
+        if(!lblHeader.getText().toLowerCase().equals("permission")) {
+            lblHeader.setText("Permission");
+        }
+        panelContent.removeAll();
+        panelContent.repaint();
+        panelContent.revalidate();
+        
+        panelContent.add(panelPermission);
+        panelContent.repaint();
+        panelContent.revalidate();
+    }//GEN-LAST:event_btnPermissionMouseClicked
+
+    private void btnRoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRoleMouseClicked
+        // TODO add your handling code here:
+        btnPermission.setBackground(new Color(40, 40, 40));
+        btnRole.setBackground(new Color(30, 30, 30));
+        if(!lblHeader.getText().toLowerCase().equals("role")) {
+            lblHeader.setText("Role");
+        }
+        panelContent.removeAll();
+        panelContent.repaint();
+        panelContent.revalidate();
+        
+        panelContent.add(panelRole);
+        panelContent.repaint();
+        panelContent.revalidate();
+    }//GEN-LAST:event_btnRoleMouseClicked
 
     /**
      * @param args the command line arguments
@@ -219,15 +470,29 @@ public class CoffeeShopForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel btnAddPermission;
+    private javax.swing.JPanel btnAddRole;
+    private javax.swing.JPanel btnPermission;
+    private javax.swing.JPanel btnRole;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JButton jbtnExit;
+    private javax.swing.JLabel lblAddPermission;
+    private javax.swing.JLabel lblAddRole;
+    private javax.swing.JLabel lblHeader;
+    private javax.swing.JLabel lblLogoPms;
+    private javax.swing.JLabel lblLogoRole;
+    private javax.swing.JLabel lblPermission;
+    private javax.swing.JLabel lblRole;
+    private javax.swing.JPanel panelContainer;
+    private javax.swing.JPanel panelContent;
+    private javax.swing.JPanel panelHeader;
+    private javax.swing.JPanel panelNavbar;
+    private javax.swing.JPanel panelPermission;
+    private javax.swing.JPanel panelRole;
+    private javax.swing.JPanel panelSidebar;
+    private javax.swing.JTable tblPermission;
+    private javax.swing.JTable tblRole;
     // End of variables declaration//GEN-END:variables
 }
