@@ -7,6 +7,9 @@
 package coffee_shop_java.project;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import javax.swing.JFrame;
 
 /**
  *
@@ -651,6 +654,10 @@ public class MainMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void makeFrameFullSize(JFrame aFrame) {
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    aFrame.setSize(screenSize.width, screenSize.height);
+}
     private void companyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_companyMouseClicked
         // TODO add your handling code here:
        
@@ -931,5 +938,15 @@ public class MainMenu extends javax.swing.JFrame {
     private javax.swing.JPanel usercard;
     private javax.swing.JLayeredPane userpanel;
     // End of variables declaration//GEN-END:variables
+
+    private static class JFrame {
+
+        public JFrame() {
+        }
+
+        private void setSize(int width, int height) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+    }
 
 }
