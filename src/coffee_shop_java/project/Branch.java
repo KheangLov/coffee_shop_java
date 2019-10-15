@@ -71,7 +71,43 @@ public class Branch extends Action {
 
     @Override
     public void update(int id) {
-        
+        String sql = "UPDATE branches SET name=?, phone=?, email=?, address=?, company_id=? where id=?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setString(1, name);
+            stmt.setString(2, phone);
+            stmt.setString(3, email);
+            stmt.setString(4, address);
+            stmt.setInt(5, companyId);
+            stmt.setInt(6, id);
+            int i = stmt.executeUpdate();
+            if(i > 0){
+                JOptionPane.showMessageDialog(null, "Data Save");
+            } else{
+                JOptionPane.showMessageDialog(null, "Failed to Save");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+            
+        }
+    }
+
+    @Override
+    public void delete(int id) {
+        String sql = "DELETE FROM branches WHERE id=?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setInt(1, id);
+            int i = stmt.executeUpdate();
+            if(i > 0){
+                JOptionPane.showMessageDialog(null, "Data Deleted");
+            } else{
+                JOptionPane.showMessageDialog(null, "Failed to Deleted");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+            
+        }
     }
 }
 

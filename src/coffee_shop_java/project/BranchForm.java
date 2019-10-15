@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
 
@@ -81,6 +82,7 @@ public class BranchForm extends javax.swing.JFrame {
             rows[6] = listBranches.get(i).getId();
             model.addRow(rows);
         }
+        setRowIdWidth();
     }
     
     public void setRowIdWidth(){
@@ -123,6 +125,7 @@ public class BranchForm extends javax.swing.JFrame {
         jLabelbaddress = new javax.swing.JLabel();
         cbCompanies = new javax.swing.JComboBox<>();
         btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
@@ -340,6 +343,13 @@ public class BranchForm extends javax.swing.JFrame {
             }
         });
 
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpanel2Layout = new javax.swing.GroupLayout(jpanel2);
         jpanel2.setLayout(jpanel2Layout);
         jpanel2Layout.setHorizontalGroup(
@@ -351,10 +361,6 @@ public class BranchForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpanel2Layout.createSequentialGroup()
                 .addContainerGap(26, Short.MAX_VALUE)
                 .addGroup(jpanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jpanel2Layout.createSequentialGroup()
-                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(26, 26, 26)
-                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jpanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addComponent(cbCompanies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGroup(jpanel2Layout.createSequentialGroup()
@@ -371,8 +377,14 @@ public class BranchForm extends javax.swing.JFrame {
                                 .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jSeparator4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(jSeparator5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE)))))
-                .addGap(55, 55, 55))
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 192, Short.MAX_VALUE))))
+                    .addGroup(jpanel2Layout.createSequentialGroup()
+                        .addComponent(btnAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
+                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(24, 24, 24))
         );
         jpanel2Layout.setVerticalGroup(
             jpanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -408,8 +420,10 @@ public class BranchForm extends javax.swing.JFrame {
                 .addComponent(cbCompanies, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addGroup(jpanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
-                    .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnDelete, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                    .addGroup(jpanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE)
+                        .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(39, 39, 39))
         );
 
@@ -535,16 +549,63 @@ public class BranchForm extends javax.swing.JFrame {
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
-       if(btnUpdate.getText().toLowerCase().equals("update")){
-           btnUpdate.setText("Edit");
-           btnAdd.setEnabled(false);
-           tblBranches.setEnabled(false);
-           
-       } else if(btnUpdate.getText().toLowerCase().equals("edit")){
-           btnUpdate.setText("Update");
-           btnAdd.setEnabled(true);
-           tblBranches.setEnabled(true);
-       }
+        int id = (int) tblBranches.getValueAt(tblBranches.getSelectedRow(), 6);
+        String name = txtName.getText().trim();
+        String phone = txtPhone.getText().trim();
+        String email = txtEmail.getText().trim();
+        String address = txtAddress.getText().trim();
+        if(name.equals("") || phone.equals("") || email.equals("")){
+            JOptionPane.showMessageDialog(null, "Please fill out the required fields");
+        }
+        String sqlGetId = "SELECT id FROM companies WHERE LOWER(name) = ?";
+        try {
+            stmt= DbConn.getConnection().prepareStatement(sqlGetId);
+            stmt.setString(1, String.valueOf(cbCompanies.getSelectedItem()));
+            rs = stmt.executeQuery();
+            if(rs.next()){
+                myBranch.setCompanyId(rs.getInt("id"));
+            } else{
+                JOptionPane.showMessageDialog(null, "Company ID not Found");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+//        int i = tblBranches.getSelectedRow();
+//        DefaultTableModel model = (DefaultTableModel)tblBranches.getModel();
+//        id = (int) model.getValueAt(6, NORMAL);
+//        model.setValueAt(txtName.getText(), i, 1);
+//        model.setValueAt(txtPhone.getText(), i, 2);
+//        model.setValueAt(txtEmail.getText(), i, 3);
+//        model.setValueAt(txtAddress.getText(), i, 4);
+//        model.setValueAt(cbCompanies.getSelectedItem(), i, 5);
+
+//        if(btnUpdate.getText().toLowerCase().equals("update")){
+//            btnUpdate.setText("Edit");
+//            btnAdd.setEnabled(false);
+//            tblBranches.setEnabled(false);
+//            if(i >= 0)
+//            {
+//
+//            } else {
+//               JOptionPane.showMessageDialog(null, "Error");
+//            }
+//        } else if(btnUpdate.getText().toLowerCase().equals("edit")){
+//            btnUpdate.setText("Update");
+//            btnAdd.setEnabled(true);
+//            tblBranches.setEnabled(true);
+//        }
+        System.out.print(id);
+        myBranch.setName(name);
+        myBranch.setEmail(email);
+        myBranch.setPhone(phone);
+        myBranch.setAddress(address);
+        myBranch.update(id);
+        showBranches();
+        txtName.setText("Name");
+        txtPhone.setText("Phone");
+        txtEmail.setText("Email");
+        txtAddress.setText("Address");
+        cbCompanies.setSelectedIndex(0);
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
@@ -554,11 +615,29 @@ public class BranchForm extends javax.swing.JFrame {
     private void tblBranchesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBranchesMouseClicked
         // TODO add your handling code here:
         int row = tblBranches.getSelectedRow();
+        DefaultTableModel model = (DefaultTableModel)tblBranches.getModel();
+        txtName.setText(model.getValueAt( row, 1).toString());
+        txtPhone.setText(model.getValueAt( row, 2).toString());
+        txtEmail.setText(model.getValueAt( row, 3).toString());
+        txtAddress.setText(model.getValueAt( row, 4).toString());
+        cbCompanies.setSelectedItem(model.getValueAt( row, 5).toString());
         System.out.println(row);
         if(row >= 0){
             btnUpdate.setEnabled(true);
         }
     }//GEN-LAST:event_tblBranchesMouseClicked
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        int id = (int) tblBranches.getValueAt(tblBranches.getSelectedRow(), 6);
+        myBranch.delete(id);
+        showBranches();
+        txtName.setText("Name");
+        txtPhone.setText("Phone");
+        txtEmail.setText("Email");
+        txtAddress.setText("Address");
+        cbCompanies.setSelectedIndex(0);
+    }//GEN-LAST:event_btnDeleteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -595,6 +674,7 @@ public class BranchForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cbCompanies;
     private javax.swing.JLabel jLabel1;
