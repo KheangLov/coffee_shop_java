@@ -54,7 +54,7 @@ public class MainForm extends javax.swing.JFrame {
                 jbtnExitActionPerformed(evt);
             }
         });
-        jpanelBackground.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 10, 40, -1));
+        jpanelBackground.add(jbtnExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 10, 40, -1));
 
         jbtnLogout.setFont(new java.awt.Font("Agency FB", 1, 18)); // NOI18N
         jbtnLogout.setForeground(new java.awt.Color(255, 255, 255));

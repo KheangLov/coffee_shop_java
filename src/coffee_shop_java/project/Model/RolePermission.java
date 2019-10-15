@@ -3,56 +3,46 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package coffee_shop_java.project;
+package coffee_shop_java.project.Model;
 
 import coffee_shop_java.project.Action.Action;
-import coffee_shop_java.project.Model.DbConn;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 /**
  *
- * @author ASUS
+ * @author KHEANG
  */
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Company extends Action {
+@NoArgsConstructor
+public class RolePermission extends Action {
     PreparedStatement stmt = null;
-    ResultSet rs; 
-    private String name;
-    private String phone;
-    private String email;
-    private String address;
-    private int userId;
-    
+    private int role_id;
+    private int permission_id;
+
     @Override
     public void insert() {
-        String sql = "INSERT INTO companies(name, phone, email, address, user_id)"
-                + "VALUES(?, ?, ?, ?, ?)";
-        
+        String sql = "INSERT INTO role_permissions(role_id, permission_id)"
+            + "VALUES(?, ?)";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
-            stmt.setString(1, name);
-            stmt.setString(2, phone);
-            stmt.setString(3, email);
-            stmt.setString(4, address);
-            stmt.setInt(5, userId);
+            stmt.setInt(1, role_id);
+            stmt.setInt(2, permission_id);
             int i = stmt.executeUpdate();
-            if(i > 0){
-                JOptionPane.showMessageDialog(null, "Data Save");
-            } else{
-                JOptionPane.showMessageDialog(null, "Failed to Save");
+            if(i > 0) {
+                JOptionPane.showMessageDialog(null, "Data saved!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data failed to save!");
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
-            
         }
-        
     }
 
     @Override

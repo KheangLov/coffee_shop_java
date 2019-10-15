@@ -5,6 +5,8 @@
  */
 package coffee_shop_java.project;
 
+import coffee_shop_java.project.Action.Action;
+import coffee_shop_java.project.Model.DbConn;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

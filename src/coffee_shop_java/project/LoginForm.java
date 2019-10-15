@@ -5,6 +5,8 @@
  */
 package coffee_shop_java.project;
 
+import coffee_shop_java.project.Helper.PasswordEncryption;
+import coffee_shop_java.project.Model.DbConn;
 import java.awt.Color;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,9 +30,6 @@ public class LoginForm extends javax.swing.JFrame {
         jtxtUsername.setBackground(new Color(0, 0, 0, 0));
         jtxtPass.setBackground(new Color(0, 0, 0, 0));
         jbtnExit.setBackground(new Color(0, 0, 0, 0));
-        jbtnReg.setBackground(new Color(0, 0, 0, 0));
-        jbtnLogin.setBounds(250, 250, 100, 50);
-        jbtnLogin.setBackground(new Color(104, 179, 200));
     }
 
     /**
@@ -45,21 +44,29 @@ public class LoginForm extends javax.swing.JFrame {
         jpanelBackground = new javax.swing.JPanel();
         jlblForm = new javax.swing.JLabel();
         jlblLogo = new javax.swing.JLabel();
-        jbtnReg = new javax.swing.JButton();
+        btnRegister = new javax.swing.JLabel();
+        btnLogin = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
         jbtnExit = new javax.swing.JButton();
         jtxtUsername = new javax.swing.JTextField();
         jtxtPass = new javax.swing.JPasswordField();
-        jPanel4 = new javax.swing.JPanel();
-        jbtnLogin = new javax.swing.JButton();
         jlblPass = new javax.swing.JLabel();
         jlblUser = new javax.swing.JLabel();
         jBackground = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setLocation(new java.awt.Point(320, 320));
         setUndecorated(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jpanelBackground.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -71,15 +78,58 @@ public class LoginForm extends javax.swing.JFrame {
         jlblLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/conference_call_filled_100px.png"))); // NOI18N
         jpanelBackground.add(jlblLogo, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 20, -1, -1));
 
-        jbtnReg.setFont(new java.awt.Font("Agency FB", 0, 24)); // NOI18N
-        jbtnReg.setForeground(new java.awt.Color(255, 255, 255));
-        jbtnReg.setText("Register");
-        jbtnReg.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnRegActionPerformed(evt);
+        btnRegister.setFont(new java.awt.Font("Agency FB", 0, 24)); // NOI18N
+        btnRegister.setForeground(new java.awt.Color(255, 255, 255));
+        btnRegister.setText("Register Form");
+        btnRegister.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnRegisterMouseClicked(evt);
             }
         });
-        jpanelBackground.add(jbtnReg, new org.netbeans.lib.awtextra.AbsoluteConstraints(80, 350, -1, -1));
+        jpanelBackground.add(btnRegister, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 350, -1, 40));
+
+        btnLogin.setBackground(new java.awt.Color(43, 43, 43));
+        btnLogin.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnLoginMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnLoginMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnLoginMouseExited(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Login");
+        jLabel1.setAlignmentX(0.5F);
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/enter_2_32px.png"))); // NOI18N
+
+        javax.swing.GroupLayout btnLoginLayout = new javax.swing.GroupLayout(btnLogin);
+        btnLogin.setLayout(btnLoginLayout);
+        btnLoginLayout.setHorizontalGroup(
+            btnLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnLoginLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addContainerGap(22, Short.MAX_VALUE))
+        );
+        btnLoginLayout.setVerticalGroup(
+            btnLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnLoginLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(btnLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jpanelBackground.add(btnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 340, 120, 60));
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -110,6 +160,21 @@ public class LoginForm extends javax.swing.JFrame {
         );
 
         jpanelBackground.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 230, 440, 3));
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 107, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jpanelBackground.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 390, 107, 3));
 
         jbtnExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/delete_sign_32px.png"))); // NOI18N
         jbtnExit.addActionListener(new java.awt.event.ActionListener() {
@@ -152,34 +217,6 @@ public class LoginForm extends javax.swing.JFrame {
         });
         jpanelBackground.add(jtxtPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(190, 270, 340, 40));
 
-        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 70, Short.MAX_VALUE)
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        jpanelBackground.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 390, 70, 3));
-
-        jbtnLogin.setBackground(new java.awt.Color(50, 50, 50));
-        jbtnLogin.setFont(new java.awt.Font("Agency FB", 1, 24)); // NOI18N
-        jbtnLogin.setForeground(new java.awt.Color(255, 255, 255));
-        jbtnLogin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/enter_2_32px.png"))); // NOI18N
-        jbtnLogin.setText("  Login");
-        jbtnLogin.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
-        jbtnLogin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnLoginActionPerformed(evt);
-            }
-        });
-        jpanelBackground.add(jbtnLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 350, 120, 50));
-
         jlblPass.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/lock_48px.png"))); // NOI18N
         jpanelBackground.add(jlblPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, -1, 50));
 
@@ -208,30 +245,51 @@ public class LoginForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpanelBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jpanelBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jpanelBackground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jpanelBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jbtnRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnRegActionPerformed
-        // TODO add your handling code here:
-        RegisterForm reg = new RegisterForm();
-        reg.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_jbtnRegActionPerformed
-
     private void jbtnExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnExitActionPerformed
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_jbtnExitActionPerformed
 
-    private void jbtnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnLoginActionPerformed
+    private void jtxtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtUsernameFocusGained
+        // TODO add your handling code here:
+        if(jtxtUsername.getText().equals("Username...")) {
+            jtxtUsername.setText("");
+        }
+    }//GEN-LAST:event_jtxtUsernameFocusGained
+
+    private void jtxtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtUsernameFocusLost
+        // TODO add your handling code here:
+        if(jtxtUsername.getText().equals("")) {
+            jtxtUsername.setText("Username...");
+        }
+    }//GEN-LAST:event_jtxtUsernameFocusLost
+
+    private void jtxtPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusGained
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtPass.getPassword()).equals("Password...")) {
+            jtxtPass.setText("");
+        }
+    }//GEN-LAST:event_jtxtPassFocusGained
+
+    private void jtxtPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusLost
+        // TODO add your handling code here:
+        if(String.valueOf(jtxtPass.getPassword()).equals("")) {
+            jtxtPass.setText("Password...");
+        }
+    }//GEN-LAST:event_jtxtPassFocusLost
+
+    private void btnLoginMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseClicked
         // TODO add your handling code here:
         PreparedStatement st;
         ResultSet rs;
@@ -263,10 +321,6 @@ public class LoginForm extends javax.swing.JFrame {
                     stmt.setString(2, date);
                     stmt.setInt(3, id);
                     stmt.executeUpdate();
-                    
-                    MainForm main = new MainForm();
-                    main.setVisible(true);
-                    this.setVisible(false);
                 } else {
                     JOptionPane.showMessageDialog(null, "Wrong username or password!");
                     jtxtPass.setText("");
@@ -277,35 +331,30 @@ public class LoginForm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, ex);
             }
         }
-    }//GEN-LAST:event_jbtnLoginActionPerformed
+    }//GEN-LAST:event_btnLoginMouseClicked
 
-    private void jtxtUsernameFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtUsernameFocusGained
+    private void btnRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnRegisterMouseClicked
         // TODO add your handling code here:
-        if(jtxtUsername.getText().equals("Username...")) {
-            jtxtUsername.setText("");
-        }
-    }//GEN-LAST:event_jtxtUsernameFocusGained
+        RegisterForm reg = new RegisterForm();
+        reg.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnRegisterMouseClicked
 
-    private void jtxtUsernameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtUsernameFocusLost
+    private void btnLoginMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseEntered
         // TODO add your handling code here:
-        if(jtxtUsername.getText().equals("")) {
-            jtxtUsername.setText("Username...");
-        }
-    }//GEN-LAST:event_jtxtUsernameFocusLost
+        btnLogin.setBackground(new Color(46, 49, 49));
+    }//GEN-LAST:event_btnLoginMouseEntered
 
-    private void jtxtPassFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusGained
+    private void btnLoginMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLoginMouseExited
         // TODO add your handling code here:
-        if(String.valueOf(jtxtPass.getPassword()).equals("Password...")) {
-            jtxtPass.setText("");
-        }
-    }//GEN-LAST:event_jtxtPassFocusGained
+        btnLogin.setBackground(new Color(43, 43, 43));
+    }//GEN-LAST:event_btnLoginMouseExited
 
-    private void jtxtPassFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtxtPassFocusLost
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        if(String.valueOf(jtxtPass.getPassword()).equals("")) {
-            jtxtPass.setText("Password...");
-        }
-    }//GEN-LAST:event_jtxtPassFocusLost
+       
+        
+    }//GEN-LAST:event_formWindowOpened
 
     private void jtxtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtxtUsernameActionPerformed
         // TODO add your handling code here:
@@ -345,14 +394,16 @@ public class LoginForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel btnLogin;
+    private javax.swing.JLabel btnRegister;
     private javax.swing.JLabel jBackground;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JButton jbtnExit;
-    private javax.swing.JButton jbtnLogin;
-    private javax.swing.JButton jbtnReg;
     private javax.swing.JLabel jlblForm;
     private javax.swing.JLabel jlblLogo;
     private javax.swing.JLabel jlblPass;
