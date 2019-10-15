@@ -22,8 +22,17 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Permission extends Action {
     PreparedStatement stmt;
+    private int tblId;
     private String name;
     private String action;
+    private int id;
+
+    public Permission(int tblId, String name, String action, int id) {
+        this.tblId = tblId;
+        this.name = name;
+        this.action = action;
+        this.id = id;
+    }
 
     @Override
     public void insert() {

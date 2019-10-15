@@ -17,31 +17,23 @@ import lombok.NoArgsConstructor;
  *
  * @author KHEANG
  */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role extends Action {
+public class RolePermission extends Action {
     PreparedStatement stmt = null;
-    private int tblId;
-    private String name;
-    private String description;
-    private int id;
-    
-    public Role(int tblId, String name, String description, int id) {
-        this.tblId = tblId;
-        this.name = name;
-        this.description = description;
-        this.id = id;
-    }
-    
+    private int role_id;
+    private int permission_id;
+
     @Override
     public void insert() {
-        String sql = "INSERT INTO roles(name, description)"
-                + "VALUES(?, ?)";
+        String sql = "INSERT INTO role_permissions(role_id, permission_id)"
+            + "VALUES(?, ?)";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
-            stmt.setString(1, name);
-            stmt.setString(2, description);
+            stmt.setInt(1, role_id);
+            stmt.setInt(2, permission_id);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 JOptionPane.showMessageDialog(null, "Data saved!");
@@ -62,4 +54,5 @@ public class Role extends Action {
     public void delete(int id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
 }
