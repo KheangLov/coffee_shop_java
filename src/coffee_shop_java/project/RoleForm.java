@@ -7,7 +7,6 @@ package coffee_shop_java.project;
 
 import coffee_shop_java.project.Helper.AppHelper;
 import coffee_shop_java.project.Model.DbConn;
-import coffee_shop_java.project.Model.Permission;
 import coffee_shop_java.project.Model.Role;
 import coffee_shop_java.project.Model.RolePermission;
 import java.awt.Color;
@@ -99,7 +98,33 @@ public class RoleForm extends javax.swing.JFrame {
         }
     }
     
-    public void comboId(String combo) {
+    public void getRoleId(String combo) {
+        String sql = "SELECT * FROM `roles` "
+            + "WHERE LOWER(`name`) = '" + combo + "'";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            rs = stmt.executeQuery();
+            if(rs.next()) {
+                myRolePerm.setRole_id(rs.getInt("id"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+    
+    public void getPermissionId(String name, String action) throws SQLException {
+        String sql = "SELECT * FROM `permissions` "
+            + "WHERE LOWER(`name`) '" + name + "' "
+            + "AND LOWER(`action`) = '" + action + "'";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            rs = stmt.executeQuery();
+            if(rs.next()) {
+                myRolePerm.setPermission_id(rs.getInt("id"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
         
     }
     
@@ -416,6 +441,11 @@ public class RoleForm extends javax.swing.JFrame {
         cbRole.setLightWeightPopupEnabled(false);
         cbRole.setOpaque(false);
         cbRole.setBackground(new Color(0, 0, 0, 0));
+        cbRole.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbRoleItemStateChanged(evt);
+            }
+        });
 
         cbPermName.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         cbPermName.setLightWeightPopupEnabled(false);
@@ -626,6 +656,11 @@ public class RoleForm extends javax.swing.JFrame {
     private void formWindowIconified(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowIconified
         // TODO add your handling code here:
     }//GEN-LAST:event_formWindowIconified
+
+    private void cbRoleItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbRoleItemStateChanged
+        // TODO add your handling code here:
+        getRoleId(String.valueOf(cbRole.getSelectedItem()));
+    }//GEN-LAST:event_cbRoleItemStateChanged
 
     /**
      * @param args the command line arguments

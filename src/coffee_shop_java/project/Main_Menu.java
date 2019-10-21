@@ -824,7 +824,6 @@ public class Main_Menu extends javax.swing.JFrame {
         userTbl.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         userTbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                { new Integer(1), "ASdsad", "sasadsad", "sadsad", "sadasd",  new Integer(1)},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null}
@@ -848,6 +847,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        userTbl.setColumnSelectionAllowed(true);
         userTbl.setGridColor(new java.awt.Color(255, 255, 255));
         userTbl.setOpaque(false);
         userTbl.setRowHeight(28);
@@ -1011,7 +1011,7 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGroup(backgroundLayout.createSequentialGroup()
                 .addComponent(sidebar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(backgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dynamicPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(dynamicPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(dynamicLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
