@@ -31,6 +31,7 @@ public class DbConn {
         dataSource.setPassword(password);
         dataSource.setDatabaseName(dbName);
         dataSource.setPortNumber(port);
+        dataSource.setUseSSL(false);
         
         try {
             cnx = dataSource.getConnection();

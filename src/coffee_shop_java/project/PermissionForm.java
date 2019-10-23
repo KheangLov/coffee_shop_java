@@ -39,14 +39,14 @@ public class PermissionForm extends javax.swing.JFrame {
     Permission myPerm = new Permission();
     
     public void getAllTables() {
-        String sql = "SELECT table_name FROM information_schema.tables WHERE table_schema ='coffee_shop'";
+        String sql = "SELECT table_name FROM information_schema.tables "
+                + "WHERE table_schema ='coffee_shop'";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
             rs = stmt.executeQuery();
             while(rs.next()){
                 cbName.addItem(rs.getString("table_name"));
             }
-            
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
@@ -99,8 +99,6 @@ public class PermissionForm extends javax.swing.JFrame {
         exitIcon = new javax.swing.JLabel();
         lblFormName = new javax.swing.JLabel();
         pnlWrapper = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblPermission = new javax.swing.JTable();
         pnlFormAdd = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         btnAddPer = new javax.swing.JPanel();
@@ -110,10 +108,17 @@ public class PermissionForm extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         cbName = new javax.swing.JComboBox<>();
+        btnDelPer1 = new javax.swing.JPanel();
+        lblPer3 = new javax.swing.JLabel();
+        pnlContent = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblPermission = new javax.swing.JTable();
+        txtSearch = new javax.swing.JTextField();
+        jPanel3 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1080, 376));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -129,7 +134,7 @@ public class PermissionForm extends javax.swing.JFrame {
                 exitIconMouseClicked(evt);
             }
         });
-        pnlNavbar.add(exitIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 0, -1, 60));
+        pnlNavbar.add(exitIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(1050, 0, -1, 60));
 
         lblFormName.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
         lblFormName.setForeground(new java.awt.Color(255, 255, 255));
@@ -137,47 +142,7 @@ public class PermissionForm extends javax.swing.JFrame {
         pnlNavbar.add(lblFormName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, -1, 60));
 
         pnlWrapper.setBackground(new java.awt.Color(234, 234, 234));
-
-        jScrollPane1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
-
-        tblPermission.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
-        tblPermission.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        tblPermission.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "#", "Name", "Action", "id"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
-            };
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tblPermission.setGridColor(new java.awt.Color(255, 255, 255));
-        tblPermission.setOpaque(false);
-        tblPermission.setRowHeight(30);
-        jScrollPane1.setViewportView(tblPermission);
-        tblPermission.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        pnlWrapper.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 51, 0), 5));
 
         pnlFormAdd.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -257,20 +222,51 @@ public class PermissionForm extends javax.swing.JFrame {
         cbName.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
         cbName.setLightWeightPopupEnabled(false);
 
+        btnDelPer1.setBackground(new java.awt.Color(19, 132, 150));
+        btnDelPer1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDelPer1MouseClicked(evt);
+            }
+        });
+
+        lblPer3.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        lblPer3.setForeground(new java.awt.Color(255, 255, 255));
+        lblPer3.setText("UPDATE");
+
+        javax.swing.GroupLayout btnDelPer1Layout = new javax.swing.GroupLayout(btnDelPer1);
+        btnDelPer1.setLayout(btnDelPer1Layout);
+        btnDelPer1Layout.setHorizontalGroup(
+            btnDelPer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnDelPer1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(lblPer3)
+                .addGap(25, 25, 25))
+        );
+        btnDelPer1Layout.setVerticalGroup(
+            btnDelPer1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnDelPer1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblPer3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout pnlFormAddLayout = new javax.swing.GroupLayout(pnlFormAdd);
         pnlFormAdd.setLayout(pnlFormAddLayout);
         pnlFormAddLayout.setHorizontalGroup(
             pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFormAddLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnAddPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(txtAction)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
-                    .addComponent(cbName, 0, 267, Short.MAX_VALUE))
+                .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormAddLayout.createSequentialGroup()
+                        .addComponent(btnAddPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                        .addComponent(btnDelPer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtAction, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbName, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(25, 25, 25))
         );
         pnlFormAddLayout.setVerticalGroup(
@@ -286,10 +282,110 @@ public class PermissionForm extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addGap(0, 0, 0)
                 .addComponent(txtAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)
+                .addGap(0, 0, 0)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnAddPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnAddPer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelPer1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25))
+        );
+
+        pnlContent.setBackground(new java.awt.Color(255, 255, 255));
+
+        jScrollPane1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+
+        tblPermission.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        tblPermission.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        tblPermission.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "#", "Name", "Action", "id"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblPermission.setGridColor(new java.awt.Color(255, 255, 255));
+        tblPermission.setOpaque(false);
+        tblPermission.setRowHeight(30);
+        jScrollPane1.setViewportView(tblPermission);
+        tblPermission.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        txtSearch.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtSearch.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        txtSearch.setPreferredSize(new java.awt.Dimension(0, 36));
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
+
+        jPanel3.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel3.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setText("Search:");
+
+        javax.swing.GroupLayout pnlContentLayout = new javax.swing.GroupLayout(pnlContent);
+        pnlContent.setLayout(pnlContentLayout);
+        pnlContentLayout.setHorizontalGroup(
+            pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContentLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3)
+                        .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25))
+        );
+        pnlContentLayout.setVerticalGroup(
+            pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContentLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(jLabel3)
+                .addGap(0, 0, 0)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
         );
 
@@ -301,16 +397,16 @@ public class PermissionForm extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(pnlFormAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25)
-                .addComponent(jScrollPane1)
+                .addComponent(pnlContent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(25, 25, 25))
         );
         pnlWrapperLayout.setVerticalGroup(
             pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWrapperLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(pnlFormAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(pnlFormAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(pnlContent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25))
         );
 
@@ -318,7 +414,7 @@ public class PermissionForm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlNavbar, javax.swing.GroupLayout.DEFAULT_SIZE, 1080, Short.MAX_VALUE)
+            .addComponent(pnlNavbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -362,16 +458,44 @@ public class PermissionForm extends javax.swing.JFrame {
         if(name.equals("") || action.equals("")) {
             JOptionPane.showMessageDialog(null, "Name or Action can't be blank!");
         } else {
-            myPerm.setName(name);
-            myPerm.setAction(action);
-            myPerm.insert();
-            showPermission();
-            AppHelper.setColWidth(tblPermission, 0, 50);
-            AppHelper.setColWidth(tblPermission, 3, 0);
-            cbName.setSelectedIndex(0);
-            txtAction.setText("");
+            Boolean checkExist = false;
+            String sql = "SELECT * FROM `permissions` "
+                    + "WHERE LOWER(`name`) = ? AND LOWER(`action`) = ?";
+            try {
+                stmt = DbConn.getConnection().prepareStatement(sql);
+                stmt.setString(1, name.toLowerCase());
+                stmt.setString(2, action.toLowerCase());
+                rs = stmt.executeQuery();
+                if(rs.next())
+                    checkExist = true;
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+            if(checkExist.equals(true)) {
+                JOptionPane.showMessageDialog(null, "Permission already exist!");
+                checkExist = false;
+                cbName.setSelectedIndex(0);
+                txtAction.setText("");
+            } else {
+                myPerm.setName(name);
+                myPerm.setAction(action);
+                myPerm.insert();
+                showPermission();
+                AppHelper.setColWidth(tblPermission, 0, 50);
+                AppHelper.setColWidth(tblPermission, 3, 0);
+                cbName.setSelectedIndex(0);
+                txtAction.setText("");
+            }
         }
     }//GEN-LAST:event_btnAddPerMouseClicked
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
+
+    private void btnDelPer1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDelPer1MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnDelPer1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -404,19 +528,25 @@ public class PermissionForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel btnAddPer;
+    private javax.swing.JPanel btnDelPer1;
     private javax.swing.JComboBox<String> cbName;
     private javax.swing.JLabel exitIcon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFormName;
     private javax.swing.JLabel lblPer;
+    private javax.swing.JLabel lblPer3;
+    private javax.swing.JPanel pnlContent;
     private javax.swing.JPanel pnlFormAdd;
     private javax.swing.JPanel pnlNavbar;
     private javax.swing.JPanel pnlWrapper;
     private javax.swing.JTable tblPermission;
     private javax.swing.JTextField txtAction;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

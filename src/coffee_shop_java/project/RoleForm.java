@@ -15,6 +15,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -31,20 +34,22 @@ public class RoleForm extends javax.swing.JFrame {
     public RoleForm() {
         initComponents();
         showRole();
-        addToCombo("roles");
-        addToCombo("permissions");
+        showRolePermission();
+        addToRole();
+        addToPerName();
+        addToAction(String.valueOf(cbPermName.getSelectedItem()));
         cbPermName.setBackground(new Color(0, 0, 0, 0));
         cbPermAction.setBackground(new Color(0, 0, 0, 0));
     }
     
-    PreparedStatement stmt = null;
-    ResultSet rs;
     Role myRole = new Role();
     RolePermission myRolePerm = new RolePermission();
 
-    public ArrayList<Role> getAllRoles(){
+    public ArrayList<Role> getAllRoles() {
+        PreparedStatement stmt = null;
+        ResultSet rs;
         ArrayList<Role> list = new ArrayList<>();
-        String sql = "SELECT * FROM `roles`";
+        String sql = "SELECT * FROM `roles` ORDER BY `name`";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
             rs = stmt.executeQuery();
@@ -62,7 +67,9 @@ public class RoleForm extends javax.swing.JFrame {
         return list;
     }
     
-    public void showRole(){
+    public void showRole() {
+        PreparedStatement stmt = null;
+        ResultSet rs;
         tblRole.setModel(new DefaultTableModel(null, new String[]{"#", "Name", "Description", "id"}));
         ArrayList<Role> list = getAllRoles();
         DefaultTableModel model = (DefaultTableModel) tblRole.getModel();
@@ -76,22 +83,93 @@ public class RoleForm extends javax.swing.JFrame {
         }
     }
     
-    public void addToCombo(String tblName) {
-        String name = "";
-        String sql = "SELECT * FROM `" + tblName + "`";
+    public ArrayList<RolePermission> getAllRolePer() {
+        PreparedStatement stmt = null;
+        ResultSet rs;
+        ArrayList<RolePermission> list = new ArrayList<>();
+        String sql = "SELECT `role_permissions`.`id` AS role_per_id, `roles`.`name` AS role_name, "
+                + "CONCAT(`permissions`.`name`, '_', `permissions`.`action`) AS permission_name "
+                + "FROM `role_permissions` "
+                + "INNER JOIN `roles` ON `role_permissions`.`role_id` = `roles`.`id` "
+                + "INNER JOIN `permissions` ON `role_permissions`.`permission_id` = `permissions`.`id`";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            rs = stmt.executeQuery();
+            RolePermission rolePer;
+            int i = 0;
+            while(rs.next()){
+                i++;
+                rolePer = new RolePermission(
+                    i, 
+                    rs.getString("role_name"), 
+                    rs.getString("permission_name"), 
+                    rs.getInt("role_per_id")
+                );
+                list.add(rolePer);
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return list;
+    }
+    
+    public void showRolePermission() {
+        tblRolePer.setModel(new DefaultTableModel(null, new String[]{"#", "Role", "Permission", "id"}));
+        ArrayList<RolePermission> list = getAllRolePer();
+        DefaultTableModel model = (DefaultTableModel) tblRolePer.getModel();
+        Object[] rows = new Object[4];
+        for(int i=0; i<list.size(); i++){
+            rows[0] = list.get(i).getTblId();
+            rows[1] = list.get(i).getRole_name();
+            rows[2] = list.get(i).getPermission_name();
+            rows[3] = list.get(i).getId();
+            model.addRow(rows);
+        }
+    }
+    
+    public void addToRole() {
+        PreparedStatement stmt = null;
+        ResultSet rs;
+        String sql = "SELECT * FROM `roles` ORDER BY `name`";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
             rs = stmt.executeQuery();
             while(rs.next()){
-                if(tblName.equals("roles"))
-                    cbRole.addItem(rs.getString("name"));
-                else if(tblName.equals("permissions")) {
-                    if(cbPermName.getItemCount() > 0)
-                        name = cbPermName.getItemAt(0);
-                    if(!name.equals(rs.getString("name")))
-                        cbPermName.addItem(rs.getString("name"));
-                    cbPermAction.addItem(rs.getString("action"));
-                }
+                cbRole.addItem(rs.getString("name"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+    
+    public void addToPerName() {
+        PreparedStatement stmt = null;
+        ResultSet rs;
+        cbPermName.removeAllItems();
+        String sql = "SELECT DISTINCT `name` FROM permissions ORDER BY `name`";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            rs = stmt.executeQuery();
+            while(rs.next()) {
+                cbPermName.addItem(AppHelper.toCapitalize(rs.getString("name")));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+    
+    public void addToAction(String perName) {
+        PreparedStatement stmt = null;
+        ResultSet rs;
+        cbPermAction.removeAllItems();
+        String sql = "SELECT `action` FROM `permissions` WHERE LOWER(`name`) = ?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setString(1, perName.toLowerCase());
+            rs = stmt.executeQuery();
+            while(rs.next()) {
+                cbPermAction.addItem(rs.getString("action"));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
@@ -99,6 +177,8 @@ public class RoleForm extends javax.swing.JFrame {
     }
     
     public void getRoleId(String combo) {
+        PreparedStatement stmt = null;
+        ResultSet rs;
         String sql = "SELECT * FROM `roles` "
             + "WHERE LOWER(`name`) = '" + combo + "'";
         try {
@@ -112,9 +192,11 @@ public class RoleForm extends javax.swing.JFrame {
         }
     }
     
-    public void getPermissionId(String name, String action) throws SQLException {
+    public void getPermissionId(String name, String action) {
+        PreparedStatement stmt = null;
+        ResultSet rs;
         String sql = "SELECT * FROM `permissions` "
-            + "WHERE LOWER(`name`) '" + name + "' "
+            + "WHERE LOWER(`name`) = '" + name + "' "
             + "AND LOWER(`action`) = '" + action + "'";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
@@ -143,13 +225,15 @@ public class RoleForm extends javax.swing.JFrame {
         pnlWrapper = new javax.swing.JPanel();
         pnlFormAdd = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        btnAddRole = new javax.swing.JPanel();
+        btnUpdateRole = new javax.swing.JPanel();
         lblAdd = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         txtName = new javax.swing.JTextField();
         txtDesc = new javax.swing.JTextArea();
+        btnAddRole = new javax.swing.JPanel();
+        lblAdd2 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRole = new javax.swing.JTable();
         pnlAddRolePer = new javax.swing.JPanel();
@@ -164,14 +248,14 @@ public class RoleForm extends javax.swing.JFrame {
         cbPermName = new javax.swing.JComboBox<>();
         cbPermAction = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
+        btnUpdateRolePer = new javax.swing.JPanel();
+        lblAdd3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblRolePer = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setAlwaysOnTop(true);
         setBackground(new java.awt.Color(255, 255, 255));
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(1080, 827));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowIconified(java.awt.event.WindowEvent evt) {
                 formWindowIconified(evt);
@@ -190,7 +274,7 @@ public class RoleForm extends javax.swing.JFrame {
                 exitIconMouseClicked(evt);
             }
         });
-        pnlNavbar.add(exitIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(1020, 0, -1, 60));
+        pnlNavbar.add(exitIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(1040, 0, -1, 60));
 
         lblFormName.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
         lblFormName.setForeground(new java.awt.Color(255, 255, 255));
@@ -198,6 +282,7 @@ public class RoleForm extends javax.swing.JFrame {
         pnlNavbar.add(lblFormName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, -1, 60));
 
         pnlWrapper.setBackground(new java.awt.Color(234, 234, 234));
+        pnlWrapper.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 51, 0), 5));
         pnlWrapper.setPreferredSize(new java.awt.Dimension(1083, 900));
 
         pnlFormAdd.setBackground(new java.awt.Color(255, 255, 255));
@@ -205,29 +290,29 @@ public class RoleForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Name:");
 
-        btnAddRole.setBackground(new java.awt.Color(144, 202, 249));
-        btnAddRole.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnUpdateRole.setBackground(new java.awt.Color(19, 132, 150));
+        btnUpdateRole.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAddRoleMouseClicked(evt);
+                btnUpdateRoleMouseClicked(evt);
             }
         });
 
         lblAdd.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
         lblAdd.setForeground(new java.awt.Color(255, 255, 255));
-        lblAdd.setText("ADD");
+        lblAdd.setText("UPDATE");
 
-        javax.swing.GroupLayout btnAddRoleLayout = new javax.swing.GroupLayout(btnAddRole);
-        btnAddRole.setLayout(btnAddRoleLayout);
-        btnAddRoleLayout.setHorizontalGroup(
-            btnAddRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddRoleLayout.createSequentialGroup()
+        javax.swing.GroupLayout btnUpdateRoleLayout = new javax.swing.GroupLayout(btnUpdateRole);
+        btnUpdateRole.setLayout(btnUpdateRoleLayout);
+        btnUpdateRoleLayout.setHorizontalGroup(
+            btnUpdateRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnUpdateRoleLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(lblAdd)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addGap(25, 25, 25))
         );
-        btnAddRoleLayout.setVerticalGroup(
-            btnAddRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddRoleLayout.createSequentialGroup()
+        btnUpdateRoleLayout.setVerticalGroup(
+            btnUpdateRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnUpdateRoleLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblAdd)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -243,7 +328,7 @@ public class RoleForm extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 250, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -278,6 +363,34 @@ public class RoleForm extends javax.swing.JFrame {
         txtDesc.setRows(5);
         txtDesc.setBorder(null);
 
+        btnAddRole.setBackground(new java.awt.Color(144, 202, 249));
+        btnAddRole.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddRoleMouseClicked(evt);
+            }
+        });
+
+        lblAdd2.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        lblAdd2.setForeground(new java.awt.Color(255, 255, 255));
+        lblAdd2.setText("ADD");
+
+        javax.swing.GroupLayout btnAddRoleLayout = new javax.swing.GroupLayout(btnAddRole);
+        btnAddRole.setLayout(btnAddRoleLayout);
+        btnAddRoleLayout.setHorizontalGroup(
+            btnAddRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnAddRoleLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(lblAdd2)
+                .addContainerGap(25, Short.MAX_VALUE))
+        );
+        btnAddRoleLayout.setVerticalGroup(
+            btnAddRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnAddRoleLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblAdd2)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout pnlFormAddLayout = new javax.swing.GroupLayout(pnlFormAdd);
         pnlFormAdd.setLayout(pnlFormAddLayout);
         pnlFormAddLayout.setHorizontalGroup(
@@ -287,11 +400,14 @@ public class RoleForm extends javax.swing.JFrame {
                 .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
-                    .addComponent(txtDesc, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
                     .addComponent(txtName)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAddRole, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormAddLayout.createSequentialGroup()
+                        .addComponent(btnAddRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnUpdateRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDesc, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
                 .addGap(25, 25, 25))
         );
         pnlFormAddLayout.setVerticalGroup(
@@ -303,14 +419,16 @@ public class RoleForm extends javax.swing.JFrame {
                 .addComponent(txtName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addGap(0, 0, 0)
                 .addComponent(txtDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnAddRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnUpdateRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25))
         );
 
@@ -351,7 +469,6 @@ public class RoleForm extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblRole.setColumnSelectionAllowed(true);
         tblRole.setGridColor(new java.awt.Color(255, 255, 255));
         tblRole.setIntercellSpacing(new java.awt.Dimension(0, 0));
         tblRole.setOpaque(false);
@@ -451,6 +568,11 @@ public class RoleForm extends javax.swing.JFrame {
         cbPermName.setLightWeightPopupEnabled(false);
         cbPermName.setOpaque(false);
         cbPermName.setBackground(new Color(0, 0, 0, 0));
+        cbPermName.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbPermNameItemStateChanged(evt);
+            }
+        });
 
         cbPermAction.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         cbPermAction.setLightWeightPopupEnabled(false);
@@ -459,6 +581,34 @@ public class RoleForm extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Permission Action:");
+
+        btnUpdateRolePer.setBackground(new java.awt.Color(19, 132, 150));
+        btnUpdateRolePer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUpdateRolePerMouseClicked(evt);
+            }
+        });
+
+        lblAdd3.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        lblAdd3.setForeground(new java.awt.Color(255, 255, 255));
+        lblAdd3.setText("UPDATE");
+
+        javax.swing.GroupLayout btnUpdateRolePerLayout = new javax.swing.GroupLayout(btnUpdateRolePer);
+        btnUpdateRolePer.setLayout(btnUpdateRolePerLayout);
+        btnUpdateRolePerLayout.setHorizontalGroup(
+            btnUpdateRolePerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnUpdateRolePerLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(lblAdd3)
+                .addGap(25, 25, 25))
+        );
+        btnUpdateRolePerLayout.setVerticalGroup(
+            btnUpdateRolePerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnUpdateRolePerLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblAdd3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout pnlAddRolePerLayout = new javax.swing.GroupLayout(pnlAddRolePer);
         pnlAddRolePer.setLayout(pnlAddRolePerLayout);
@@ -469,40 +619,46 @@ public class RoleForm extends javax.swing.JFrame {
                 .addGroup(pnlAddRolePerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
                     .addGroup(pnlAddRolePerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(cbPermName, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabel4)
                         .addComponent(jLabel3)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnAddRolePer, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(cbRole, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cbPermAction, 0, 250, Short.MAX_VALUE)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(25, Short.MAX_VALUE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE)
+                        .addComponent(cbRole, 0, 258, Short.MAX_VALUE)
+                        .addComponent(cbPermAction, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, 258, Short.MAX_VALUE))
+                    .addComponent(cbPermName, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlAddRolePerLayout.createSequentialGroup()
+                        .addComponent(btnAddRolePer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btnUpdateRolePer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(25, 25, 25))
         );
         pnlAddRolePerLayout.setVerticalGroup(
             pnlAddRolePerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlAddRolePerLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(jLabel3)
-                .addGap(0, 0, 0)
-                .addComponent(cbRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel4)
-                .addGap(0, 0, 0)
-                .addComponent(cbPermName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jLabel5)
-                .addGap(0, 0, 0)
-                .addComponent(cbPermAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnAddRolePer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(pnlAddRolePerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnUpdateRolePer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlAddRolePerLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 0, 0)
+                        .addComponent(cbRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel4)
+                        .addGap(0, 0, 0)
+                        .addComponent(cbPermName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel5)
+                        .addGap(0, 0, 0)
+                        .addComponent(cbPermAction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btnAddRolePer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(25, 25, 25))
         );
 
@@ -554,9 +710,9 @@ public class RoleForm extends javax.swing.JFrame {
             pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWrapperLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(pnlFormAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pnlAddRolePer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(pnlAddRolePer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlFormAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(25, 25, 25)
                 .addGroup(pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
@@ -582,7 +738,7 @@ public class RoleForm extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(pnlNavbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 1101, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -602,21 +758,9 @@ public class RoleForm extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_exitIconMouseClicked
 
-    private void btnAddRoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddRoleMouseClicked
+    private void btnUpdateRoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateRoleMouseClicked
         // TODO add your handling code here:
-        if(txtName.equals("")) {
-            JOptionPane.showMessageDialog(null, "Name can't be blank!");
-        } else {
-            myRole.setName(txtName.getText().trim());
-            myRole.setDescription(txtDesc.getText().trim());
-            myRole.insert();
-            showRole();
-            AppHelper.setColWidth(tblRole, 0, 50);
-            AppHelper.setColWidth(tblRole, 3, 0);
-            txtName.setText("");
-            txtDesc.setText("");
-        }
-    }//GEN-LAST:event_btnAddRoleMouseClicked
+    }//GEN-LAST:event_btnUpdateRoleMouseClicked
 
     private void txtNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNameActionPerformed
         // TODO add your handling code here:
@@ -624,13 +768,44 @@ public class RoleForm extends javax.swing.JFrame {
 
     private void btnAddRolePerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddRolePerMouseClicked
         // TODO add your handling code here:
+        PreparedStatement stmt = null;
+        ResultSet rs;
         String role = String.valueOf(cbRole.getSelectedItem());
         String permName = String.valueOf(cbPermName.getSelectedItem());
         String permAction = String.valueOf(cbPermAction.getSelectedItem());
         if(role.equals("") || permName.equals("") || permAction.equals("")) {
             JOptionPane.showMessageDialog(null, "You can't add a blank role or permission name or permission action!");
         } else {
-
+            getRoleId(role);
+            getPermissionId(permName, permAction);
+            Boolean checkExist = false;
+            String sql = "SELECT * FROM `role_permissions` "
+                    + "WHERE `role_id` = ? AND `permission_id` = ?";
+            try {
+                stmt = DbConn.getConnection().prepareStatement(sql);
+                stmt.setInt(1, myRolePerm.getRole_id());
+                stmt.setInt(2, myRolePerm.getPermission_id());
+                rs = stmt.executeQuery();
+                if(rs.next())
+                    checkExist = true;
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+            if(checkExist.equals(true)) {
+                JOptionPane.showMessageDialog(null, "Role permission already exist!");
+                checkExist = false;
+                cbRole.setSelectedIndex(0);
+                cbPermName.setSelectedIndex(0);
+                cbPermAction.setSelectedIndex(0);
+            } else {
+                myRolePerm.insert();
+                showRolePermission();
+                AppHelper.setColWidth(tblRolePer, 0, 50);
+                AppHelper.setColWidth(tblRolePer, 3, 0);
+                cbRole.setSelectedIndex(0);
+                cbPermName.setSelectedIndex(0);
+                cbPermAction.setSelectedIndex(0);
+            }
         }
     }//GEN-LAST:event_btnAddRolePerMouseClicked
 
@@ -659,8 +834,56 @@ public class RoleForm extends javax.swing.JFrame {
 
     private void cbRoleItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbRoleItemStateChanged
         // TODO add your handling code here:
-        getRoleId(String.valueOf(cbRole.getSelectedItem()));
     }//GEN-LAST:event_cbRoleItemStateChanged
+
+    private void btnAddRoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddRoleMouseClicked
+        // TODO add your handling code here:
+        PreparedStatement stmt = null;
+        ResultSet rs;
+        if(txtName.getText().equals("")) {
+            JOptionPane.showMessageDialog(null, "Name can't be blank!");
+        } else {
+            Boolean checkExist = false;
+            String name = txtName.getText().trim();
+            String description = txtDesc.getText().trim();
+            String sql = "SELECT * FROM `roles` WHERE LOWER(`name`) = ?";
+            try {
+                stmt = DbConn.getConnection().prepareStatement(sql);
+                stmt.setString(1, name.toLowerCase());
+                rs = stmt.executeQuery();
+                if(rs.next()) {
+                    checkExist = true;
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+            if(checkExist.equals(true)) {
+                JOptionPane.showMessageDialog(null, "Role already exist!");
+                checkExist = false;
+                txtName.setText("");
+                txtDesc.setText("");
+                txtName.requestFocus(true);
+            } else {
+                myRole.setName(name);
+                myRole.setDescription(description);
+                myRole.insert();
+                showRole();
+                AppHelper.setColWidth(tblRole, 0, 50);
+                AppHelper.setColWidth(tblRole, 3, 0);
+                txtName.setText("");
+                txtDesc.setText("");
+            }
+        }
+    }//GEN-LAST:event_btnAddRoleMouseClicked
+
+    private void btnUpdateRolePerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateRolePerMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnUpdateRolePerMouseClicked
+
+    private void cbPermNameItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbPermNameItemStateChanged
+        // TODO add your handling code here:
+        addToAction(String.valueOf(cbPermName.getSelectedItem()));
+    }//GEN-LAST:event_cbPermNameItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -695,6 +918,8 @@ public class RoleForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel btnAddRole;
     private javax.swing.JPanel btnAddRolePer;
+    private javax.swing.JPanel btnUpdateRole;
+    private javax.swing.JPanel btnUpdateRolePer;
     private javax.swing.JComboBox<String> cbPermAction;
     private javax.swing.JComboBox<String> cbPermName;
     private javax.swing.JComboBox<String> cbRole;
@@ -713,6 +938,8 @@ public class RoleForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblAdd;
     private javax.swing.JLabel lblAdd1;
+    private javax.swing.JLabel lblAdd2;
+    private javax.swing.JLabel lblAdd3;
     private javax.swing.JLabel lblFormName;
     private javax.swing.JPanel pnlAddRolePer;
     private javax.swing.JPanel pnlFormAdd;
