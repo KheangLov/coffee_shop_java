@@ -6,8 +6,10 @@
 package coffee_shop_java.project.Helper;
 
 import coffee_shop_java.project.Model.DbConn;
+import coffee_shop_java.project.Model.User;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -53,6 +55,22 @@ public class AppHelper {
 //        }
 //        return null;
 //    }
+    
+    public static ResultSet selectQuery(String sql) {
+        PreparedStatement stmt = null;
+        ResultSet rs;
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            rs = stmt.executeQuery();
+            ResultSetMetaData metaData = rs.getMetaData();
+            int columnCount = metaData.getColumnCount();
+            if (columnCount > 0)
+                return rs;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return null;
+    }
     
     public static Boolean currentUserCan(int roleId, String permissionName, String permissionAction) {
         PreparedStatement st;

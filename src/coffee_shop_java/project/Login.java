@@ -7,8 +7,6 @@ package coffee_shop_java.project;
 
 import coffee_shop_java.project.Helper.PasswordEncryption;
 import coffee_shop_java.project.Model.DbConn;
-import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -323,10 +321,8 @@ public class Login extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Login().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Login().setVisible(true);
         });
     }
 

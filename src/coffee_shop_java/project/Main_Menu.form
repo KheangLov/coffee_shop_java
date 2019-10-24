@@ -61,7 +61,7 @@
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="dynamicLabel" min="-2" pref="293" max="-2" attributes="0"/>
-                          <EmptySpace pref="546" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="exitIcon" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
                       </Group>
@@ -81,7 +81,7 @@
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
-                  <Component id="dynamicPanel" max="32767" attributes="0"/>
+                  <Component id="dynamicPanel" pref="876" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -113,26 +113,34 @@
                           <Component id="dashLayp" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="dashPnl" alignment="1" pref="366" max="32767" attributes="0"/>
-                          <Component id="branchLabel" alignment="1" pref="366" max="32767" attributes="0"/>
-                          <Component id="comLabel" pref="366" max="32767" attributes="0"/>
-                          <Component id="proLabel" alignment="1" pref="366" max="32767" attributes="0"/>
-                          <Component id="staffLabel" alignment="1" pref="366" max="32767" attributes="0"/>
-                          <Component id="stockLabel" alignment="1" pref="366" max="32767" attributes="0"/>
-                          <Component id="userPnl" alignment="1" pref="366" max="32767" attributes="0"/>
+                          <Component id="dashPnl" alignment="1" pref="396" max="32767" attributes="0"/>
+                          <Component id="branchLabel" alignment="1" pref="396" max="32767" attributes="0"/>
+                          <Component id="comLabel" pref="396" max="32767" attributes="0"/>
+                          <Component id="proLabel" alignment="1" pref="396" max="32767" attributes="0"/>
+                          <Component id="staffLabel" alignment="1" pref="396" max="32767" attributes="0"/>
+                          <Component id="stockLabel" alignment="1" pref="396" max="32767" attributes="0"/>
+                          <Component id="userPnl" alignment="1" pref="396" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="21" max="32767" attributes="0"/>
-                      <Component id="company1" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                  <Component id="btnLogout" alignment="1" pref="413" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="supplierLayp" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <Component id="supplierPnl" pref="396" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
-                      <Component id="company2" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
+                              <Component id="company2" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+                              <Component id="company1" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
-                  <Component id="btnLogout" alignment="1" pref="383" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -140,9 +148,9 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       <Component id="company2" min="-2" pref="50" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="company1" min="-2" pref="50" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="dashPnl" min="-2" max="-2" attributes="0"/>
@@ -153,7 +161,7 @@
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                           <Component id="comLayer" max="-2" attributes="0"/>
-                                          <Component id="comLabel" max="32767" attributes="0"/>
+                                          <Component id="comLabel" pref="82" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -162,7 +170,7 @@
                                       </Group>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                          <Component id="staffLabel" max="32767" attributes="0"/>
+                                          <Component id="staffLabel" pref="82" max="32767" attributes="0"/>
                                           <Component id="staffLayer" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
@@ -179,6 +187,11 @@
                               </Group>
                           </Group>
                           <Component id="dashLayp" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="supplierPnl" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="supplierLayp" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                       <Component id="btnLogout" min="-2" max="-2" attributes="0"/>
@@ -287,12 +300,12 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="branchIcon" max="32767" attributes="0"/>
                               <Component id="branch" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -351,12 +364,12 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="proIcon" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="pro" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -479,12 +492,12 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="stock" min="-2" pref="50" max="-2" attributes="0"/>
                               <Component id="stockIcon" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -885,12 +898,12 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="userIcon" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="userLbl" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1008,7 +1021,7 @@
                           <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                           <Component id="dashIcon" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
-                          <Component id="dashLbl" max="32767" attributes="0"/>
+                          <Component id="dashLbl" pref="272" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1016,12 +1029,12 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="dashIcon" alignment="0" min="-2" max="-2" attributes="0"/>
                               <Component id="dashLbl" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1145,12 +1158,12 @@
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace pref="15" max="32767" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1176,12 +1189,157 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Container class="javax.swing.JPanel" name="supplierPnl">
+              <Properties>
+                <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="11" green="2d" red="4e" type="rgb"/>
+                </Property>
+                <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                  <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                </Property>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[330, 80]"/>
+                </Property>
+              </Properties>
+              <Events>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="supplierPnlMouseClicked"/>
+                <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="supplierPnlMouseEntered"/>
+                <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="supplierPnlMouseExited"/>
+              </Events>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                          <Component id="stockIcon1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                          <Component id="stock1" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" alignment="0" attributes="0">
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="stock1" alignment="1" min="-2" pref="50" max="-2" attributes="0"/>
+                              <Component id="stockIcon1" alignment="1" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JLabel" name="stockIcon1">
+                  <Properties>
+                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+                      <Image iconType="3" name="/coffee_shop_java/icons/supplier_filled_50px.png"/>
+                    </Property>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JLabel" name="stock1">
+                  <Properties>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Segoe UI" size="36" style="0"/>
+                    </Property>
+                    <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="SUPPLIER"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
+            <Container class="javax.swing.JLayeredPane" name="supplierLayp">
+              <Properties>
+                <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+                  <Dimension value="[17, 80]"/>
+                </Property>
+              </Properties>
+
+              <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
+              <SubComponents>
+                <Container class="javax.swing.JPanel" name="supplierBlink">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="11" green="2d" red="4e" type="rgb"/>
+                    </Property>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                      <CardConstraints cardName="card2"/>
+                    </Constraint>
+                  </Constraints>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="17" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="80" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                </Container>
+                <Container class="javax.swing.JPanel" name="supplierActive">
+                  <Properties>
+                    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+                      <Color blue="11" green="2d" red="4e" type="rgb"/>
+                    </Property>
+                  </Properties>
+                  <Constraints>
+                    <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                      <CardConstraints cardName="card3"/>
+                    </Constraint>
+                  </Constraints>
+
+                  <Layout>
+                    <DimensionLayout dim="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="17" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                    <DimensionLayout dim="1">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <EmptySpace min="0" pref="80" max="32767" attributes="0"/>
+                      </Group>
+                    </DimensionLayout>
+                  </Layout>
+                </Container>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JLayeredPane" name="dynamicPanel">
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignCardLayout"/>
           <SubComponents>
+            <Container class="javax.swing.JPanel" name="supplierPanel">
+              <Constraints>
+                <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignCardLayout" value="org.netbeans.modules.form.compat2.layouts.DesignCardLayout$CardConstraintsDescription">
+                  <CardConstraints cardName="card6"/>
+                </Constraint>
+              </Constraints>
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+            </Container>
             <Container class="javax.swing.JPanel" name="comPanel">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -1197,12 +1355,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="906" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="881" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -1222,12 +1380,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="906" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="881" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -1247,7 +1405,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="881" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -1267,7 +1425,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="881" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -1287,7 +1445,7 @@
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="881" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
@@ -1338,17 +1496,17 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="btnAddUser" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnEditUser" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnChangePass" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnDelUser" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnRole" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnPermission" min="-2" max="-2" attributes="0"/>
-                              <Component id="btnUserRefresh" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="btnEditUser" max="32767" attributes="0"/>
+                              <Component id="btnChangePass" max="32767" attributes="0"/>
+                              <Component id="btnDelUser" max="32767" attributes="0"/>
+                              <Component id="btnRole" max="32767" attributes="0"/>
+                              <Component id="btnPermission" max="32767" attributes="0"/>
+                              <Component id="btnUserRefresh" max="32767" attributes="0"/>
+                              <Component id="btnAddUser" alignment="0" pref="0" max="32767" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
-                          <Component id="jScrollPane1" pref="732" max="32767" attributes="0"/>
+                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                          <Component id="jScrollPane1" pref="724" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1432,6 +1590,7 @@
                             </Column>
                           </TableColumnModel>
                         </Property>
+                        <Property name="columnSelectionAllowed" type="boolean" value="true"/>
                         <Property name="gridColor" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="ff" green="ff" red="ff" type="rgb"/>
                         </Property>
@@ -1522,7 +1681,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnRoleLbl" alignment="1" pref="74" max="32767" attributes="0"/>
+                          <Component id="btnRoleLbl" alignment="1" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnRoleIcon" min="-2" max="-2" attributes="0"/>
@@ -1576,7 +1735,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnRoleLbl1" alignment="1" pref="74" max="32767" attributes="0"/>
+                          <Component id="btnRoleLbl1" alignment="1" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnRoleIcon1" min="-2" max="-2" attributes="0"/>
@@ -1630,7 +1789,7 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnUserLbl1" alignment="1" pref="74" max="32767" attributes="0"/>
+                          <Component id="btnUserLbl1" alignment="1" max="32767" attributes="0"/>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnUserIcon1" min="-2" max="-2" attributes="0"/>
@@ -1684,9 +1843,9 @@
                     </DimensionLayout>
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnUserLbl2" alignment="1" pref="74" max="32767" attributes="0"/>
+                          <Component id="btnUserLbl2" alignment="1" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <EmptySpace pref="19" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnUserIcon2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                           </Group>
@@ -1791,7 +1950,7 @@
                     <DimensionLayout dim="1">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace pref="19" max="32767" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
                               <Component id="btnRoleIcon2" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                           </Group>
@@ -1820,12 +1979,12 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="906" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
                 <DimensionLayout dim="1">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <EmptySpace min="0" pref="881" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="876" max="32767" attributes="0"/>
                   </Group>
                 </DimensionLayout>
               </Layout>
