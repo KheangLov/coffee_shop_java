@@ -34,16 +34,13 @@ public class PermissionForm extends javax.swing.JFrame {
         cbName.setBackground(new Color(0, 0, 0, 0));
     }
     
-    PreparedStatement stmt = null;
-    ResultSet rs;
     Permission myPerm = new Permission();
     
     public void getAllTables() {
         String sql = "SELECT table_name FROM information_schema.tables "
                 + "WHERE table_schema ='coffee_shop'";
         try {
-            stmt = DbConn.getConnection().prepareStatement(sql);
-            rs = stmt.executeQuery();
+            ResultSet rs = AppHelper.selectQuery(sql);
             while(rs.next()){
                 cbName.addItem(rs.getString("table_name"));
             }
@@ -54,10 +51,9 @@ public class PermissionForm extends javax.swing.JFrame {
     
     public ArrayList<Permission> getAllPermission(){
         ArrayList<Permission> list = new ArrayList<>();
-        String sqlGetBranch = "SELECT * FROM `permissions`";
+        String sql = "SELECT * FROM `permissions`";
         try {
-            stmt = DbConn.getConnection().prepareStatement(sqlGetBranch);
-            rs = stmt.executeQuery();
+            ResultSet rs = AppHelper.selectQuery(sql);;
             Permission permission;
             int i = 0;
             while(rs.next()){
@@ -350,7 +346,7 @@ public class PermissionForm extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 250, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -364,15 +360,14 @@ public class PermissionForm extends javax.swing.JFrame {
         pnlContent.setLayout(pnlContentLayout);
         pnlContentLayout.setHorizontalGroup(
             pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlContentLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContentLayout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel3)
-                        .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3)
+                    .addGroup(pnlContentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(txtSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 629, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25))
         );
         pnlContentLayout.setVerticalGroup(
@@ -384,7 +379,7 @@ public class PermissionForm extends javax.swing.JFrame {
                 .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
         );
@@ -452,6 +447,8 @@ public class PermissionForm extends javax.swing.JFrame {
 
     private void btnAddPerMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddPerMouseClicked
         // TODO add your handling code here:
+        PreparedStatement stmt = null;
+        ResultSet rs;
         String name = String.valueOf(cbName.getSelectedItem());
         String action = txtAction.getText().trim();
         

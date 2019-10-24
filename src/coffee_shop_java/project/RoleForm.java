@@ -84,8 +84,6 @@ public class RoleForm extends javax.swing.JFrame {
     }
     
     public ArrayList<RolePermission> getAllRolePer() {
-        PreparedStatement stmt = null;
-        ResultSet rs;
         ArrayList<RolePermission> list = new ArrayList<>();
         String sql = "SELECT `role_permissions`.`id` AS role_per_id, `roles`.`name` AS role_name, "
                 + "CONCAT(`permissions`.`name`, '_', `permissions`.`action`) AS permission_name "
@@ -93,8 +91,7 @@ public class RoleForm extends javax.swing.JFrame {
                 + "INNER JOIN `roles` ON `role_permissions`.`role_id` = `roles`.`id` "
                 + "INNER JOIN `permissions` ON `role_permissions`.`permission_id` = `permissions`.`id`";
         try {
-            stmt = DbConn.getConnection().prepareStatement(sql);
-            rs = stmt.executeQuery();
+            ResultSet rs = AppHelper.selectQuery(sql);
             RolePermission rolePer;
             int i = 0;
             while(rs.next()){
@@ -129,15 +126,11 @@ public class RoleForm extends javax.swing.JFrame {
     }
     
     public void addToRole() {
-        PreparedStatement stmt = null;
-        ResultSet rs;
         String sql = "SELECT * FROM `roles` ORDER BY `name`";
         try {
-            stmt = DbConn.getConnection().prepareStatement(sql);
-            rs = stmt.executeQuery();
-            while(rs.next()){
+            ResultSet rs = AppHelper.selectQuery(sql);
+            while(rs.next())
                 cbRole.addItem(rs.getString("name"));
-            }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }

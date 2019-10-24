@@ -50,7 +50,7 @@ public class Main_Menu extends javax.swing.JFrame {
         initComponents();
     }
     
-    public void showUsers() {
+    public void showUsers(ArrayList<User> list) {
         userTbl.setModel(new DefaultTableModel(
             null, 
             new String[]{
@@ -63,7 +63,6 @@ public class Main_Menu extends javax.swing.JFrame {
                 "id"
             }
         ));
-        ArrayList<User> list = getAllUsers();
         DefaultTableModel model = (DefaultTableModel) userTbl.getModel();
         Object[] rows = new Object[7];
         for(int i=0; i<list.size(); i++){
@@ -76,6 +75,8 @@ public class Main_Menu extends javax.swing.JFrame {
             rows[6] = list.get(i).getId();
             model.addRow(rows);
         }
+        AppHelper.setColWidth(userTbl, 6, 0);
+        AppHelper.setColWidth(userTbl, 0, 50);
     }
     
     public ArrayList<User> getAllUsers() {
@@ -99,6 +100,34 @@ public class Main_Menu extends javax.swing.JFrame {
                 );
                 list.add(user);
             }      
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return list;
+    }
+    
+    public ArrayList<User> searchUser(String text) {
+        ArrayList<User> list = new ArrayList<>();
+        String sql = "SELECT `users`.*, `roles`.`name` AS role_name FROM `users` "
+            + "INNER JOIN `roles` ON `users`.`role_id` = `roles`.`id` "
+            + "WHERE LOWER(`users`.`fullname`) LIKE '%" + text + "%'";
+        try {
+            ResultSet rs = AppHelper.selectQuery(sql);
+            User user;
+            int i = 0;
+            while(rs.next()){
+                i++;
+                user = new User(
+                    i,
+                    rs.getString("fullname"),
+                    rs.getString("email"),
+                    rs.getString("gender"),
+                    rs.getString("status"),
+                    rs.getString("role_name"),
+                    rs.getInt("id")
+                );
+                list.add(user);
+            } 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
@@ -199,6 +228,9 @@ public class Main_Menu extends javax.swing.JFrame {
         btnUserLbl3 = new javax.swing.JLabel();
         btnUserRefresh = new javax.swing.JPanel();
         btnRoleIcon2 = new javax.swing.JLabel();
+        txtSearchUser = new javax.swing.JTextField();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
         dashPanel = new javax.swing.JPanel();
         exitIcon = new javax.swing.JLabel();
         dynamicLabel = new javax.swing.JLabel();
@@ -949,7 +981,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(supplierPnl, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(supplierLayp, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -980,7 +1012,7 @@ public class Main_Menu extends javax.swing.JFrame {
         );
         comPanelLayout.setVerticalGroup(
             comPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 881, Short.MAX_VALUE)
+            .addGap(0, 876, Short.MAX_VALUE)
         );
 
         dynamicPanel.add(comPanel, "card2");
@@ -995,7 +1027,7 @@ public class Main_Menu extends javax.swing.JFrame {
         );
         branchPanelLayout.setVerticalGroup(
             branchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 881, Short.MAX_VALUE)
+            .addGap(0, 876, Short.MAX_VALUE)
         );
 
         dynamicPanel.add(branchPanel, "card3");
@@ -1008,7 +1040,7 @@ public class Main_Menu extends javax.swing.JFrame {
         );
         proPanelLayout.setVerticalGroup(
             proPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 881, Short.MAX_VALUE)
+            .addGap(0, 876, Short.MAX_VALUE)
         );
 
         dynamicPanel.add(proPanel, "card4");
@@ -1021,7 +1053,7 @@ public class Main_Menu extends javax.swing.JFrame {
         );
         staffPanelLayout.setVerticalGroup(
             staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 881, Short.MAX_VALUE)
+            .addGap(0, 876, Short.MAX_VALUE)
         );
 
         dynamicPanel.add(staffPanel, "card5");
@@ -1034,7 +1066,7 @@ public class Main_Menu extends javax.swing.JFrame {
         );
         stockPanelLayout.setVerticalGroup(
             stockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 881, Short.MAX_VALUE)
+            .addGap(0, 876, Short.MAX_VALUE)
         );
 
         dynamicPanel.add(stockPanel, "card6");
@@ -1073,10 +1105,10 @@ public class Main_Menu extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        userTbl.setColumnSelectionAllowed(true);
         userTbl.setGridColor(new java.awt.Color(255, 255, 255));
         userTbl.setOpaque(false);
         userTbl.setRowHeight(34);
+        userTbl.setSelectionBackground(new java.awt.Color(0, 0, 0));
         userTbl.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(userTbl);
         userTbl.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -1175,7 +1207,7 @@ public class Main_Menu extends javax.swing.JFrame {
             btnPermissionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnRoleLbl1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnPermissionLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(19, Short.MAX_VALUE)
                 .addComponent(btnRoleIcon1)
                 .addGap(15, 15, 15))
         );
@@ -1208,7 +1240,7 @@ public class Main_Menu extends javax.swing.JFrame {
             btnEditUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnUserLbl1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnEditUserLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(19, Short.MAX_VALUE)
                 .addComponent(btnUserIcon1)
                 .addGap(15, 15, 15))
         );
@@ -1241,7 +1273,7 @@ public class Main_Menu extends javax.swing.JFrame {
             btnChangePassLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(btnUserLbl2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(btnChangePassLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(19, Short.MAX_VALUE)
                 .addComponent(btnUserIcon2)
                 .addGap(15, 15, 15))
         );
@@ -1300,10 +1332,36 @@ public class Main_Menu extends javax.swing.JFrame {
         btnUserRefreshLayout.setVerticalGroup(
             btnUserRefreshLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnUserRefreshLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(19, Short.MAX_VALUE)
                 .addComponent(btnRoleIcon2)
                 .addGap(15, 15, 15))
         );
+
+        txtSearchUser.setBackground(new java.awt.Color(234, 234, 234));
+        txtSearchUser.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        txtSearchUser.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        txtSearchUser.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSearchUserKeyPressed(evt);
+            }
+        });
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel1.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 630, Short.MAX_VALUE)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel3.setText("Search:");
 
         javax.swing.GroupLayout userPanelLayout = new javax.swing.GroupLayout(userPanel);
         userPanel.setLayout(userPanelLayout);
@@ -1312,39 +1370,54 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGroup(userPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(userPanelLayout.createSequentialGroup()
-                        .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtSearchUser, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(userPanelLayout.createSequentialGroup()
+                                    .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnEditUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(btnChangePass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))
                         .addGap(18, 18, 18)
-                        .addComponent(btnEditUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnChangePass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnDelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnUserRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(userPanelLayout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addGap(25, 25, 25))))
+                        .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(userPanelLayout.createSequentialGroup()
+                                .addComponent(btnDelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(btnUserRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 159, Short.MAX_VALUE)))
+                .addGap(25, 25, 25))
         );
         userPanelLayout.setVerticalGroup(
             userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(userPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnEditUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnChangePass, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDelUser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnPermission, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnUserRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(28, 28, 28)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 724, Short.MAX_VALUE)
+                    .addComponent(btnEditUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnChangePass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(userPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtSearchUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnUserRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 602, Short.MAX_VALUE)
                 .addGap(25, 25, 25))
         );
 
@@ -1358,7 +1431,7 @@ public class Main_Menu extends javax.swing.JFrame {
         );
         dashPanelLayout.setVerticalGroup(
             dashPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 881, Short.MAX_VALUE)
+            .addGap(0, 876, Short.MAX_VALUE)
         );
 
         dynamicPanel.add(dashPanel, "card6");
@@ -1381,7 +1454,7 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, backgroundLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(dynamicLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 513, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(exitIcon)
                         .addGap(5, 5, 5))))
         );
@@ -1395,7 +1468,7 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(dynamicLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                .addComponent(dynamicPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 876, Short.MAX_VALUE))
+                .addComponent(dynamicPanel))
         );
 
         getContentPane().add(background, java.awt.BorderLayout.CENTER);
@@ -1797,14 +1870,12 @@ public class Main_Menu extends javax.swing.JFrame {
             dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
             dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
             dynamicLabel.setText("USER");
-            showUsers();
+            showUsers(getAllUsers());
             JTableHeader header = userTbl.getTableHeader();
             header.setFont(new Font("Segoe UI", Font.BOLD, 26));
             header.setOpaque(false);
             header.setForeground(Color.WHITE);
             header.setBackground(Color.black);
-            AppHelper.setColWidth(userTbl, 6, 0);
-            AppHelper.setColWidth(userTbl, 0, 50);
 
             //braLayer
             branchLabel.setBackground(new Color(78, 45, 17));
@@ -2000,9 +2071,7 @@ public class Main_Menu extends javax.swing.JFrame {
                     if(res == JOptionPane.YES_OPTION) {
                         User myUser = new User();
                         myUser.delete(id);
-                        showUsers();
-                        AppHelper.setColWidth(userTbl, 6, 0);
-                        AppHelper.setColWidth(userTbl, 0, 50);
+                        showUsers(getAllUsers());
                     }
                 }
             }
@@ -2011,9 +2080,7 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void btnUserRefreshMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUserRefreshMouseClicked
         // TODO add your handling code here:
-        showUsers();
-        AppHelper.setColWidth(userTbl, 6, 0);
-        AppHelper.setColWidth(userTbl, 0, 50);
+        showUsers(getAllUsers());
     }//GEN-LAST:event_btnUserRefreshMouseClicked
 
     private void btnLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLogoutMouseClicked
@@ -2091,6 +2158,15 @@ public class Main_Menu extends javax.swing.JFrame {
         if(sup == false)
             supplierBlink.setBackground(new Color(78, 45, 17));
     }//GEN-LAST:event_supplierPnlMouseExited
+
+    private void txtSearchUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchUserKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.alphOnly(evt))
+            txtSearchUser.setEditable(true);
+        else
+            txtSearchUser.setEditable(false);
+        showUsers(searchUser(txtSearchUser.getText().trim()));
+    }//GEN-LAST:event_txtSearchUserKeyPressed
 
     /**
      * @param args the command line arguments
@@ -2176,6 +2252,8 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel exitIcon;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel pro;
     private javax.swing.JPanel proActive;
@@ -2206,6 +2284,7 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLayeredPane supplierLayp;
     private javax.swing.JPanel supplierPanel;
     private javax.swing.JPanel supplierPnl;
+    private javax.swing.JTextField txtSearchUser;
     private javax.swing.JPanel userActive;
     private javax.swing.JPanel userBlink;
     private javax.swing.JLabel userIcon;

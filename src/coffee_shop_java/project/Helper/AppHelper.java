@@ -7,6 +7,7 @@ package coffee_shop_java.project.Helper;
 
 import coffee_shop_java.project.Model.DbConn;
 import coffee_shop_java.project.Model.User;
+import com.sun.glass.events.KeyEvent;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
@@ -58,14 +59,9 @@ public class AppHelper {
     
     public static ResultSet selectQuery(String sql) {
         PreparedStatement stmt = null;
-        ResultSet rs;
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
-            rs = stmt.executeQuery();
-            ResultSetMetaData metaData = rs.getMetaData();
-            int columnCount = metaData.getColumnCount();
-            if (columnCount > 0)
-                return rs;
+            return stmt.executeQuery();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
         }
@@ -100,7 +96,7 @@ public class AppHelper {
     }
     
     public static ArrayList<String> getAllRoles() {
-        ArrayList<String> roles = new ArrayList<String>();
+        ArrayList<String> roles = new ArrayList<>();
         PreparedStatement st;
         ResultSet rs;
         String sql = "SELECT `name` FROM `roles` ORDER BY `name`";
@@ -135,6 +131,13 @@ public class AppHelper {
     public static boolean isValid(String email) {
         String regex = "^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$";
         return email.matches(regex);
+    }
+    
+    public static boolean alphOnly(java.awt.event.KeyEvent evt) {
+        char c = evt.getKeyChar();
+        if(Character.isLetter(c) || Character.isISOControl(c))
+            return true;
+        return false;
     }
     
     public static boolean isMatchLength(String type, int maxMin, int inputLength) {

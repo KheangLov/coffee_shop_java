@@ -9,6 +9,7 @@ import coffee_shop_java.project.Helper.AppHelper;
 import coffee_shop_java.project.Helper.PasswordEncryption;
 import coffee_shop_java.project.Model.DbConn;
 import coffee_shop_java.project.Model.User;
+import com.sun.glass.events.KeyEvent;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.PreparedStatement;
@@ -247,6 +248,11 @@ public class UserActions extends javax.swing.JFrame {
                 txtAddFnameActionPerformed(evt);
             }
         });
+        txtAddFname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtAddFnameKeyPressed(evt);
+            }
+        });
 
         btnAddRole.setBackground(new java.awt.Color(144, 202, 249));
         btnAddRole.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -290,6 +296,11 @@ public class UserActions extends javax.swing.JFrame {
         txtAddLname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtAddLnameActionPerformed(evt);
+            }
+        });
+        txtAddLname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtAddLnameKeyPressed(evt);
             }
         });
 
@@ -1279,6 +1290,22 @@ public class UserActions extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_txtEditConPassFocusLost
+
+    private void txtAddFnameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAddFnameKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.alphOnly(evt))
+            txtAddFname.setEditable(true);
+        else
+            txtAddFname.setEditable(false);
+    }//GEN-LAST:event_txtAddFnameKeyPressed
+
+    private void txtAddLnameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAddLnameKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.alphOnly(evt))
+            txtAddLname.setEditable(true);
+        else
+            txtAddLname.setEditable(false);
+    }//GEN-LAST:event_txtAddLnameKeyPressed
 
     /**
      * @param args the command line arguments
