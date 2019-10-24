@@ -9,7 +9,6 @@ import coffee_shop_java.project.Helper.AppHelper;
 import coffee_shop_java.project.Helper.PasswordEncryption;
 import coffee_shop_java.project.Model.DbConn;
 import coffee_shop_java.project.Model.User;
-import com.sun.glass.events.KeyEvent;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.PreparedStatement;

@@ -6,11 +6,9 @@
 package coffee_shop_java.project;
 
 import coffee_shop_java.project.Helper.AppHelper;
-import coffee_shop_java.project.Model.DbConn;
 import coffee_shop_java.project.Model.User;
 import java.awt.Color;
 import java.awt.Font;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
