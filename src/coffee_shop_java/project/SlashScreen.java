@@ -5,10 +5,6 @@
  */
 package coffee_shop_java.project;
 
-import com.sun.javafx.applet.Splash;
-import javax.swing.JOptionPane;
-import javax.swing.JProgressBar;
-
 /**
  *
  * @author KHEANG
