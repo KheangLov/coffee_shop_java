@@ -3,18 +3,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-<<<<<<< HEAD
-            <file>file:/D:/Years%203%20So10/Sa%20II/coffee_shop_java/src/coffee_shop_java/project/RegisterForm.java</file>
-            <file>file:/D:/Years%203%20So10/Sa%20II/coffee_shop_java/src/coffee_shop_java/project/Branch.java</file>
-            <file>file:/D:/Years%203%20So10/Sa%20II/coffee_shop_java/src/coffee_shop_java/project/CompanyForm.java</file>
-            <file>file:/D:/Years%203%20So10/Sa%20II/coffee_shop_java/src/coffee_shop_java/project/User.java</file>
-            <file>file:/D:/Years%203%20So10/Sa%20II/coffee_shop_java/src/coffee_shop_java/project/LoginForm.java</file>
-            <file>file:/D:/Years%203%20So10/Sa%20II/coffee_shop_java/src/coffee_shop_java/project/MainForm.java</file>
-            <file>file:/D:/Years%203%20So10/Sa%20II/coffee_shop_java/src/coffee_shop_java/project/DbConn.java</file>
-            <file>file:/D:/Years%203%20So10/Sa%20II/coffee_shop_java/src/coffee_shop_java/project/Action.java</file>
-            <file>file:/D:/Years%203%20So10/Sa%20II/coffee_shop_java/src/coffee_shop_java/project/BranchForm.java</file>
-            <file>file:/D:/Years%203%20So10/Sa%20II/coffee_shop_java/src/coffee_shop_java/project/Company.java</file>
-=======
             <file>file:/D:/School/Java/SA/coffee_shop_java/src/coffee_shop_java/project/Model/Role.java</file>
             <file>file:/D:/School/Java/SA/coffee_shop_java/src/coffee_shop_java/project/CoffeeShopForm.java</file>
             <file>file:/D:/School/Java/SA/coffee_shop_java/src/coffee_shop_java/project/MainForm.java</file>
@@ -28,7 +16,6 @@
             <file>file:/D:/School/Java/SA/coffee_shop_java/src/coffee_shop_java/project/Model/User.java</file>
             <file>file:/D:/School/Java/SA/coffee_shop_java/src/coffee_shop_java/project/LoginForm.java</file>
             <file>file:/D:/School/Java/SA/coffee_shop_java/src/coffee_shop_java/project/PermissionForm.java</file>
->>>>>>> b91d07e1aff9360676b8177f1d7e2e28dfbfeb73
         </group>
     </open-files>
 </project-private>

@@ -23,8 +23,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RolePermission extends Action {
     PreparedStatement stmt = null;
+    private int tblId;
+    private String role_name;
+    private String permission_name;
+    private int id;
     private int role_id;
     private int permission_id;
+
+    public RolePermission(int tblId, String role_name, String permission_name, int id) {
+        this.tblId = tblId;
+        this.role_name = role_name;
+        this.permission_name = permission_name;
+        this.id = id;
+    }
 
     @Override
     public void insert() {

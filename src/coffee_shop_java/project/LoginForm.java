@@ -117,7 +117,7 @@ public class LoginForm extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         btnLoginLayout.setVerticalGroup(
             btnLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
