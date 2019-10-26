@@ -6,11 +6,8 @@
 package coffee_shop_java.project.Model;
 
 import coffee_shop_java.project.Action.Action;
-import coffee_shop_java.project.Helper.AppHelper;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -40,7 +37,16 @@ public class User extends Action {
     private String created_date;
     private String updated_date;
 
-    public User(int tblId, String fullname, String email, String gender, String status, String role_name, int id) {
+    public User(
+        int tblId, 
+        String fullname, 
+        String email, 
+        String gender, 
+        String status, 
+        String role_name, 
+        int id
+    )
+    {
         this.tblId = tblId;
         this.fullname = fullname;
         this.email = email;
@@ -52,8 +58,20 @@ public class User extends Action {
     
     @Override
     public void insert() {
-        String sql = "INSERT INTO users(firstname, lastname, fullname, email, password, gender, status, role_id, user_type, login_count, created_date, updated_date)"
-                + "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO users("
+                + "firstname, "
+                + "lastname, "
+                + "fullname, "
+                + "email, "
+                + "password, "
+                + "gender, "
+                + "status, "
+                + "role_id, "
+                + "user_type, "
+                + "login_count, "
+                + "created_date, "
+                + "updated_date"
+                + ") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
             stmt.setString(1, firstname);

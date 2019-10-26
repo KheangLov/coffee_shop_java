@@ -79,55 +79,59 @@ public class Main_Menu extends javax.swing.JFrame {
     
     public ArrayList<User> getAllUsers() {
         ArrayList<User> list = new ArrayList<>();
-        String sql = "SELECT `users`.*, `roles`.`name` AS role_name FROM `users` "
-            + "INNER JOIN `roles` ON `users`.`role_id` = `roles`.`id`";
-        try {
-            ResultSet rs = AppHelper.selectQuery(sql);
-            User user;
-            int i = 0;
-            while(rs.next()){
-                i++;
-                user = new User(
-                    i,
-                    rs.getString("fullname"),
-                    rs.getString("email"),
-                    rs.getString("gender"),
-                    rs.getString("status"),
-                    rs.getString("role_name"),
-                    rs.getInt("id")
-                );
-                list.add(user);
-            }      
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+        if(AppHelper.currentUserCan(roleId, "users", "read")) {
+            String sql = "SELECT `users`.*, `roles`.`name` AS role_name FROM `users` "
+                + "INNER JOIN `roles` ON `users`.`role_id` = `roles`.`id`";
+            try {
+                ResultSet rs = AppHelper.selectQuery(sql);
+                User user;
+                int i = 0;
+                while(rs.next()){
+                    i++;
+                    user = new User(
+                        i,
+                        rs.getString("fullname"),
+                        rs.getString("email"),
+                        rs.getString("gender"),
+                        rs.getString("status"),
+                        rs.getString("role_name"),
+                        rs.getInt("id")
+                    );
+                    list.add(user);
+                }      
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
         }
         return list;
     }
     
     public ArrayList<User> searchUser(String text) {
         ArrayList<User> list = new ArrayList<>();
-        String sql = "SELECT `users`.*, `roles`.`name` AS role_name FROM `users` "
-            + "INNER JOIN `roles` ON `users`.`role_id` = `roles`.`id` "
-            + "WHERE LOWER(`users`.`fullname`) LIKE '%" + text + "%'";
-        try {
-            ResultSet rs = AppHelper.selectQuery(sql);
-            User user;
-            int i = 0;
-            while(rs.next()){
-                i++;
-                user = new User(
-                    i,
-                    rs.getString("fullname"),
-                    rs.getString("email"),
-                    rs.getString("gender"),
-                    rs.getString("status"),
-                    rs.getString("role_name"),
-                    rs.getInt("id")
-                );
-                list.add(user);
-            } 
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+        if(AppHelper.currentUserCan(roleId, "users", "read")) {
+            String sql = "SELECT `users`.*, `roles`.`name` AS role_name FROM `users` "
+                + "INNER JOIN `roles` ON `users`.`role_id` = `roles`.`id` "
+                + "WHERE LOWER(`users`.`fullname`) LIKE '%" + text + "%'";
+            try {
+                ResultSet rs = AppHelper.selectQuery(sql);
+                User user;
+                int i = 0;
+                while(rs.next()){
+                    i++;
+                    user = new User(
+                        i,
+                        rs.getString("fullname"),
+                        rs.getString("email"),
+                        rs.getString("gender"),
+                        rs.getString("status"),
+                        rs.getString("role_name"),
+                        rs.getInt("id")
+                    );
+                    list.add(user);
+                } 
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
         }
         return list;
     }
@@ -284,11 +288,11 @@ public class Main_Menu extends javax.swing.JFrame {
         comLabelLayout.setVerticalGroup(
             comLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(comLabelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(comLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(comIcon)
                     .addComponent(company, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         branchLabel.setBackground(new java.awt.Color(78, 45, 17));
@@ -326,11 +330,11 @@ public class Main_Menu extends javax.swing.JFrame {
         branchLabelLayout.setVerticalGroup(
             branchLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, branchLabelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(branchLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(branchIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(branch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         proLabel.setBackground(new java.awt.Color(78, 45, 17));
@@ -368,11 +372,11 @@ public class Main_Menu extends javax.swing.JFrame {
         proLabelLayout.setVerticalGroup(
             proLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, proLabelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(proLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(proIcon)
                     .addComponent(pro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         staffLabel.setBackground(new java.awt.Color(78, 45, 17));
@@ -452,11 +456,11 @@ public class Main_Menu extends javax.swing.JFrame {
         stockLabelLayout.setVerticalGroup(
             stockLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(stockLabelLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(stockLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(stock, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(stockIcon))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         comLayer.setBackground(new java.awt.Color(255, 255, 255));
@@ -672,11 +676,11 @@ public class Main_Menu extends javax.swing.JFrame {
         userPnlLayout.setVerticalGroup(
             userPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(userPnlLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(userPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(userIcon)
                     .addComponent(userLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         userLayp.setPreferredSize(new java.awt.Dimension(17, 80));
@@ -749,11 +753,11 @@ public class Main_Menu extends javax.swing.JFrame {
         dashPnlLayout.setVerticalGroup(
             dashPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashPnlLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(dashPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dashIcon)
                     .addComponent(dashLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         dashLayp.setBackground(new java.awt.Color(78, 45, 17));
@@ -820,11 +824,11 @@ public class Main_Menu extends javax.swing.JFrame {
         btnLogoutLayout.setVerticalGroup(
             btnLogoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnLogoutLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(btnLogoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         supplierPnl.setBackground(new java.awt.Color(78, 45, 17));
@@ -862,11 +866,11 @@ public class Main_Menu extends javax.swing.JFrame {
         supplierPnlLayout.setVerticalGroup(
             supplierPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(supplierPnlLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(15, Short.MAX_VALUE)
                 .addGroup(supplierPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(stock1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(stockIcon1))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         supplierLayp.setPreferredSize(new java.awt.Dimension(17, 80));
@@ -937,7 +941,7 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addGroup(sidebarLayout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(company1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         sidebarLayout.setVerticalGroup(
             sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -965,7 +969,7 @@ public class Main_Menu extends javax.swing.JFrame {
                                 .addGap(0, 0, 0)
                                 .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(staffLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
-                                    .addComponent(staffLayer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(staffLayer, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE))
                                 .addGap(0, 0, 0)
                                 .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(proLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1351,7 +1355,7 @@ public class Main_Menu extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 630, Short.MAX_VALUE)
+            .addGap(0, 624, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1371,16 +1375,16 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(userPanelLayout.createSequentialGroup()
                         .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3)
                             .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(txtSearchUser, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(userPanelLayout.createSequentialGroup()
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, userPanelLayout.createSequentialGroup()
                                     .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
                                     .addComponent(btnEditUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(18, 18, 18)
-                                    .addComponent(btnChangePass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 630, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
+                                    .addComponent(btnChangePass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGap(18, 18, 18)
                         .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(userPanelLayout.createSequentialGroup()
@@ -1390,7 +1394,7 @@ public class Main_Menu extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btnUserRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 159, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addGap(25, 25, 25))
         );
         userPanelLayout.setVerticalGroup(
@@ -1401,7 +1405,7 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addComponent(btnEditUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnChangePass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnDelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(btnRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1846,66 +1850,62 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void userPnlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userPnlMouseClicked
         // TODO add your handling code here:
-        if(!AppHelper.currentUserCan(roleId, "users", "read")) {
-            AppHelper.permissionMessage();
-        } else {
-            com = false;
-            bra = false;
-            prod = false;
-            stocks = false;
-            staffs = false;
-            user = true;
-            dash = false;
-            sup = false;
-            
-            //dynamicPanel
-            dynamicPanel.removeAll();
-            dynamicPanel.repaint();
-            dynamicPanel.revalidate();
-            dynamicPanel.add(userPanel);
-            dynamicPanel.repaint();
-            dynamicPanel.revalidate();
-            dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
-            dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
-            dynamicLabel.setText("USER");
-            showUsers(getAllUsers());
-            JTableHeader header = userTbl.getTableHeader();
-            header.setFont(new Font("Segoe UI", Font.BOLD, 26));
-            header.setOpaque(false);
-            header.setForeground(Color.WHITE);
-            header.setBackground(Color.black);
+        com = false;
+        bra = false;
+        prod = false;
+        stocks = false;
+        staffs = false;
+        user = true;
+        dash = false;
+        sup = false;
 
-            //braLayer
-            branchLabel.setBackground(new Color(78, 45, 17));
-            braActive.setBackground(new Color(78, 45, 17));
+        //dynamicPanel
+        dynamicPanel.removeAll();
+        dynamicPanel.repaint();
+        dynamicPanel.revalidate();
+        dynamicPanel.add(userPanel);
+        dynamicPanel.repaint();
+        dynamicPanel.revalidate();
+        dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
+        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
+        dynamicLabel.setText("USER");
+        showUsers(getAllUsers());
+        JTableHeader header = userTbl.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        header.setOpaque(false);
+        header.setForeground(Color.WHITE);
+        header.setBackground(Color.black);
 
-            //comLayer
-            comLabel.setBackground(new Color(78, 45, 17));
-            comActive.setBackground(new Color(78, 45, 17));
+        //braLayer
+        branchLabel.setBackground(new Color(78, 45, 17));
+        braActive.setBackground(new Color(78, 45, 17));
 
-            //proLayer
-            proLabel.setBackground(new Color(78, 45, 17));
-            proActive.setBackground(new Color(78, 45, 17));
+        //comLayer
+        comLabel.setBackground(new Color(78, 45, 17));
+        comActive.setBackground(new Color(78, 45, 17));
 
-            //staffLayer
-            staffLabel.setBackground(new Color(78, 45, 17));
-            staffActive.setBackground(new Color(78, 45, 17));
+        //proLayer
+        proLabel.setBackground(new Color(78, 45, 17));
+        proActive.setBackground(new Color(78, 45, 17));
 
-            stockLabel.setBackground(new Color(78, 45, 17));
-            stockActive.setBackground(new Color(78, 45, 17));
+        //staffLayer
+        staffLabel.setBackground(new Color(78, 45, 17));
+        staffActive.setBackground(new Color(78, 45, 17));
 
-            dashPnl.setBackground(new Color(78, 45, 17));
-            dashActive.setBackground(new Color(78, 45, 17));
-            
-            supplierPnl.setBackground(new Color(78, 45, 17));
-            supplierActive.setBackground(new Color(78, 45, 17));
+        stockLabel.setBackground(new Color(78, 45, 17));
+        stockActive.setBackground(new Color(78, 45, 17));
 
-            userPnl.setBackground(new Color(102, 51, 0));
-            userLayp.add(userBlink, 1);
-            userLayp.add(userActive, 0);
-            userActive.setBackground(new Color(255, 255, 255));
-            userPnl.setBackground(new Color(102, 51, 0));
-        }
+        dashPnl.setBackground(new Color(78, 45, 17));
+        dashActive.setBackground(new Color(78, 45, 17));
+
+        supplierPnl.setBackground(new Color(78, 45, 17));
+        supplierActive.setBackground(new Color(78, 45, 17));
+
+        userPnl.setBackground(new Color(102, 51, 0));
+        userLayp.add(userBlink, 1);
+        userLayp.add(userActive, 0);
+        userActive.setBackground(new Color(255, 255, 255));
+        userPnl.setBackground(new Color(102, 51, 0));
     }//GEN-LAST:event_userPnlMouseClicked
 
     private void userPnlMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userPnlMouseEntered

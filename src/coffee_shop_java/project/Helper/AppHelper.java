@@ -6,12 +6,18 @@
 package coffee_shop_java.project.Helper;
 
 import coffee_shop_java.project.Model.DbConn;
+import coffee_shop_java.project.UserActions;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import static javax.swing.JFrame.EXIT_ON_CLOSE;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -22,7 +28,7 @@ import javax.swing.table.DefaultTableColumnModel;
  *
  * @author KHEANG
  */
-public class AppHelper {
+public class AppHelper {    
     public static void setColWidth(JTable table, int col, int width){
         DefaultTableColumnModel columnModel = (DefaultTableColumnModel) table.getColumnModel();
         columnModel.getColumn(col).setWidth(width);
@@ -65,6 +71,53 @@ public class AppHelper {
         return null;
     }
     
+    public static ResultSet selectQuery(String sql, int frtData) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setInt(1, frtData);
+            return stmt.executeQuery();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return null;
+    }
+    
+    public static boolean isExist(String tblName, String name) {
+        PreparedStatement st = null;
+        ResultSet rs;
+        String sql = "SELECT * FROM `" + tblName + "` "
+            + "WHERE LOWER(`fullname`) = ?";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
+            st.setString(1, name.toLowerCase());
+            rs = st.executeQuery();
+            if(rs.next())
+                return true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return false;
+    }
+    
+    public static boolean isExist(String tblName, String name, int id) {
+        PreparedStatement st = null;
+        ResultSet rs;
+        String sql = "SELECT * FROM `" + tblName + "` "
+            + "WHERE LOWER(`fullname`) = ? AND `id` != ?";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
+            st.setString(1, name.toLowerCase());
+            st.setInt(2, id);
+            rs = st.executeQuery();
+            if(rs.next())
+                return true;
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return false;
+    }
+    
     public static Boolean currentUserCan(int roleId, String permissionName, String permissionAction) {
         PreparedStatement st;
         ResultSet rs;
@@ -90,6 +143,14 @@ public class AppHelper {
     
     public static void permissionMessage() {
         JOptionPane.showMessageDialog(null, "You don't have permission to access this path!");
+    }
+    
+    public static void fieldRequiredMsg() {
+        JOptionPane.showMessageDialog(null, "Please input the required fields!");
+    }
+    
+    public static void existMsg() {
+        JOptionPane.showMessageDialog(null, "User already exist!");
     }
     
     public static ArrayList<String> getAllRoles() {
@@ -152,5 +213,20 @@ public class AppHelper {
             JOptionPane.showMessageDialog(null, "Maximum length is " + num + "!");
         else if(type == "password")
             JOptionPane.showMessageDialog(null, "Minimum length is " + num + "!");
+    }
+    
+    public static void addBackground(JFrame frame,ImageIcon img) {
+        frame.setExtendedState(UserActions.MAXIMIZED_BOTH);
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        frame.setPreferredSize(new Dimension(screenSize.width, screenSize.height));
+        frame.setSize(new Dimension(screenSize.width, screenSize.height));
+        frame.setLayout(null);
+        frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        JLabel background = new JLabel("", JLabel.LEFT);
+        background.setPreferredSize(new Dimension(screenSize.width, screenSize.height));
+        background.setSize(new Dimension(screenSize.width, screenSize.height));
+        background.setBounds(0, 0, screenSize.width, screenSize.height);
+        background.setIcon(img);
+        frame.add(background);
     }
 }

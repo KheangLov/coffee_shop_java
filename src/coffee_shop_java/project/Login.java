@@ -5,6 +5,7 @@
  */
 package coffee_shop_java.project;
 
+import coffee_shop_java.project.Helper.AppHelper;
 import coffee_shop_java.project.Helper.PasswordEncryption;
 import coffee_shop_java.project.Model.DbConn;
 import java.awt.event.KeyEvent;
@@ -14,7 +15,6 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
 /**
@@ -28,13 +28,8 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
-        this.setExtendedState(Login.MAXIMIZED_BOTH);
-        setLayout(null);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         ImageIcon img = new ImageIcon(getClass().getResource("/coffee_shop_java/images/pic1.jpg"));
-        JLabel background = new JLabel("", img, JLabel.LEFT);
-        background.setBounds(0, 0, this.getWidth(), this.getHeight());
-        add(background);
+        AppHelper.addBackground(this, img);
     }
     
     private void loginAction() {
@@ -47,7 +42,8 @@ public class Login extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Username and password can't be blank!");
             txtUsername.requestFocus();
         } else {
-            String sql = "SELECT * FROM `users` WHERE LOWER(`fullname`) = ? AND `password` = ?";
+            String sql = "SELECT * FROM `users` "
+                + "WHERE LOWER(`fullname`) = ? AND `password` = ?";
 
             try {
                 st = DbConn.getConnection().prepareStatement(sql);
@@ -63,7 +59,9 @@ public class Login extends javax.swing.JFrame {
                     LocalDateTime now = LocalDateTime.now();
                     String date = dtf.format(now);
                     loginCount++;
-                    String update = "UPDATE users SET login_count = ?, last_logged = ? WHERE id = ?";
+                    String update = "UPDATE users "
+                        + "SET login_count = ?, last_logged = ? "
+                        + "WHERE id = ?";
                     PreparedStatement stmt = DbConn.getConnection().prepareStatement(update);
                     stmt.setInt(1, loginCount);
                     stmt.setString(2, date);

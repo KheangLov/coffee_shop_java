@@ -7,7 +7,6 @@ package coffee_shop_java.project;
 
 import coffee_shop_java.project.Helper.AppHelper;
 import coffee_shop_java.project.Helper.PasswordEncryption;
-import coffee_shop_java.project.Model.DbConn;
 import coffee_shop_java.project.Model.User;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -16,7 +15,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  *
@@ -27,15 +28,16 @@ public class UserActions extends javax.swing.JFrame {
     /**
      * Creates new form UserActions
      */
+    private ImageIcon img = new ImageIcon(getClass().getResource("/coffee_shop_java/images/pic1.jpg"));
     public UserActions() {
         initComponents();
-        pnlContainer.removeAll();
-        pnlContainer.repaint();
-        pnlContainer.revalidate();
-        pnlContainer.add(pnlFormAdd);
-        pnlContainer.repaint();
-        pnlContainer.revalidate();
-        lblFormName.setText("ADD USER");
+        AppHelper.addBackground(this, img);
+        panelGenerate(pnlFormAdd, "ADD USER");
+        
+        LaypWrapper.setLocation(
+            (this.getWidth() / 2) - (LaypWrapper.getSize().width / 2), 
+            (this.getHeight()/ 2) - (LaypWrapper.getSize().height / 2)
+        );
         
         cbAddRole.removeAllItems();
         AppHelper.getAllRoles().forEach((r) -> cbAddRole.addItem(r));
@@ -45,38 +47,19 @@ public class UserActions extends javax.swing.JFrame {
     public UserActions(String action, int id) {
         initComponents();
         userId = id;
-        if(action.equals("edit")) {
-            pnlContainer.removeAll();
-            pnlContainer.repaint();
-            pnlContainer.revalidate();
-            pnlContainer.add(pnlFormEdit);
-            pnlContainer.repaint();
-            pnlContainer.revalidate();
-            lblFormName.setText("EDIT USER");
-            setPreferredSize(new Dimension(678, 428));
-            setSize(new Dimension(678, 428));
-            setMinimumSize(new Dimension(678, 428));
-            pnlContainer.setPreferredSize(new Dimension(668, 348));
-            pnlContainer.setSize(new Dimension(668, 348));
-            pnlContainer.setMinimumSize(new Dimension(668, 348));
-            pnlWrapper.setPreferredSize(new Dimension(678, 348));
-            pnlWrapper.setSize(new Dimension(678, 348));
-            pnlWrapper.setMinimumSize(new Dimension(678, 348));
-            pnlNavbar.setLayout(null);
-            exitIcon.setBounds(620, 0, 50, 60);
+        if(action.equals("edit")) { 
+            panelGenerate(pnlFormEdit, "EDIT USER");
+            
+            formLayoutDimension(678, 428, 60);
             
             cbRole.removeAllItems();
             AppHelper.getAllRoles().forEach((r) -> cbRole.addItem(r));
             
-            PreparedStatement st;
-            ResultSet rs;
             String sql = "SELECT `users`.*, `roles`.`name` AS role_name FROM `users` "
                     + "INNER JOIN `roles` ON `users`.`role_id` = `roles`.`id`"
                     + "WHERE `users`.`id` = ?";
             try {
-                st = DbConn.getConnection().prepareStatement(sql);
-                st.setInt(1, id);
-                rs = st.executeQuery();
+                ResultSet rs = AppHelper.selectQuery(sql, id);
                 if(rs.next()) {
                     txtFname.setText(rs.getString("firstname"));
                     txtLname.setText(rs.getString("lastname"));
@@ -89,28 +72,58 @@ public class UserActions extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, ex);
             }
         } else if(action.equals("edit_password")) {
-            pnlContainer.removeAll();
-            pnlContainer.repaint();
-            pnlContainer.revalidate();
-            pnlContainer.add(pnlFormPassword);
-            pnlContainer.repaint();
-            pnlContainer.revalidate();
-            lblFormName.setText("EDIT USER PASSWORD");
-            setPreferredSize(new Dimension(519, 348));
-            setSize(new Dimension(519, 348));
-            setMinimumSize(new Dimension(519, 348));
-            pnlContainer.setPreferredSize(new Dimension(509, 150));
-            pnlContainer.setSize(new Dimension(509, 150));
-            pnlContainer.setMinimumSize(new Dimension(509, 150));
-            pnlWrapper.setPreferredSize(new Dimension(519, 150));
-            pnlWrapper.setSize(new Dimension(519, 150));
-            pnlWrapper.setMinimumSize(new Dimension(519, 150));
-            pnlNavbar.setLayout(null);
-            exitIcon.setBounds(465, 0, 50, 60);
+            panelGenerate(pnlFormPassword, "EDIT USER PASSWORD");
+ 
+            formLayoutDimension(519, 416, 60);
         }
+        
+        AppHelper.addBackground(this, img);
+        
+        LaypWrapper.setLocation(
+            (this.getWidth() / 2) - (LaypWrapper.getSize().width / 2), 
+            (this.getHeight()/ 2) - (LaypWrapper.getSize().height / 2)
+        );
     }
 
     User myUser = new User();
+    
+    private void formLayoutDimension(int layPaneWidth, int layPaneHeight, int navHeight) {
+        LaypWrapper.setSize(new Dimension(layPaneWidth, layPaneHeight));
+        LaypWrapper.setPreferredSize(new Dimension(layPaneWidth, layPaneHeight)); 
+
+        pnlNavbar.setSize(new Dimension(LaypWrapper.getWidth(), navHeight));
+        pnlNavbar.setPreferredSize(new Dimension(LaypWrapper.getWidth(), navHeight));
+
+        pnlWrapper.setSize(new Dimension(
+                LaypWrapper.getWidth(),
+                LaypWrapper.getHeight() - pnlNavbar.getHeight()
+            )
+        );
+
+        pnlContainer.setSize(new Dimension(
+                LaypWrapper.getWidth() - 10,
+                LaypWrapper.getHeight() - pnlNavbar.getHeight() - 10
+            )
+        );
+        pnlContainer.setPreferredSize(new Dimension(
+                LaypWrapper.getWidth() - 10,
+                LaypWrapper.getHeight() - pnlNavbar.getHeight() - 10
+            )
+        );
+
+        pnlNavbar.setLayout(null);
+        exitIcon.setBounds(pnlNavbar.getWidth() - 50, 0, 50, pnlNavbar.getHeight());  
+    }
+    
+    private void panelGenerate(JPanel panelAction, String lblText) {
+        pnlContainer.removeAll();
+        pnlContainer.repaint();
+        pnlContainer.revalidate();
+        pnlContainer.add(panelAction);
+        pnlContainer.repaint();
+        pnlContainer.revalidate();
+        lblFormName.setText(lblText); 
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -121,11 +134,33 @@ public class UserActions extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        LaypWrapper = new javax.swing.JLayeredPane();
         pnlNavbar = new javax.swing.JPanel();
         exitIcon = new javax.swing.JLabel();
         lblFormName = new javax.swing.JLabel();
         pnlWrapper = new javax.swing.JPanel();
         pnlContainer = new javax.swing.JLayeredPane();
+        pnlFormEdit = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        txtFname = new javax.swing.JTextField();
+        btnUpdateUser = new javax.swing.JPanel();
+        lblAdd3 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        txtLname = new javax.swing.JTextField();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel11 = new javax.swing.JLabel();
+        txtEmail = new javax.swing.JTextField();
+        jPanel11 = new javax.swing.JPanel();
+        cbGender = new javax.swing.JComboBox<>();
+        jLabel14 = new javax.swing.JLabel();
+        jPanel14 = new javax.swing.JPanel();
+        cbStatus = new javax.swing.JComboBox<>();
+        jLabel15 = new javax.swing.JLabel();
+        jPanel15 = new javax.swing.JPanel();
+        cbRole = new javax.swing.JComboBox<>();
+        jLabel16 = new javax.swing.JLabel();
+        jPanel16 = new javax.swing.JPanel();
         pnlFormAdd = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
@@ -153,27 +188,6 @@ public class UserActions extends javax.swing.JFrame {
         cbAddRole = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jPanel8 = new javax.swing.JPanel();
-        pnlFormEdit = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        jPanel9 = new javax.swing.JPanel();
-        txtFname = new javax.swing.JTextField();
-        btnUpdateUser = new javax.swing.JPanel();
-        lblAdd3 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        txtLname = new javax.swing.JTextField();
-        jPanel10 = new javax.swing.JPanel();
-        jLabel11 = new javax.swing.JLabel();
-        txtEmail = new javax.swing.JTextField();
-        jPanel11 = new javax.swing.JPanel();
-        cbGender = new javax.swing.JComboBox<>();
-        jLabel14 = new javax.swing.JLabel();
-        jPanel14 = new javax.swing.JPanel();
-        cbStatus = new javax.swing.JComboBox<>();
-        jLabel15 = new javax.swing.JLabel();
-        jPanel15 = new javax.swing.JPanel();
-        cbRole = new javax.swing.JComboBox<>();
-        jLabel16 = new javax.swing.JLabel();
-        jPanel16 = new javax.swing.JPanel();
         pnlFormPassword = new javax.swing.JPanel();
         btnEditPass = new javax.swing.JPanel();
         lblAdd4 = new javax.swing.JLabel();
@@ -201,7 +215,7 @@ public class UserActions extends javax.swing.JFrame {
                 exitIconMouseClicked(evt);
             }
         });
-        pnlNavbar.add(exitIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 0, -1, 60));
+        pnlNavbar.add(exitIcon, new org.netbeans.lib.awtextra.AbsoluteConstraints(940, 0, 50, 60));
 
         lblFormName.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
         lblFormName.setForeground(new java.awt.Color(255, 255, 255));
@@ -214,6 +228,278 @@ public class UserActions extends javax.swing.JFrame {
 
         pnlContainer.setPreferredSize(new java.awt.Dimension(986, 384));
         pnlContainer.setLayout(new java.awt.CardLayout());
+
+        pnlFormEdit.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel9.setText("Firstname:");
+
+        jPanel9.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel9.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        txtFname.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        txtFname.setBorder(null);
+        txtFname.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        txtFname.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtFnameFocusLost(evt);
+            }
+        });
+        txtFname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtFnameActionPerformed(evt);
+            }
+        });
+
+        btnUpdateUser.setBackground(new java.awt.Color(19, 132, 150));
+        btnUpdateUser.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnUpdateUserMouseClicked(evt);
+            }
+        });
+
+        lblAdd3.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        lblAdd3.setForeground(new java.awt.Color(255, 255, 255));
+        lblAdd3.setText("UPDATE");
+
+        javax.swing.GroupLayout btnUpdateUserLayout = new javax.swing.GroupLayout(btnUpdateUser);
+        btnUpdateUser.setLayout(btnUpdateUserLayout);
+        btnUpdateUserLayout.setHorizontalGroup(
+            btnUpdateUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnUpdateUserLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(lblAdd3)
+                .addGap(25, 25, 25))
+        );
+        btnUpdateUserLayout.setVerticalGroup(
+            btnUpdateUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnUpdateUserLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblAdd3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel10.setText("Lastname:");
+
+        txtLname.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        txtLname.setBorder(null);
+        txtLname.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        txtLname.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtLnameFocusLost(evt);
+            }
+        });
+        txtLname.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtLnameActionPerformed(evt);
+            }
+        });
+
+        jPanel10.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel10.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel11.setText("Email:");
+
+        txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        txtEmail.setBorder(null);
+        txtEmail.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        txtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtEmailFocusLost(evt);
+            }
+        });
+        txtEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtEmailActionPerformed(evt);
+            }
+        });
+
+        jPanel11.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel11.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 300, Short.MAX_VALUE)
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        cbGender.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        cbGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
+        cbGender.setPreferredSize(new java.awt.Dimension(64, 36));
+
+        jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel14.setText("Gender:");
+
+        jPanel14.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        cbStatus.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
+        cbStatus.setPreferredSize(new java.awt.Dimension(64, 36));
+
+        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel15.setText("Status:");
+
+        jPanel15.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
+        jPanel15.setLayout(jPanel15Layout);
+        jPanel15Layout.setHorizontalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel15Layout.setVerticalGroup(
+            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        cbRole.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbRole.setPreferredSize(new java.awt.Dimension(64, 36));
+
+        jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel16.setText("Role:");
+
+        jPanel16.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
+        jPanel16.setLayout(jPanel16Layout);
+        jPanel16Layout.setHorizontalGroup(
+            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel16Layout.setVerticalGroup(
+            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout pnlFormEditLayout = new javax.swing.GroupLayout(pnlFormEdit);
+        pnlFormEdit.setLayout(pnlFormEditLayout);
+        pnlFormEditLayout.setHorizontalGroup(
+            pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFormEditLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel14)
+                        .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbGender, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
+                        .addComponent(txtFname, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel11)
+                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
+                    .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLname, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel16)
+                    .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(cbRole, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel15)
+                    .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(btnUpdateUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPanel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(25, 25, 25))
+        );
+        pnlFormEditLayout.setVerticalGroup(
+            pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlFormEditLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlFormEditLayout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtFname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlFormEditLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtLname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlFormEditLayout.createSequentialGroup()
+                        .addComponent(jLabel16)
+                        .addGap(0, 0, 0)
+                        .addComponent(cbRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlFormEditLayout.createSequentialGroup()
+                        .addComponent(jLabel11)
+                        .addGap(0, 0, 0)
+                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormEditLayout.createSequentialGroup()
+                        .addComponent(jLabel14)
+                        .addGap(0, 0, 0)
+                        .addComponent(cbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormEditLayout.createSequentialGroup()
+                        .addComponent(jLabel15)
+                        .addGap(0, 0, 0)
+                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(btnUpdateUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
+        );
+
+        pnlContainer.add(pnlFormEdit, "card2");
 
         pnlFormAdd.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -579,278 +865,6 @@ public class UserActions extends javax.swing.JFrame {
 
         pnlContainer.add(pnlFormAdd, "card2");
 
-        pnlFormEdit.setBackground(new java.awt.Color(255, 255, 255));
-
-        jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel9.setText("Firstname:");
-
-        jPanel9.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel9.setPreferredSize(new java.awt.Dimension(100, 3));
-
-        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
-        jPanel9.setLayout(jPanel9Layout);
-        jPanel9Layout.setHorizontalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-        jPanel9Layout.setVerticalGroup(
-            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        txtFname.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        txtFname.setBorder(null);
-        txtFname.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        txtFname.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtFnameFocusLost(evt);
-            }
-        });
-        txtFname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtFnameActionPerformed(evt);
-            }
-        });
-
-        btnUpdateUser.setBackground(new java.awt.Color(19, 132, 150));
-        btnUpdateUser.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnUpdateUserMouseClicked(evt);
-            }
-        });
-
-        lblAdd3.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        lblAdd3.setForeground(new java.awt.Color(255, 255, 255));
-        lblAdd3.setText("UPDATE");
-
-        javax.swing.GroupLayout btnUpdateUserLayout = new javax.swing.GroupLayout(btnUpdateUser);
-        btnUpdateUser.setLayout(btnUpdateUserLayout);
-        btnUpdateUserLayout.setHorizontalGroup(
-            btnUpdateUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnUpdateUserLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(lblAdd3)
-                .addGap(25, 25, 25))
-        );
-        btnUpdateUserLayout.setVerticalGroup(
-            btnUpdateUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnUpdateUserLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblAdd3)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel10.setText("Lastname:");
-
-        txtLname.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        txtLname.setBorder(null);
-        txtLname.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        txtLname.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtLnameFocusLost(evt);
-            }
-        });
-        txtLname.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtLnameActionPerformed(evt);
-            }
-        });
-
-        jPanel10.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel10.setPreferredSize(new java.awt.Dimension(100, 3));
-
-        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
-        jPanel10.setLayout(jPanel10Layout);
-        jPanel10Layout.setHorizontalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-        jPanel10Layout.setVerticalGroup(
-            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel11.setText("Email:");
-
-        txtEmail.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        txtEmail.setBorder(null);
-        txtEmail.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        txtEmail.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtEmailFocusLost(evt);
-            }
-        });
-        txtEmail.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEmailActionPerformed(evt);
-            }
-        });
-
-        jPanel11.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel11.setPreferredSize(new java.awt.Dimension(100, 3));
-
-        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
-        jPanel11.setLayout(jPanel11Layout);
-        jPanel11Layout.setHorizontalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
-        jPanel11Layout.setVerticalGroup(
-            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        cbGender.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        cbGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female" }));
-        cbGender.setPreferredSize(new java.awt.Dimension(64, 36));
-
-        jLabel14.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel14.setText("Gender:");
-
-        jPanel14.setBackground(new java.awt.Color(0, 0, 0));
-
-        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
-        jPanel14.setLayout(jPanel14Layout);
-        jPanel14Layout.setHorizontalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel14Layout.setVerticalGroup(
-            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        cbStatus.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        cbStatus.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
-        cbStatus.setPreferredSize(new java.awt.Dimension(64, 36));
-
-        jLabel15.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel15.setText("Status:");
-
-        jPanel15.setBackground(new java.awt.Color(0, 0, 0));
-
-        javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
-        jPanel15.setLayout(jPanel15Layout);
-        jPanel15Layout.setHorizontalGroup(
-            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel15Layout.setVerticalGroup(
-            jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        cbRole.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        cbRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbRole.setPreferredSize(new java.awt.Dimension(64, 36));
-
-        jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel16.setText("Role:");
-
-        jPanel16.setBackground(new java.awt.Color(0, 0, 0));
-
-        javax.swing.GroupLayout jPanel16Layout = new javax.swing.GroupLayout(jPanel16);
-        jPanel16.setLayout(jPanel16Layout);
-        jPanel16Layout.setHorizontalGroup(
-            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel16Layout.setVerticalGroup(
-            jPanel16Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        javax.swing.GroupLayout pnlFormEditLayout = new javax.swing.GroupLayout(pnlFormEdit);
-        pnlFormEdit.setLayout(pnlFormEditLayout);
-        pnlFormEditLayout.setHorizontalGroup(
-            pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlFormEditLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel14)
-                        .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel14, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbGender, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE)
-                        .addComponent(txtFname, javax.swing.GroupLayout.Alignment.LEADING))
-                    .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel11)
-                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtLname, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel16)
-                    .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel16, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(cbRole, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel15)
-                    .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(btnUpdateUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jPanel15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbStatus, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(25, 25, 25))
-        );
-        pnlFormEditLayout.setVerticalGroup(
-            pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlFormEditLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlFormEditLayout.createSequentialGroup()
-                        .addComponent(jLabel9)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtFname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlFormEditLayout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtLname, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlFormEditLayout.createSequentialGroup()
-                        .addComponent(jLabel16)
-                        .addGap(0, 0, 0)
-                        .addComponent(cbRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel16, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlFormEditLayout.createSequentialGroup()
-                        .addComponent(jLabel11)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(pnlFormEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormEditLayout.createSequentialGroup()
-                        .addComponent(jLabel14)
-                        .addGap(0, 0, 0)
-                        .addComponent(cbGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlFormEditLayout.createSequentialGroup()
-                        .addComponent(jLabel15)
-                        .addGap(0, 0, 0)
-                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel15, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(btnUpdateUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
-        );
-
-        pnlContainer.add(pnlFormEdit, "card2");
-
         pnlFormPassword.setBackground(new java.awt.Color(255, 255, 255));
 
         btnEditPass.setBackground(new java.awt.Color(35, 39, 43));
@@ -979,30 +993,50 @@ public class UserActions extends javax.swing.JFrame {
             pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWrapperLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(pnlContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addComponent(pnlContainer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlWrapperLayout.setVerticalGroup(
             pnlWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlWrapperLayout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(pnlContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 371, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addComponent(pnlContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 358, Short.MAX_VALUE))
+        );
+
+        LaypWrapper.setLayer(pnlNavbar, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        LaypWrapper.setLayer(pnlWrapper, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        javax.swing.GroupLayout LaypWrapperLayout = new javax.swing.GroupLayout(LaypWrapper);
+        LaypWrapper.setLayout(LaypWrapperLayout);
+        LaypWrapperLayout.setHorizontalGroup(
+            LaypWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(LaypWrapperLayout.createSequentialGroup()
+                .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 996, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(pnlNavbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        LaypWrapperLayout.setVerticalGroup(
+            LaypWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(LaypWrapperLayout.createSequentialGroup()
+                .addComponent(pnlNavbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 368, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(pnlNavbar, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 1008, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(50, Short.MAX_VALUE)
+                .addComponent(LaypWrapper, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(pnlNavbar, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 381, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE)
+                .addComponent(LaypWrapper)
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         pack();
@@ -1033,24 +1067,12 @@ public class UserActions extends javax.swing.JFrame {
         LocalDateTime now = LocalDateTime.now();
         String date = dtf.format(now);
         if(firstname.equals("") || lastname.equals("") || email.equals("") || password.equals("") || conPassword.equals("")) {
-            JOptionPane.showMessageDialog(null, "Please input the required fields!");
+            AppHelper.fieldRequiredMsg();
             txtAddFname.requestFocus();
         } else {
-            Boolean checkExist = false;
-            String sql = "SELECT * FROM `users` WHERE LOWER(`fullname`) = ?";
-            try {
-                st = DbConn.getConnection().prepareStatement(sql);
-                st.setString(1, fullname.toLowerCase());
-                rs = st.executeQuery();
-                if(rs.next()) {
-                    checkExist = true;
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
+            Boolean checkExist = AppHelper.isExist("users", fullname);
             if(checkExist.equals(true)) {
-                JOptionPane.showMessageDialog(null, "User already exist!");
-                checkExist = false;
+                AppHelper.existMsg();
                 txtAddPassword.setText("");
                 txtAddEmail.setText("");
                 txtAddFname.setText("");
@@ -1119,25 +1141,12 @@ public class UserActions extends javax.swing.JFrame {
         LocalDateTime now = LocalDateTime.now();
         String date = dtf.format(now);
         if(firstname.equals("") || lastname.equals("") || email.equals("")) {
-            JOptionPane.showMessageDialog(null, "Please input the required fields!");
+            AppHelper.fieldRequiredMsg();
             txtFname.requestFocus();
         } else {
-            Boolean checkExist = false;
-            String sql = "SELECT * FROM `users` WHERE LOWER(`fullname`) = ? AND id != ?";
-            try {
-                st = DbConn.getConnection().prepareStatement(sql);
-                st.setString(1, fullname.toLowerCase());
-                st.setInt(2, userId);
-                rs = st.executeQuery();
-                if(rs.next()) {
-                    checkExist = true;
-                }
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
+            Boolean checkExist = AppHelper.isExist("users", fullname, userId);
             if(checkExist.equals(true)) {
-                JOptionPane.showMessageDialog(null, "User already exist!");
-                checkExist = false;
+                AppHelper.existMsg();
                 txtFname.requestFocus();
             } else {
                 int roleId = AppHelper.getRoleId(role);
@@ -1340,6 +1349,7 @@ public class UserActions extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLayeredPane LaypWrapper;
     private javax.swing.JPanel btnAddRole;
     private javax.swing.JPanel btnEditPass;
     private javax.swing.JPanel btnUpdateUser;
