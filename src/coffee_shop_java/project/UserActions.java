@@ -28,6 +28,7 @@ public class UserActions extends javax.swing.JFrame {
     /**
      * Creates new form UserActions
      */
+    boolean action = false;
     private ImageIcon img = new ImageIcon(getClass().getResource("/coffee_shop_java/images/pic1.jpg"));
     public UserActions() {
         initComponents();
@@ -165,7 +166,7 @@ public class UserActions extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         txtAddFname = new javax.swing.JTextField();
-        btnAddRole = new javax.swing.JPanel();
+        btnAddUser = new javax.swing.JPanel();
         lblAdd2 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtAddLname = new javax.swing.JTextField();
@@ -539,10 +540,10 @@ public class UserActions extends javax.swing.JFrame {
             }
         });
 
-        btnAddRole.setBackground(new java.awt.Color(144, 202, 249));
-        btnAddRole.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnAddUser.setBackground(new java.awt.Color(144, 202, 249));
+        btnAddUser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAddRoleMouseClicked(evt);
+                btnAddUserMouseClicked(evt);
             }
         });
 
@@ -550,18 +551,18 @@ public class UserActions extends javax.swing.JFrame {
         lblAdd2.setForeground(new java.awt.Color(255, 255, 255));
         lblAdd2.setText("ADD");
 
-        javax.swing.GroupLayout btnAddRoleLayout = new javax.swing.GroupLayout(btnAddRole);
-        btnAddRole.setLayout(btnAddRoleLayout);
-        btnAddRoleLayout.setHorizontalGroup(
-            btnAddRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddRoleLayout.createSequentialGroup()
+        javax.swing.GroupLayout btnAddUserLayout = new javax.swing.GroupLayout(btnAddUser);
+        btnAddUser.setLayout(btnAddUserLayout);
+        btnAddUserLayout.setHorizontalGroup(
+            btnAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnAddUserLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(lblAdd2)
                 .addContainerGap(25, Short.MAX_VALUE))
         );
-        btnAddRoleLayout.setVerticalGroup(
-            btnAddRoleLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddRoleLayout.createSequentialGroup()
+        btnAddUserLayout.setVerticalGroup(
+            btnAddUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnAddUserLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblAdd2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -793,7 +794,7 @@ public class UserActions extends javax.swing.JFrame {
                         .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel8)
                             .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(btnAddRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addComponent(jPanel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cbAddRole, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE))))))
@@ -859,7 +860,7 @@ public class UserActions extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(btnAddRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
         );
 
@@ -1009,9 +1010,7 @@ public class UserActions extends javax.swing.JFrame {
         LaypWrapper.setLayout(LaypWrapperLayout);
         LaypWrapperLayout.setHorizontalGroup(
             LaypWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(LaypWrapperLayout.createSequentialGroup()
-                .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 996, Short.MAX_VALUE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 996, Short.MAX_VALUE)
             .addComponent(pnlNavbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         LaypWrapperLayout.setVerticalGroup(
@@ -1046,10 +1045,11 @@ public class UserActions extends javax.swing.JFrame {
     private void exitIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitIconMouseClicked
         // TODO add your handling code here:
         this.dispose();
-        JOptionPane.showMessageDialog(null, "Pleaese click refresh to see new data!");
+        if(action == true)
+            JOptionPane.showMessageDialog(null, "Pleaese click refresh to see new data!");
     }//GEN-LAST:event_exitIconMouseClicked
 
-    private void btnAddRoleMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddRoleMouseClicked
+    private void btnAddUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddUserMouseClicked
         // TODO add your handling code here:
         PreparedStatement st;
         ResultSet rs;
@@ -1097,6 +1097,7 @@ public class UserActions extends javax.swing.JFrame {
                 myUser.setCreated_date(date);
                 myUser.setUpdated_date(date);
                 myUser.insert();
+                action = true;
                 txtAddPassword.setText("");
                 txtAddEmail.setText("");
                 txtAddFname.setText("");
@@ -1108,7 +1109,7 @@ public class UserActions extends javax.swing.JFrame {
                 txtAddFname.requestFocus();
             }
         }
-    }//GEN-LAST:event_btnAddRoleMouseClicked
+    }//GEN-LAST:event_btnAddUserMouseClicked
 
     private void txtAddFnameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAddFnameActionPerformed
         // TODO add your handling code here:
@@ -1159,6 +1160,7 @@ public class UserActions extends javax.swing.JFrame {
                 myUser.setRole_id(roleId);
                 myUser.setUpdated_date(date);
                 myUser.update(userId);
+                action = true;
                 txtFname.requestFocus();
             }
         }
@@ -1267,6 +1269,7 @@ public class UserActions extends javax.swing.JFrame {
             String hashedPass = PasswordEncryption.MD5(pass);
             myUser.setPassword(hashedPass);
             myUser.updatePassword(userId);
+            action = true;
             txtEditConPass.setText("");
             txtEditPass.setText("");
             txtEditPass.requestFocus();
@@ -1350,7 +1353,7 @@ public class UserActions extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLayeredPane LaypWrapper;
-    private javax.swing.JPanel btnAddRole;
+    private javax.swing.JPanel btnAddUser;
     private javax.swing.JPanel btnEditPass;
     private javax.swing.JPanel btnUpdateUser;
     private javax.swing.JComboBox<String> cbAddGender;
