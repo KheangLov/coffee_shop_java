@@ -83,11 +83,11 @@ public class AppHelper {
         return null;
     }
     
-    public static boolean isExist(String tblName, String name) {
+    public static boolean isExist(String tblName, String colName, String name) {
         PreparedStatement st = null;
         ResultSet rs;
         String sql = "SELECT * FROM `" + tblName + "` "
-            + "WHERE LOWER(`fullname`) = ?";
+            + "WHERE LOWER(`" + colName + "`) = ?";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
             st.setString(1, name.toLowerCase());

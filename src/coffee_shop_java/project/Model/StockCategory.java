@@ -25,15 +25,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class StockCategory extends Action {
     PreparedStatement stmt;
-    private int id;
+    private int tblId;
     private String name;
     private String description;
+    private int id;
+
+    public StockCategory(int tblId, String name, String description, int id) {
+        this.tblId = tblId;
+        this.name = name;
+        this.description = description;
+        this.id = id;
+    }
 
     @Override
     public void insert() {
         String sql = "INSERT INTO `stock_categories`("
             + "`name`, "
-            + "`decsription`"
+            + "`description`"
             + ") VALUES(?, ?)";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
@@ -52,11 +60,41 @@ public class StockCategory extends Action {
 
     @Override
     public void update(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "UPDATE `stock_categories` SET "
+            + "`name` = ?, "
+            + "`description` = ? "
+            + "WHERE `id` = ?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setString(1, name);
+            stmt.setString(2, description);
+            stmt.setInt(3, id);
+            int i = stmt.executeUpdate();
+            if(i > 0) {
+                JOptionPane.showMessageDialog(null, "Data updated!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data failed to update!");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }
 
     @Override
     public void delete(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "DELETE FROM `stock_categories` "
+            + "WHERE `id` = ?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setInt(1, id);
+            int i = stmt.executeUpdate();
+            if(i > 0) {
+                JOptionPane.showMessageDialog(null, "Data deleted!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data failed to delete!");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StockCategory.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

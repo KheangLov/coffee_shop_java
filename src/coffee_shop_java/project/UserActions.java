@@ -1070,7 +1070,7 @@ public class UserActions extends javax.swing.JFrame {
             AppHelper.fieldRequiredMsg();
             txtAddFname.requestFocus();
         } else {
-            Boolean checkExist = AppHelper.isExist("users", fullname);
+            Boolean checkExist = AppHelper.isExist("users", "fullname", fullname);
             if(checkExist.equals(true)) {
                 AppHelper.existMsg();
                 txtAddPassword.setText("");
