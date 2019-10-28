@@ -41,7 +41,7 @@ public class UserActions extends javax.swing.JFrame {
         );
         
         cbAddRole.removeAllItems();
-        AppHelper.getAllRoles().forEach((r) -> cbAddRole.addItem(r));
+        AppHelper.getCombos("name", "roles").forEach((r) -> cbAddRole.addItem(r));
     }
     
     private int userId;
@@ -54,7 +54,7 @@ public class UserActions extends javax.swing.JFrame {
             formLayoutDimension(678, 428, 60);
             
             cbRole.removeAllItems();
-            AppHelper.getAllRoles().forEach((r) -> cbRole.addItem(r));
+            AppHelper.getCombos("name", "roles").forEach((r) -> cbRole.addItem(r));
             
             String sql = "SELECT `users`.*, `roles`.`name` AS role_name FROM `users` "
                     + "INNER JOIN `roles` ON `users`.`role_id` = `roles`.`id`"
@@ -1083,7 +1083,7 @@ public class UserActions extends javax.swing.JFrame {
                 cbAddStatus.setSelectedIndex(0);
                 txtAddFname.requestFocus();
             } else {
-                int roleId = AppHelper.getRoleId(role);
+                int roleId = AppHelper.getId(role, "id", "roles", "name");
                 String hashedPass = PasswordEncryption.MD5(password);
                 myUser.setFirstname(firstname);
                 myUser.setLastname(lastname);
@@ -1150,7 +1150,7 @@ public class UserActions extends javax.swing.JFrame {
                 AppHelper.existMsg();
                 txtFname.requestFocus();
             } else {
-                int roleId = AppHelper.getRoleId(role);
+                int roleId = AppHelper.getId(role, "id", "roles", "name");
                 myUser.setFirstname(firstname);
                 myUser.setLastname(lastname);
                 myUser.setFullname(fullname);

@@ -153,37 +153,54 @@ public class AppHelper {
         JOptionPane.showMessageDialog(null, "User already exist!");
     }
     
-    public static ArrayList<String> getAllRoles() {
-        ArrayList<String> roles = new ArrayList<>();
+    public static ArrayList<String> getCombos(String col, String tblName) {
+        ArrayList<String> list = new ArrayList<>();
         PreparedStatement st;
         ResultSet rs;
-        String sql = "SELECT `name` FROM `roles` ORDER BY `name`";
+        String sql = "SELECT `" + col + "` FROM `" + tblName + "` ORDER BY `" + col + "`";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
             rs = st.executeQuery();
             while(rs.next())
-                roles.add(rs.getString("name"));
-            return roles;
+                list.add(rs.getString(col));
+            return list;
         } catch (SQLException ex) {
             Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
     
-    public static Integer getRoleId(String role) {
+    public static Integer getId(String data, String colName, String tblName, String colWhere) {
         PreparedStatement st;
         ResultSet rs;
-        String sql = "SELECT `id` FROM `roles` WHERE LOWER(`name`) = ?";
+        String sql = "SELECT `" + colName + "` FROM `" + tblName + "` "
+            + "WHERE LOWER(`" + colWhere + "`) = ?";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
-            st.setString(1, role.toLowerCase());
+            st.setString(1, data.toLowerCase());
+            rs = st.executeQuery();
+            if(rs.next())
+                return rs.getInt(colName);
+        } catch (SQLException ex) {
+            Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static Integer getLastRecordId(String tblName) {
+        PreparedStatement st;
+        ResultSet rs;
+        String sql = "SELECT `id` FROM `" + tblName + "` "
+            + "ORDER BY `id` DESC LIMIT 1";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
             rs = st.executeQuery();
             if(rs.next())
                 return rs.getInt("id");
         } catch (SQLException ex) {
             Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        }        
+        return 0;
     }
     
     public static boolean isValid(String email) {
@@ -194,6 +211,12 @@ public class AppHelper {
     public static boolean alphOnly(java.awt.event.KeyEvent evt) {
         char c = evt.getKeyChar();
         if(Character.isLetter(c) || Character.isISOControl(c))
+            return true;
+        return false;
+    }
+    
+    public static boolean numberOnly(java.awt.event.KeyEvent evt) {
+        if(evt.getKeyChar() >= '0' && evt.getKeyChar() <= '9' ||  Character.isISOControl(evt.getKeyChar()))
             return true;
         return false;
     }

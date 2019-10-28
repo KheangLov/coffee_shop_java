@@ -6,12 +6,18 @@
 package coffee_shop_java.project;
 
 import coffee_shop_java.project.Helper.AppHelper;
+import coffee_shop_java.project.Model.Import;
+import coffee_shop_java.project.Model.ImportDetail;
+import coffee_shop_java.project.Model.Stock;
 import coffee_shop_java.project.Model.StockCategory;
 import coffee_shop_java.project.Model.User;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,6 +48,9 @@ public class Main_Menu extends javax.swing.JFrame {
     private int roleId;
     private int stockCateId;
     StockCategory myStockCate = new StockCategory();
+    Stock myStock = new Stock();
+    Import myImport = new Import();
+    ImportDetail myImpDetail = new ImportDetail();
     public Main_Menu(int uId, int rId) {
         initComponents();
         userId = uId;
@@ -186,6 +195,61 @@ public class Main_Menu extends javax.swing.JFrame {
         }
         return list;
     }
+    
+    public void showStocks(ArrayList<Stock> list) {
+        tblStock.setModel(new DefaultTableModel(
+            null, 
+            new String[]{
+                "#", 
+                "Name", 
+                "Quantity",
+                "Measure Unit",
+                "Stock Category",
+                "id"
+            }
+        ));
+        DefaultTableModel model = (DefaultTableModel) tblStock.getModel();
+        Object[] rows = new Object[6];
+        for(int i=0; i<list.size(); i++){
+            rows[0] = list.get(i).getTblId();
+            rows[1] = list.get(i).getName();
+            rows[2] = list.get(i).getQty();
+            rows[3] = list.get(i).getMeasureUnit();
+            rows[4] = AppHelper.toCapitalize(list.get(i).getStockCateName());
+            rows[5] = list.get(i).getId();
+            model.addRow(rows);
+        }
+        AppHelper.setColWidth(tblStock, 5, 0);
+        AppHelper.setColWidth(tblStock, 0, 50);
+    }
+    
+    public ArrayList<Stock> getAllStocks() {
+        ArrayList<Stock> list = new ArrayList<>();
+        String sql = "SELECT `stocks`.*, `stock_categories`.`name` AS stock_cate_name "
+                + "FROM `stocks` "
+                + "INNER JOIN `stock_categories` "
+                + "ON `stocks`.`stock_category_id` = `stock_categories`.`id`";
+        try {
+            ResultSet rs = AppHelper.selectQuery(sql);
+            Stock stock;
+            int i = 0;            
+            while(rs.next()) {
+                i++;
+                stock = new Stock(
+                    i,
+                    rs.getString("name"),
+                    rs.getDouble("qty"),
+                    rs.getString("measure_unit"),
+                    rs.getString("stock_cate_name"),
+                    rs.getInt("id")
+                );
+                list.add(stock);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return list;
+    }
   
     /**
      * This method is called from within the constructor to initialize the form.
@@ -301,7 +365,7 @@ public class Main_Menu extends javax.swing.JFrame {
         cbStockCate = new javax.swing.JComboBox<>();
         jPanel12 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        cbStockMeasure = new javax.swing.JComboBox<>();
         jPanel13 = new javax.swing.JPanel();
         jLabel14 = new javax.swing.JLabel();
         txtStockAlertQty = new javax.swing.JTextField();
@@ -1504,12 +1568,13 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(userPanelLayout.createSequentialGroup()
                                 .addComponent(btnDelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
+                                .addGap(18, 18, Short.MAX_VALUE)
                                 .addComponent(btnRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnUserRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addGroup(userPanelLayout.createSequentialGroup()
+                                .addComponent(btnUserRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addGap(25, 25, 25))
         );
         userPanelLayout.setVerticalGroup(
@@ -1596,6 +1661,7 @@ public class Main_Menu extends javax.swing.JFrame {
         );
 
         dpStockExpired.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        dpStockExpired.setDateFormatString("yyyy-MM-dd");
         dpStockExpired.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
 
         jPanel10.setBackground(new java.awt.Color(0, 0, 0));
@@ -1631,6 +1697,11 @@ public class Main_Menu extends javax.swing.JFrame {
                 txtStockQtyActionPerformed(evt);
             }
         });
+        txtStockQty.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtStockQtyKeyPressed(evt);
+            }
+        });
 
         jPanel11.setBackground(new java.awt.Color(0, 0, 0));
         jPanel11.setPreferredSize(new java.awt.Dimension(100, 3));
@@ -1650,7 +1721,6 @@ public class Main_Menu extends javax.swing.JFrame {
         jLabel12.setText("Stock category:");
 
         cbStockCate.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        cbStockCate.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jPanel12.setBackground(new java.awt.Color(0, 0, 0));
         jPanel12.setPreferredSize(new java.awt.Dimension(100, 3));
@@ -1669,8 +1739,8 @@ public class Main_Menu extends javax.swing.JFrame {
         jLabel13.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel13.setText("Measure:");
 
-        jComboBox2.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "g", "kg" }));
+        cbStockMeasure.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        cbStockMeasure.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "g", "kg" }));
 
         jPanel13.setBackground(new java.awt.Color(0, 0, 0));
         jPanel13.setPreferredSize(new java.awt.Dimension(100, 3));
@@ -1700,6 +1770,11 @@ public class Main_Menu extends javax.swing.JFrame {
         txtStockAlertQty.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtStockAlertQtyActionPerformed(evt);
+            }
+        });
+        txtStockAlertQty.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtStockAlertQtyKeyPressed(evt);
             }
         });
 
@@ -1749,7 +1824,6 @@ public class Main_Menu extends javax.swing.JFrame {
         );
 
         cbStockCompany.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        cbStockCompany.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel16.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel16.setText("Company:");
@@ -1769,7 +1843,6 @@ public class Main_Menu extends javax.swing.JFrame {
         );
 
         cbStockBranch.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        cbStockBranch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel17.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel17.setText("Branch:");
@@ -1789,7 +1862,6 @@ public class Main_Menu extends javax.swing.JFrame {
         );
 
         cbStockSupplier.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        cbStockSupplier.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel18.setText("Supplier:");
@@ -1853,59 +1925,59 @@ public class Main_Menu extends javax.swing.JFrame {
                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
-                                            .addComponent(txtStockName, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                                            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                                            .addComponent(txtStockName, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
                                             .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                     .addComponent(txtStockQty)
-                                                    .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 223, Short.MAX_VALUE)
+                                                    .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 222, Short.MAX_VALUE)
                                                     .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                         .addGap(18, 18, 18)
-                                                        .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE))
+                                                        .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 122, Short.MAX_VALUE))
                                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlStockImportLayout.createSequentialGroup()
                                                         .addGap(18, 18, 18)
                                                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                             .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                                            .addComponent(cbStockCompany, 0, 364, Short.MAX_VALUE)
-                                            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                                                            .addComponent(cbStockMeasure, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
+                                            .addComponent(cbStockCompany, 0, 362, Short.MAX_VALUE)
+                                            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
                                             .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, Short.MAX_VALUE)))
                                         .addGap(18, 18, 18))
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
-                                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 188, Short.MAX_VALUE)
+                                        .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, 186, Short.MAX_VALUE)
                                         .addGap(194, 194, 194)))
                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(dpStockExpired, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                                            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
                                             .addComponent(txtStockAlertQty, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                                            .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
                                             .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(cbStockBranch, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, 364, Short.MAX_VALUE)
+                                            .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
                                             .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                 .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 234, Short.MAX_VALUE)))
+                                                .addGap(0, 232, Short.MAX_VALUE)))
                                         .addGap(18, 18, 18))
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(207, 207, 207)))
                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbStockCate, 0, 365, Short.MAX_VALUE)
-                                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                                    .addComponent(cbStockCate, 0, 363, Short.MAX_VALUE)
+                                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
                                     .addComponent(txtStockPrice, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
                                     .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cbStockSupplier, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
+                                    .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 235, Short.MAX_VALUE))
+                                        .addGap(0, 233, Short.MAX_VALUE))
                                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addGap(25, 25, 25))
         );
@@ -1944,7 +2016,7 @@ public class Main_Menu extends javax.swing.JFrame {
                                     .addComponent(jLabel13))
                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(txtStockQty, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(cbStockMeasure, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1986,7 +2058,6 @@ public class Main_Menu extends javax.swing.JFrame {
         tblStock.setAutoCreateRowSorter(true);
         tblStock.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
         tblStock.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        tblStock.setForeground(new java.awt.Color(255, 255, 255));
         tblStock.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -2013,6 +2084,7 @@ public class Main_Menu extends javax.swing.JFrame {
         tblStock.setGridColor(new java.awt.Color(255, 255, 255));
         tblStock.setOpaque(false);
         tblStock.setRowHeight(34);
+        tblStock.setSelectionBackground(new java.awt.Color(0, 0, 0));
         jScrollPane2.setViewportView(tblStock);
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -2034,7 +2106,7 @@ public class Main_Menu extends javax.swing.JFrame {
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1179, Short.MAX_VALUE)
+            .addGap(0, 1173, Short.MAX_VALUE)
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2045,9 +2117,9 @@ public class Main_Menu extends javax.swing.JFrame {
         pnlStockList.setLayout(pnlStockListLayout);
         pnlStockListLayout.setHorizontalGroup(
             pnlStockListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtSearchStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1179, Short.MAX_VALUE)
+            .addComponent(txtSearchStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1173, Short.MAX_VALUE)
             .addComponent(jScrollPane2)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1179, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1173, Short.MAX_VALUE)
             .addComponent(jLabel5)
         );
         pnlStockListLayout.setVerticalGroup(
@@ -2287,20 +2359,20 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGroup(pnlStockCateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlStockCateLayout.createSequentialGroup()
                                 .addGroup(pnlStockCateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, 478, Short.MAX_VALUE)
+                                    .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
                                     .addGroup(pnlStockCateLayout.createSequentialGroup()
-                                        .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
+                                        .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                                         .addGap(194, 194, 194))
                                     .addComponent(txtStockCateName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(pnlStockCateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
-                                    .addComponent(txtStockCateDesc, javax.swing.GroupLayout.DEFAULT_SIZE, 512, Short.MAX_VALUE)
+                                    .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
+                                    .addComponent(txtStockCateDesc, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
                                     .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addComponent(btnAddStockCate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane3)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1129, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1123, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator1)
                             .addGroup(pnlStockCateLayout.createSequentialGroup()
@@ -2527,7 +2599,7 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGroup(stockPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(stockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dynamicStockPane)
+                    .addComponent(dynamicStockPane, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(stockPanelLayout.createSequentialGroup()
                         .addComponent(btnStockImport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -2551,7 +2623,7 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addComponent(btnStockCate, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnStockList, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
-                .addComponent(dynamicStockPane, javax.swing.GroupLayout.DEFAULT_SIZE, 739, Short.MAX_VALUE)
+                .addComponent(dynamicStockPane)
                 .addGap(25, 25, 25))
         );
 
@@ -2926,12 +2998,13 @@ public class Main_Menu extends javax.swing.JFrame {
         dynamicStockPane.repaint();
         dynamicStockPane.revalidate();
         
+        showStocks(getAllStocks());
+        
         JTableHeader header = tblStock.getTableHeader();
         header.setFont(new Font("Segoe UI", Font.BOLD, 26));
         header.setOpaque(false);
         header.setForeground(Color.WHITE);
         header.setBackground(Color.black);
-        AppHelper.setColWidth(tblStock, 5, 0);
         
         //braLayer
         branchLabel.setBackground(new Color(78, 45, 17));
@@ -3307,6 +3380,7 @@ public class Main_Menu extends javax.swing.JFrame {
         dynamicStockPane.add(pnlStockImport);
         dynamicStockPane.repaint();
         dynamicStockPane.revalidate();
+        AppHelper.getCombos("name", "stock_categories").forEach((r) -> cbStockCate.addItem(AppHelper.toCapitalize(r)));
     }//GEN-LAST:event_btnStockImportMouseClicked
 
     private void btnStockEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStockEditMouseClicked
@@ -3378,6 +3452,67 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void btnAddStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddStockMouseClicked
         // TODO add your handling code here:
+        if(
+            txtStockName.getText().trim().equals("") || 
+            dpStockExpired.getDateFormatString().trim().equals("") || 
+            txtStockQty.getText().trim().equals("") ||
+            txtStockPrice.getText().trim().equals("") ||
+            txtStockAlertQty.getText().trim().equals("")
+        )
+        {
+            AppHelper.fieldRequiredMsg();
+            txtStockName.requestFocus();
+        } else {
+            String name = txtStockName.getText().trim();
+            Date expiredDate = dpStockExpired.getDate();
+            double qty = Double.valueOf(txtStockQty.getText().trim());
+            int alertQty = Integer.valueOf(txtStockAlertQty.getText().trim());
+            double price = Double.valueOf(txtStockPrice.getText().trim());
+            Date currentDate = new Date();
+            
+            DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            
+            myStock.setName(name);
+            myStock.setExpiredDate(df.format(expiredDate));
+            myStock.setQty(qty);
+            myStock.setAlertQty(alertQty);
+            myStock.setAlerted(0);
+            myStock.setMeasureUnit(String.valueOf(cbStockMeasure.getSelectedItem()));
+            myStock.setStockCateId(
+                AppHelper.getId(
+                    String.valueOf(cbStockCate.getSelectedItem()), 
+                    "id", 
+                    "stock_categories", 
+                    "name"
+                )
+            );
+            myStock.setCompanyId(0);
+            myStock.setBranchId(0);
+            myStock.insert();
+            
+            myImport.setDate(dtf.format(currentDate));
+            myImport.setUserId(userId);
+            myImport.setSupplierId(0);
+            myImport.insert();
+            
+            myImpDetail.setImportId(myImport.getId());
+            myImpDetail.setStockId(myStock.getId());
+            myImpDetail.setQty(qty);
+            myImpDetail.setPrice(price);
+            myImpDetail.insert();
+            txtStockName.setText("");
+            txtStockQty.setText("");
+            txtStockPrice.setText("");
+            txtStockAlertQty.setText("");
+            dpStockExpired.setDateFormatString("");
+            cbStockCate.setSelectedIndex(0);
+            cbStockMeasure.setSelectedIndex(0);
+//            cbStockCompany.setSelectedIndex(0);
+//            cbStockBranch.setSelectedIndex(0);
+//            cbStockSupplier.setSelectedIndex(0);
+            txtStockName.requestFocus();
+        }
     }//GEN-LAST:event_btnAddStockMouseClicked
 
     private void btnStockListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStockListMouseClicked
@@ -3388,7 +3523,7 @@ public class Main_Menu extends javax.swing.JFrame {
         dynamicStockPane.add(pnlStockList);
         dynamicStockPane.repaint();
         dynamicStockPane.revalidate();
-        AppHelper.setColWidth(tblStock, 5, 0);
+        showStocks(getAllStocks());
     }//GEN-LAST:event_btnStockListMouseClicked
 
     private void txtStockCateNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStockCateNameFocusLost
@@ -3478,6 +3613,22 @@ public class Main_Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditStockCateMouseClicked
 
+    private void txtStockQtyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockQtyKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.numberOnly(evt))
+            txtStockQty.setEditable(true);
+        else
+            txtStockQty.setEditable(false);
+    }//GEN-LAST:event_txtStockQtyKeyPressed
+
+    private void txtStockAlertQtyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockAlertQtyKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.numberOnly(evt))
+            txtStockAlertQty.setEditable(true);
+        else
+            txtStockAlertQty.setEditable(false);
+    }//GEN-LAST:event_txtStockAlertQtyKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -3564,6 +3715,7 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> cbStockBranch;
     private javax.swing.JComboBox<String> cbStockCate;
     private javax.swing.JComboBox<String> cbStockCompany;
+    private javax.swing.JComboBox<String> cbStockMeasure;
     private javax.swing.JComboBox<String> cbStockSupplier;
     private javax.swing.JPanel comActive;
     private javax.swing.JPanel comBlink;
@@ -3586,7 +3738,6 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLayeredPane dynamicPanel;
     private javax.swing.JLayeredPane dynamicStockPane;
     private javax.swing.JLabel exitIcon;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -3684,9 +3835,4 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JTable userTbl;
     // End of variables declaration//GEN-END:variables
 
-    private static class jPanel2 {
-
-        public jPanel2() {
-        }
-    }
 }
