@@ -727,6 +727,11 @@ public class UserActions extends javax.swing.JFrame {
         cbAddRole.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
         cbAddRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbAddRole.setPreferredSize(new java.awt.Dimension(64, 36));
+        cbAddRole.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbAddRoleActionPerformed(evt);
+            }
+        });
 
         jLabel8.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel8.setText("Role:");
@@ -1009,9 +1014,7 @@ public class UserActions extends javax.swing.JFrame {
         LaypWrapper.setLayout(LaypWrapperLayout);
         LaypWrapperLayout.setHorizontalGroup(
             LaypWrapperLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(LaypWrapperLayout.createSequentialGroup()
-                .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 996, Short.MAX_VALUE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(pnlWrapper, javax.swing.GroupLayout.DEFAULT_SIZE, 996, Short.MAX_VALUE)
             .addComponent(pnlNavbar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         LaypWrapperLayout.setVerticalGroup(
@@ -1314,6 +1317,10 @@ public class UserActions extends javax.swing.JFrame {
         else
             txtAddLname.setEditable(false);
     }//GEN-LAST:event_txtAddLnameKeyPressed
+
+    private void cbAddRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAddRoleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbAddRoleActionPerformed
 
     /**
      * @param args the command line arguments

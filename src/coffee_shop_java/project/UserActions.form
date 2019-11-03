@@ -50,10 +50,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
-                  <Component id="pnlWrapper" pref="996" max="32767" attributes="0"/>
-                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-              </Group>
+              <Component id="pnlWrapper" pref="996" max="32767" attributes="0"/>
               <Component id="pnlNavbar" alignment="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
@@ -1173,6 +1170,9 @@
                           <Dimension value="[64, 36]"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cbAddRoleActionPerformed"/>
+                      </Events>
                       <AuxValues>
                         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                       </AuxValues>

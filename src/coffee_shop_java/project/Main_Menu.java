@@ -6,6 +6,7 @@
 package coffee_shop_java.project;
 
 import coffee_shop_java.project.Helper.AppHelper;
+import coffee_shop_java.project.Model.Supplier;
 import coffee_shop_java.project.Model.User;
 import java.awt.Color;
 import java.awt.Font;
@@ -47,7 +48,7 @@ public class Main_Menu extends javax.swing.JFrame {
     public Main_Menu() {
         initComponents();
     }
-    
+    //User
     public void showUsers(ArrayList<User> list) {
         userTbl.setModel(new DefaultTableModel(
             null, 
@@ -135,6 +136,94 @@ public class Main_Menu extends javax.swing.JFrame {
         }
         return list;
     }
+    // Supplier--------------------------------------------------------------------------------
+    public void showSups(ArrayList<Sups> list) {
+        supplierTbl1.setModel(new DefaultTableModel(
+            null, 
+            new String[]{
+                "id", 
+                "name", 
+                "address", 
+                "phone", 
+                "email", 
+                "company_id", 
+                "branch_id"
+            }
+        ));
+        DefaultTableModel model = (DefaultTableModel) supplierTbl1.getModel();
+        Object[] rows = new Object[7];
+        for(int i=0; i<list.size(); i++){
+            rows[0] = list.get(i).getid();
+            rows[1] = list.get(i).getname();
+            rows[2] = list.get(i).getaddress();
+            rows[3] = list.get(i).getphone();
+            rows[4] = list.get(i).getemail();
+            rows[5] = list.get(i).getcompany_id();
+            rows[6] = list.get(i).getbranch_id();
+            model.addRow(rows);
+        }
+        AppHelper.setColWidth(supplierTbl1, 6, 0);
+        AppHelper.setColWidth(supplierTbl1, 0, 50);
+    }
+    
+    public ArrayList<Sups> getAllSups() {
+        ArrayList<Sups> list = new ArrayList<>();
+        if(AppHelper.currentUserCan(roleId, "suppliers", "read")) {
+            String sql = "select * from suppliers";
+            try {
+                ResultSet rs = AppHelper.selectQuery(sql);
+                Sups sups;
+                int i = 0;
+                while(rs.next()){
+                    i++;
+                    sups = new Sups(
+                        i,
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("phone"),
+                        rs.getString("email"),
+                        rs.getInt("company_id"),
+                        rs.getInt("branch_id")
+                    );
+                    list.add(sups);
+                }      
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+        return list;
+    }
+    
+    public ArrayList<Sups> searchSups(String text) {
+        ArrayList<Sups> list = new ArrayList<>();
+        if(AppHelper.currentUserCan(roleId, "supplierss", "read")) {
+            String sql = "select * from suppliers"
+                + "WHERE LOWER(`suppliers` . `name`) LIKE '%" + text + "%'";
+            try {
+                ResultSet rs = AppHelper.selectQuery(sql);
+                Sups sups;
+                int i = 0;
+                while(rs.next()){
+                    i++;
+                    sups = new Sups(
+                        i,
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("phone"),
+                        rs.getString("email"),
+                        rs.getInt("company_id"),
+                        rs.getInt("branch_id")
+                    );
+                    list.add(sups);
+                } 
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+        return list;
+    }
   
     /**
      * This method is called from within the constructor to initialize the form.
@@ -202,6 +291,22 @@ public class Main_Menu extends javax.swing.JFrame {
         supplierActive = new javax.swing.JPanel();
         dynamicPanel = new javax.swing.JLayeredPane();
         supplierPanel = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        btnDelSup1 = new javax.swing.JPanel();
+        btnSupIcon4 = new javax.swing.JLabel();
+        btnSupLbl4 = new javax.swing.JLabel();
+        btnSupRefresh1 = new javax.swing.JPanel();
+        btnRefIcon3 = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        supplierTbl1 = new javax.swing.JTable();
+        btnEditSup1 = new javax.swing.JPanel();
+        btnSupIcon5 = new javax.swing.JLabel();
+        btnSupLbl5 = new javax.swing.JLabel();
+        txtSearchSup1 = new javax.swing.JTextField();
+        Line = new javax.swing.JPanel();
+        btnAddSup1 = new javax.swing.JPanel();
+        btnSupIcon6 = new javax.swing.JLabel();
+        btnSupLbl6 = new javax.swing.JLabel();
         comPanel = new javax.swing.JPanel();
         branchPanel = new javax.swing.JPanel();
         proPanel = new javax.swing.JPanel();
@@ -991,15 +1096,244 @@ public class Main_Menu extends javax.swing.JFrame {
 
         dynamicPanel.setLayout(new java.awt.CardLayout());
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setText("Search:");
+
+        btnDelSup1.setBackground(new java.awt.Color(200, 35, 51));
+        btnDelSup1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnDelSup1MouseClicked(evt);
+            }
+        });
+
+        btnSupIcon4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/delete_sign_40px.png"))); // NOI18N
+
+        btnSupLbl4.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        btnSupLbl4.setForeground(new java.awt.Color(255, 255, 255));
+        btnSupLbl4.setText("DELETE");
+
+        javax.swing.GroupLayout btnDelSup1Layout = new javax.swing.GroupLayout(btnDelSup1);
+        btnDelSup1.setLayout(btnDelSup1Layout);
+        btnDelSup1Layout.setHorizontalGroup(
+            btnDelSup1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnDelSup1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnSupIcon4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSupLbl4)
+                .addGap(25, 25, 25))
+        );
+        btnDelSup1Layout.setVerticalGroup(
+            btnDelSup1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnDelSup1Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(btnSupIcon4)
+                .addGap(15, 15, 15))
+            .addComponent(btnSupLbl4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        btnSupRefresh1.setBackground(new java.awt.Color(35, 39, 43));
+        btnSupRefresh1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnSupRefresh1MouseClicked(evt);
+            }
+        });
+
+        btnRefIcon3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/refresh_40px.png"))); // NOI18N
+
+        javax.swing.GroupLayout btnSupRefresh1Layout = new javax.swing.GroupLayout(btnSupRefresh1);
+        btnSupRefresh1.setLayout(btnSupRefresh1Layout);
+        btnSupRefresh1Layout.setHorizontalGroup(
+            btnSupRefresh1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnSupRefresh1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnRefIcon3)
+                .addGap(25, 25, 25))
+        );
+        btnSupRefresh1Layout.setVerticalGroup(
+            btnSupRefresh1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnSupRefresh1Layout.createSequentialGroup()
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addComponent(btnRefIcon3)
+                .addGap(15, 15, 15))
+        );
+
+        jScrollPane2.setBackground(new java.awt.Color(255, 255, 255));
+        jScrollPane2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        jScrollPane2.setOpaque(false);
+
+        supplierTbl1.setAutoCreateRowSorter(true);
+        supplierTbl1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        supplierTbl1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        supplierTbl1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Name", "Address", "Phone", "Email", "Company", "Branch"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        supplierTbl1.setGridColor(new java.awt.Color(255, 255, 255));
+        supplierTbl1.setOpaque(false);
+        supplierTbl1.setRowHeight(34);
+        supplierTbl1.setSelectionBackground(new java.awt.Color(0, 0, 0));
+        supplierTbl1.getTableHeader().setReorderingAllowed(false);
+        jScrollPane2.setViewportView(supplierTbl1);
+
+        btnEditSup1.setBackground(new java.awt.Color(19, 132, 150));
+        btnEditSup1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEditSup1MouseClicked(evt);
+            }
+        });
+
+        btnSupIcon5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/pencil_40px.png"))); // NOI18N
+
+        btnSupLbl5.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        btnSupLbl5.setForeground(new java.awt.Color(255, 255, 255));
+        btnSupLbl5.setText("UPDATE");
+
+        javax.swing.GroupLayout btnEditSup1Layout = new javax.swing.GroupLayout(btnEditSup1);
+        btnEditSup1.setLayout(btnEditSup1Layout);
+        btnEditSup1Layout.setHorizontalGroup(
+            btnEditSup1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnEditSup1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnSupIcon5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSupLbl5)
+                .addGap(25, 25, 25))
+        );
+        btnEditSup1Layout.setVerticalGroup(
+            btnEditSup1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnSupLbl5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnEditSup1Layout.createSequentialGroup()
+                .addContainerGap(19, Short.MAX_VALUE)
+                .addComponent(btnSupIcon5)
+                .addGap(15, 15, 15))
+        );
+
+        txtSearchSup1.setBackground(new java.awt.Color(234, 234, 234));
+        txtSearchSup1.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        txtSearchSup1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        txtSearchSup1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSearchSup1KeyPressed(evt);
+            }
+        });
+
+        Line.setBackground(new java.awt.Color(0, 0, 0));
+        Line.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout LineLayout = new javax.swing.GroupLayout(Line);
+        Line.setLayout(LineLayout);
+        LineLayout.setHorizontalGroup(
+            LineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 759, Short.MAX_VALUE)
+        );
+        LineLayout.setVerticalGroup(
+            LineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        btnAddSup1.setBackground(new java.awt.Color(144, 202, 249));
+        btnAddSup1.setPreferredSize(new java.awt.Dimension(205, 74));
+        btnAddSup1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAddSup1MouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnAddSup1MouseEntered(evt);
+            }
+        });
+
+        btnSupIcon6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/add_user_40px.png"))); // NOI18N
+
+        btnSupLbl6.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        btnSupLbl6.setForeground(new java.awt.Color(255, 255, 255));
+        btnSupLbl6.setText("CREATE");
+
+        javax.swing.GroupLayout btnAddSup1Layout = new javax.swing.GroupLayout(btnAddSup1);
+        btnAddSup1.setLayout(btnAddSup1Layout);
+        btnAddSup1Layout.setHorizontalGroup(
+            btnAddSup1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnAddSup1Layout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnSupIcon6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnSupLbl6, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6))
+        );
+        btnAddSup1Layout.setVerticalGroup(
+            btnAddSup1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnAddSup1Layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(btnSupIcon6)
+                .addContainerGap(13, Short.MAX_VALUE))
+            .addComponent(btnSupLbl6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout supplierPanelLayout = new javax.swing.GroupLayout(supplierPanel);
         supplierPanel.setLayout(supplierPanelLayout);
         supplierPanelLayout.setHorizontalGroup(
             supplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 876, Short.MAX_VALUE)
+            .addGroup(supplierPanelLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addGroup(supplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(supplierPanelLayout.createSequentialGroup()
+                        .addComponent(Line, javax.swing.GroupLayout.PREFERRED_SIZE, 759, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(supplierPanelLayout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(supplierPanelLayout.createSequentialGroup()
+                        .addGroup(supplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, supplierPanelLayout.createSequentialGroup()
+                                .addComponent(btnAddSup1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnEditSup1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnDelSup1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSupRefresh1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(txtSearchSup1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(25, 25, 25))))
         );
         supplierPanelLayout.setVerticalGroup(
             supplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 876, Short.MAX_VALUE)
+            .addGroup(supplierPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel4)
+                .addGap(43, 43, 43)
+                .addComponent(Line, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(supplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnEditSup1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelSup1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnAddSup1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSupRefresh1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(2, 2, 2)
+                .addComponent(txtSearchSup1, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                .addGap(136, 136, 136))
         );
 
         dynamicPanel.add(supplierPanel, "card6");
@@ -2103,12 +2437,18 @@ public class Main_Menu extends javax.swing.JFrame {
         dynamicPanel.removeAll();
         dynamicPanel.repaint();
         dynamicPanel.revalidate();
-        dynamicPanel.add(dashPanel);
+        dynamicPanel.add(supplierPanel);
         dynamicPanel.repaint();
         dynamicPanel.revalidate();
         dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
         dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
         dynamicLabel.setText("SUPPLIER");
+        //show(getAllUsers());
+        JTableHeader header = supplierTbl1.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        header.setOpaque(false);
+        header.setForeground(Color.WHITE);
+        header.setBackground(Color.black);
         
         //braLayer
         branchLabel.setBackground(new Color(78, 45, 17));
@@ -2160,11 +2500,82 @@ public class Main_Menu extends javax.swing.JFrame {
     private void txtSearchUserKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchUserKeyPressed
         // TODO add your handling code here:
         if(AppHelper.alphOnly(evt))
-            txtSearchUser.setEditable(true);
+            txtSearchSup1.setEditable(true);
         else
-            txtSearchUser.setEditable(false);
-        showUsers(searchUser(txtSearchUser.getText().trim()));
+            txtSearchSup1.setEditable(false);
+        showUsers(searchUser(txtSearchSup1.getText().trim()));
     }//GEN-LAST:event_txtSearchUserKeyPressed
+
+    private void btnDelSup1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDelSup1MouseClicked
+        // TODO add your handling code here:
+        if(!AppHelper.currentUserCan(roleId, "users", "delete"))
+        AppHelper.permissionMessage();
+        else {
+            int row = userTbl.getSelectedRow();
+            if(row < 0)
+            JOptionPane.showMessageDialog(null, "Please select any user first to edit!");
+            else {
+                int id = (int)userTbl.getValueAt(row, 6);
+                if(id == userId) {
+                    JOptionPane.showMessageDialog(null, "You can't delete yourself!");
+                } else {
+                    int res = JOptionPane.showConfirmDialog(
+                        this,
+                        "Are you sure you want to delete this?",
+                        "Confirm message",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                    );
+                    if(res == JOptionPane.YES_OPTION) {
+                        Supplier mySup = new Supplier();
+                        mySup.delete(id);
+                        showSups(getAllSups());
+                    }
+                }
+            }
+        }
+    }//GEN-LAST:event_btnDelSup1MouseClicked
+
+    private void btnSupRefresh1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnSupRefresh1MouseClicked
+        // TODO add your handling code here:
+        showSups(getAllSups());
+    }//GEN-LAST:event_btnSupRefresh1MouseClicked
+
+    private void btnEditSup1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEditSup1MouseClicked
+        // TODO add your handling code here:
+        if(!AppHelper.currentUserCan(roleId, "users", "update"))
+        AppHelper.permissionMessage();
+        else {
+            int row = userTbl.getSelectedRow();
+            if(row < 0)
+            JOptionPane.showMessageDialog(null, "Please select any user first to edit!");
+            else {
+                int id = (int)userTbl.getValueAt(row, 6);
+                new UserActions("edit", id).setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_btnEditSup1MouseClicked
+
+    private void txtSearchSup1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchSup1KeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.alphOnly(evt))
+        txtSearchUser.setEditable(true);
+        else
+        txtSearchUser.setEditable(false);
+        showSups(searchSups(txtSearchSup1.getText().trim()));
+    }//GEN-LAST:event_txtSearchSup1KeyPressed
+
+    private void btnAddSup1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddSup1MouseClicked
+        // TODO add your handling code here:
+        if(!AppHelper.currentUserCan(roleId, "users", "create"))
+        AppHelper.permissionMessage();
+        else
+        new SupplierActions().setVisible(true);
+    }//GEN-LAST:event_btnAddSup1MouseClicked
+
+    private void btnAddSup1MouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddSup1MouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAddSup1MouseEntered
 
     /**
      * @param args the command line arguments
@@ -2200,6 +2611,7 @@ public class Main_Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel Line;
     private javax.swing.JPanel background;
     private javax.swing.JPanel braActive;
     private javax.swing.JPanel braBlink;
@@ -2208,18 +2620,29 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel branchIcon;
     private javax.swing.JPanel branchLabel;
     private javax.swing.JPanel branchPanel;
+    private javax.swing.JPanel btnAddSup1;
     private javax.swing.JPanel btnAddUser;
     private javax.swing.JPanel btnChangePass;
+    private javax.swing.JPanel btnDelSup1;
     private javax.swing.JPanel btnDelUser;
+    private javax.swing.JPanel btnEditSup1;
     private javax.swing.JPanel btnEditUser;
     private javax.swing.JPanel btnLogout;
     private javax.swing.JPanel btnPermission;
+    private javax.swing.JLabel btnRefIcon3;
     private javax.swing.JPanel btnRole;
     private javax.swing.JLabel btnRoleIcon;
     private javax.swing.JLabel btnRoleIcon1;
     private javax.swing.JLabel btnRoleIcon2;
     private javax.swing.JLabel btnRoleLbl;
     private javax.swing.JLabel btnRoleLbl1;
+    private javax.swing.JLabel btnSupIcon4;
+    private javax.swing.JLabel btnSupIcon5;
+    private javax.swing.JLabel btnSupIcon6;
+    private javax.swing.JLabel btnSupLbl4;
+    private javax.swing.JLabel btnSupLbl5;
+    private javax.swing.JLabel btnSupLbl6;
+    private javax.swing.JPanel btnSupRefresh1;
     private javax.swing.JLabel btnUserIcon;
     private javax.swing.JLabel btnUserIcon1;
     private javax.swing.JLabel btnUserIcon2;
@@ -2251,8 +2674,10 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel pro;
     private javax.swing.JPanel proActive;
     private javax.swing.JPanel proBlink;
@@ -2282,6 +2707,8 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLayeredPane supplierLayp;
     private javax.swing.JPanel supplierPanel;
     private javax.swing.JPanel supplierPnl;
+    private javax.swing.JTable supplierTbl1;
+    private javax.swing.JTextField txtSearchSup1;
     private javax.swing.JTextField txtSearchUser;
     private javax.swing.JPanel userActive;
     private javax.swing.JPanel userBlink;
@@ -2296,6 +2723,44 @@ public class Main_Menu extends javax.swing.JFrame {
     private static class jPanel2 {
 
         public jPanel2() {
+        }
+    }
+
+    private static class Sups {
+
+        public Sups() {
+        }
+
+        private Sups(int i, int aInt, String string, String string0, String string1, String string2, int aInt0, int aInt1) {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private Object getid() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private Object getname() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private Object getaddress() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private Object getphone() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private Object getemail() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private Object getcompany_id() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        }
+
+        private Object getbranch_id() {
+            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }
 }
