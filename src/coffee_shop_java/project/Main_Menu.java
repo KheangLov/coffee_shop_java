@@ -1506,9 +1506,9 @@ public class Main_Menu extends javax.swing.JFrame {
         btnUserRefreshLayout.setHorizontalGroup(
             btnUserRefreshLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnUserRefreshLayout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnRoleIcon2)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         btnUserRefreshLayout.setVerticalGroup(
             btnUserRefreshLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1552,7 +1552,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1435, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1409, Short.MAX_VALUE)
                     .addComponent(txtSearchUser)
                     .addGroup(userPanelLayout.createSequentialGroup()
                         .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2595,7 +2595,7 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGroup(stockPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(stockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dynamicStockPane, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(dynamicStockPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(stockPanelLayout.createSequentialGroup()
                         .addComponent(btnStockImport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -3381,6 +3381,48 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void btnStockEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStockEditMouseClicked
         // TODO add your handling code here:
+        if(!AppHelper.currentUserCan(roleId, "stocks", "update"))
+            AppHelper.permissionMessage();
+        else {
+            int row = tblStock.getSelectedRow();
+            if(row < 0)
+                JOptionPane.showMessageDialog(null, "Please select any stock first to edit!");
+            else {
+                int id = (int)userTbl.getValueAt(row, 6);
+                dynamicStockPane.removeAll();
+                dynamicStockPane.repaint();
+                dynamicStockPane.revalidate();
+                dynamicStockPane.add(pnlStockImport);
+                dynamicStockPane.repaint();
+                dynamicStockPane.revalidate();
+                AppHelper.getCombos("name", "stock_categories").forEach((r) -> cbStockCate.addItem(AppHelper.toCapitalize(r)));
+                String sql = "SELECT `import_details`.`price` AS `import_price`, " +
+                    "`imports`.`supplier_id`, " +
+                    "`stocks`.*, " +
+                    "`stock_categories`.`name` AS stock_cate_name " +
+                    "FROM `import_details` " +
+                    "INNER JOIN `imports` " +
+                    "ON `import_details`.`import_id` = `imports`.`id` " +
+                    "INNER JOIN `stocks` " +
+                    "ON `import_details`.`stock_id` = `stocks`.`id` " +
+                    "INNER JOIN `stock_categories` " +
+                    "ON `stocks`.`stock_category_id` = `stock_categories`.`id`";
+                ResultSet rs = AppHelper.selectQuery(sql, id);
+                try {
+                    if(rs.next()) {
+                        txtStockName.setText(rs.getString("name"));
+                        dpStockExpired.setDate(rs.getDate("expired_date"));
+                        txtStockQty.setText(rs.getString("qty"));
+                        cbStockCate.setSelectedItem(rs.getString("stock_cate_name"));
+                        cbStockMeasure.setSelectedItem("measure_unit");
+                        txtStockAlertQty.setText("alert_qty");
+                        txtStockPrice.setText("import_price");
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Main_Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }        
     }//GEN-LAST:event_btnStockEditMouseClicked
 
     private void btnStockDelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStockDelMouseClicked
@@ -3488,7 +3530,8 @@ public class Main_Menu extends javax.swing.JFrame {
                 myStock.setBranchId(0);
                 myStock.insert();
 
-                myImport.setDate(dtf.format(currentDate));
+                myImport.setCreatedDate(dtf.format(currentDate));
+                myImport.setUpdatedDate(dtf.format(currentDate));
                 myImport.setUserId(userId);
                 myImport.setSupplierId(0);
                 myImport.insert();

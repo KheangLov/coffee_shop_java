@@ -7,7 +7,6 @@ package coffee_shop_java.project.Model;
 
 import coffee_shop_java.project.Action.Action;
 import coffee_shop_java.project.Helper.AppHelper;
-import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -28,22 +27,25 @@ import lombok.NoArgsConstructor;
 public class Import extends Action {
     PreparedStatement stmt;
     private int id;
-    private String date;
+    private String createdDate;
+    private String updatedDate;
     private int userId;
     private int supplierId;    
     
     @Override
     public void insert() {
         String sql = "INSERT INTO `imports`("
-            + "`date`, "
             + "`user_id`, "
-            + "`supplier_id`"
-            + ") VALUES(?, ?, ?)";
+            + "`supplier_id`, "
+            + "`created_date`, "
+            + "`updated_date`, "
+            + ") VALUES(?, ?, ?, ?)";
         try {
-            stmt = DbConn.getConnection().prepareStatement(sql);
-            stmt.setString(1, date);
-            stmt.setInt(2, userId);
-            stmt.setInt(3, supplierId);
+            stmt = DbConn.getConnection().prepareStatement(sql);            
+            stmt.setInt(1, userId);
+            stmt.setInt(2, supplierId);
+            stmt.setString(3, createdDate);
+            stmt.setString(4, updatedDate);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 this.id = AppHelper.getLastRecordId("imports");
