@@ -4268,47 +4268,4 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JTable userTbl;
     // End of variables declaration//GEN-END:variables
 
-    private static class jPanel2 {
-
-        public jPanel2() {
-        }
-    }
-
-    private static class Sups {
-
-        public Sups() {
-        }
-
-        private Sups(int i, int aInt, String string, String string0, String string1, String string2, int aInt0, int aInt1) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        private Object getid() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        private Object getname() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        private Object getaddress() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        private Object getphone() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        private Object getemail() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        private Object getcompany_id() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-
-        private Object getbranch_id() {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        }
-    }
 }
