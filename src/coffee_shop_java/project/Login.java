@@ -137,6 +137,7 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 290, -1, -1));
 
         txtUsername.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        txtUsername.setText("kheanglov");
         txtUsername.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
         txtUsername.setPreferredSize(new java.awt.Dimension(69, 50));
         txtUsername.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -163,6 +164,7 @@ public class Login extends javax.swing.JFrame {
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 370, 450, 3));
 
         txtPassword.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        txtPassword.setText("not4you");
         txtPassword.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
         txtPassword.setPreferredSize(new java.awt.Dimension(126, 50));
         txtPassword.addKeyListener(new java.awt.event.KeyAdapter() {

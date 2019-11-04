@@ -680,7 +680,7 @@
                                       <Group type="103" groupAlignment="0" attributes="0">
                                           <Component id="jLabel8" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Group type="103" alignment="0" groupAlignment="1" attributes="0">
-                                              <Component id="btnAddRole" min="-2" max="-2" attributes="0"/>
+                                              <Component id="btnAddUser" min="-2" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="1" max="-2" attributes="0">
                                                   <Component id="jPanel8" alignment="0" max="32767" attributes="0"/>
                                                   <Component id="cbAddRole" alignment="0" min="-2" pref="300" max="-2" attributes="0"/>
@@ -766,7 +766,7 @@
                                   </Group>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="btnAddRole" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnAddUser" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -822,14 +822,14 @@
                         <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtAddFnameKeyPressed"/>
                       </Events>
                     </Component>
-                    <Container class="javax.swing.JPanel" name="btnAddRole">
+                    <Container class="javax.swing.JPanel" name="btnAddUser">
                       <Properties>
                         <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                           <Color blue="f9" green="ca" red="90" type="rgb"/>
                         </Property>
                       </Properties>
                       <Events>
-                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnAddRoleMouseClicked"/>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnAddUserMouseClicked"/>
                       </Events>
 
                       <Layout>

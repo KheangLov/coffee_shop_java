@@ -3,56 +3,56 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package coffee_shop_java.project;
+package coffee_shop_java.project.Model;
 
 import coffee_shop_java.project.Action.Action;
-import coffee_shop_java.project.Model.DbConn;
+import coffee_shop_java.project.Helper.AppHelper;
+import java.util.Date;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 /**
  *
- * @author ASUS
+ * @author KHEANG
  */
+
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class Company extends Action {
-    PreparedStatement stmt = null;
-    ResultSet rs; 
-    private String name;
-    private String phone;
-    private String email;
-    private String address;
+@NoArgsConstructor
+public class Import extends Action {
+    PreparedStatement stmt;
+    private int id;
+    private String date;
     private int userId;
+    private int supplierId;    
     
     @Override
     public void insert() {
-        String sql = "INSERT INTO companies(name, phone, email, address, user_id)"
-                + "VALUES(?, ?, ?, ?, ?)";
-        
+        String sql = "INSERT INTO `imports`("
+            + "`date`, "
+            + "`user_id`, "
+            + "`supplier_id`"
+            + ") VALUES(?, ?, ?)";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
-            stmt.setString(1, name);
-            stmt.setString(2, phone);
-            stmt.setString(3, email);
-            stmt.setString(4, address);
-            stmt.setInt(5, userId);
+            stmt.setString(1, date);
+            stmt.setInt(2, userId);
+            stmt.setInt(3, supplierId);
             int i = stmt.executeUpdate();
-            if(i > 0){
-                JOptionPane.showMessageDialog(null, "Data Save");
-            } else{
-                JOptionPane.showMessageDialog(null, "Failed to Save");
+            if(i > 0) {
+                this.id = AppHelper.getLastRecordId("imports");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data failed to saved!");
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
-            
-        }
-        
+            Logger.getLogger(Import.class.getName()).log(Level.SEVERE, null, ex);
+        }        
     }
 
     @Override
