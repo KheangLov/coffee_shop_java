@@ -351,7 +351,7 @@ public class Main_Menu extends javax.swing.JFrame {
         stockPanel = new javax.swing.JPanel();
         dynamicStockPane = new javax.swing.JLayeredPane();
         pnlStockImport = new javax.swing.JPanel();
-        jLabel4 = new javax.swing.JLabel();
+        lblStockAction = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtStockName = new javax.swing.JTextField();
         jPanel9 = new javax.swing.JPanel();
@@ -1506,9 +1506,9 @@ public class Main_Menu extends javax.swing.JFrame {
         btnUserRefreshLayout.setHorizontalGroup(
             btnUserRefreshLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnUserRefreshLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(btnRoleIcon2)
-                .addGap(25, 25, 25))
+                .addContainerGap(25, Short.MAX_VALUE))
         );
         btnUserRefreshLayout.setVerticalGroup(
             btnUserRefreshLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1534,7 +1534,7 @@ public class Main_Menu extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 624, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1548,56 +1548,52 @@ public class Main_Menu extends javax.swing.JFrame {
         userPanel.setLayout(userPanelLayout);
         userPanelLayout.setHorizontalGroup(
             userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(userPanelLayout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, userPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1435, Short.MAX_VALUE)
+                    .addComponent(txtSearchUser)
                     .addGroup(userPanelLayout.createSequentialGroup()
                         .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 624, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel3)
-                            .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(txtSearchUser, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, userPanelLayout.createSequentialGroup()
-                                    .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnEditUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(btnChangePass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(18, 18, 18)
-                        .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(userPanelLayout.createSequentialGroup()
-                                .addComponent(btnDelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, Short.MAX_VALUE)
-                                .addComponent(btnRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(userPanelLayout.createSequentialGroup()
-                                .addComponent(btnUserRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addComponent(btnEditUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnChangePass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnDelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnUserRefresh, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(25, 25, 25))
         );
         userPanelLayout.setVerticalGroup(
             userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(userPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnEditUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnChangePass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnDelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(btnRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(userPanelLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtSearchUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnEditUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnChangePass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnDelUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnAddUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnRole, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnPermission, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(21, 21, 21)
+                        .addComponent(jLabel3))
                     .addComponent(btnUserRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addComponent(txtSearchUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 647, Short.MAX_VALUE)
                 .addGap(25, 25, 25))
@@ -1625,8 +1621,8 @@ public class Main_Menu extends javax.swing.JFrame {
 
         pnlStockImport.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 42)); // NOI18N
-        jLabel4.setText("IMPORT STOCK");
+        lblStockAction.setFont(new java.awt.Font("Segoe UI", 0, 42)); // NOI18N
+        lblStockAction.setText("IMPORT STOCK");
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel9.setText("Name:");
@@ -1920,7 +1916,7 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel4)
+                            .addComponent(lblStockAction)
                             .addGroup(pnlStockImportLayout.createSequentialGroup()
                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
@@ -1993,7 +1989,7 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlStockImportLayout.createSequentialGroup()
-                        .addComponent(jLabel4)
+                        .addComponent(lblStockAction)
                         .addGap(25, 25, 25)
                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -3473,45 +3469,49 @@ public class Main_Menu extends javax.swing.JFrame {
             DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             
-            myStock.setName(name);
-            myStock.setExpiredDate(df.format(expiredDate));
-            myStock.setQty(qty);
-            myStock.setAlertQty(alertQty);
-            myStock.setAlerted(0);
-            myStock.setMeasureUnit(String.valueOf(cbStockMeasure.getSelectedItem()));
-            myStock.setStockCateId(
-                AppHelper.getId(
-                    String.valueOf(cbStockCate.getSelectedItem()), 
-                    "id", 
-                    "stock_categories", 
-                    "name"
-                )
-            );
-            myStock.setCompanyId(0);
-            myStock.setBranchId(0);
-            myStock.insert();
-            
-            myImport.setDate(dtf.format(currentDate));
-            myImport.setUserId(userId);
-            myImport.setSupplierId(0);
-            myImport.insert();
-            
-            myImpDetail.setImportId(myImport.getId());
-            myImpDetail.setStockId(myStock.getId());
-            myImpDetail.setQty(qty);
-            myImpDetail.setPrice(price);
-            myImpDetail.insert();
-            txtStockName.setText("");
-            txtStockQty.setText("");
-            txtStockPrice.setText("");
-            txtStockAlertQty.setText("");
-            dpStockExpired.setDateFormatString("");
-            cbStockCate.setSelectedIndex(0);
-            cbStockMeasure.setSelectedIndex(0);
-//            cbStockCompany.setSelectedIndex(0);
-//            cbStockBranch.setSelectedIndex(0);
-//            cbStockSupplier.setSelectedIndex(0);
-            txtStockName.requestFocus();
+            if(expiredDate.compareTo(currentDate) > 0) {
+                myStock.setName(name);            
+                myStock.setExpiredDate(df.format(expiredDate));
+                myStock.setQty(qty);
+                myStock.setAlertQty(alertQty);
+                myStock.setAlerted(0);
+                myStock.setMeasureUnit(String.valueOf(cbStockMeasure.getSelectedItem()));
+                myStock.setStockCateId(
+                    AppHelper.getId(
+                        String.valueOf(cbStockCate.getSelectedItem()), 
+                        "id", 
+                        "stock_categories", 
+                        "name"
+                    )
+                );
+                myStock.setCompanyId(0);
+                myStock.setBranchId(0);
+                myStock.insert();
+
+                myImport.setDate(dtf.format(currentDate));
+                myImport.setUserId(userId);
+                myImport.setSupplierId(0);
+                myImport.insert();
+
+                myImpDetail.setImportId(myImport.getId());
+                myImpDetail.setStockId(myStock.getId());
+                myImpDetail.setQty(qty);
+                myImpDetail.setPrice(price);
+                myImpDetail.insert();
+                txtStockName.setText("");
+                txtStockQty.setText("");
+                txtStockPrice.setText("");
+                txtStockAlertQty.setText("");
+                dpStockExpired.setDateFormatString("");
+                cbStockCate.setSelectedIndex(0);
+                cbStockMeasure.setSelectedIndex(0);
+    //            cbStockCompany.setSelectedIndex(0);
+    //            cbStockBranch.setSelectedIndex(0);
+    //            cbStockSupplier.setSelectedIndex(0);
+                txtStockName.requestFocus();
+            } else {
+                JOptionPane.showMessageDialog(null, "Expired date must not before current date!");
+            }
         }
     }//GEN-LAST:event_btnAddStockMouseClicked
 
@@ -3673,7 +3673,6 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JPanel branchPanel;
     private javax.swing.JPanel btnAddStock;
     private javax.swing.JPanel btnAddStockCate;
-    private javax.swing.JPanel btnAddStockCate2;
     private javax.swing.JPanel btnAddUser;
     private javax.swing.JPanel btnChangePass;
     private javax.swing.JPanel btnDelStockCate;
@@ -3752,7 +3751,6 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
@@ -3779,8 +3777,8 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAdd3;
     private javax.swing.JLabel lblAdd4;
-    private javax.swing.JLabel lblAdd6;
     private javax.swing.JLabel lblAdd7;
+    private javax.swing.JLabel lblStockAction;
     private javax.swing.JLabel lblStockCateAdd;
     private javax.swing.JPanel pnlStockCate;
     private javax.swing.JPanel pnlStockImport;
