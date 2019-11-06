@@ -38,7 +38,7 @@ public class Import extends Action {
             + "`user_id`, "
             + "`supplier_id`, "
             + "`created_date`, "
-            + "`updated_date`, "
+            + "`updated_date`"
             + ") VALUES(?, ?, ?, ?)";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);            
