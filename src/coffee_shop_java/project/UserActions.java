@@ -1217,7 +1217,7 @@ public class UserActions extends javax.swing.JFrame {
     private void txtAddPasswordFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtAddPasswordFocusLost
         // TODO add your handling code here:
         int min = 8;
-        if(!AppHelper.isMatchLength("min", min, txtAddPassword.getText().trim().length())) {
+        if(!txtAddLname.getText().trim().equals("") && !AppHelper.isMatchLength("min", min, txtAddPassword.getText().trim().length())) {
             AppHelper.errorMessage("password", min);
             txtAddPassword.requestFocus();
         }

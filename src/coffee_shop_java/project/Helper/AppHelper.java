@@ -6,6 +6,7 @@
 package coffee_shop_java.project.Helper;
 
 import coffee_shop_java.project.Model.DbConn;
+import coffee_shop_java.project.Model.User;
 import coffee_shop_java.project.UserActions;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -239,7 +240,7 @@ public class AppHelper {
     }
     
     public static void addBackground(JFrame frame,ImageIcon img) {
-        frame.setExtendedState(UserActions.MAXIMIZED_BOTH);
+        frame.setExtendedState(frame.MAXIMIZED_BOTH);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setPreferredSize(new Dimension(screenSize.width, screenSize.height));
         frame.setSize(new Dimension(screenSize.width, screenSize.height));
