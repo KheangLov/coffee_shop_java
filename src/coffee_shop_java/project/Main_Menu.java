@@ -58,10 +58,21 @@ public class Main_Menu extends javax.swing.JFrame {
         userId = uId;
         roleId = rId;
         this.setExtendedState(Main_Menu.MAXIMIZED_BOTH);
+        dynamicPanel.removeAll();
+        dynamicPanel.repaint();
+        dynamicPanel.revalidate();
+        dynamicPanel.add(dashPanel);
+        dynamicLabel.setFont(new Font("Segoe UI", 0, 36));
+        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
+        dynamicLabel.setText("DASHBOARD");
     }
 
     public Main_Menu() {
         initComponents();
+        this.setExtendedState(Main_Menu.MAXIMIZED_BOTH);
+        dynamicPanel.removeAll();
+        dynamicPanel.repaint();
+        dynamicPanel.revalidate();
     }
     
     public void showUsers(ArrayList<User> list) {
@@ -3516,13 +3527,6 @@ public class Main_Menu extends javax.swing.JFrame {
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
-        dynamicPanel.removeAll();
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicPanel.add(dashPanel);
-        dynamicLabel.setFont(new Font("Segoe UI", 0, 36));
-        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
-        dynamicLabel.setText("DASHBOARD");
         JOptionPane.showMessageDialog(null, "You have been logged in!");
     }//GEN-LAST:event_formWindowOpened
 

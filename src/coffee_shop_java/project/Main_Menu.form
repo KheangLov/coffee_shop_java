@@ -3418,18 +3418,18 @@
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Group type="102" attributes="0">
                                                           <Group type="103" groupAlignment="0" attributes="0">
-                                                              <Component id="jPanel9" pref="313" max="32767" attributes="0"/>
+                                                              <Component id="jPanel9" pref="280" max="32767" attributes="0"/>
                                                               <Component id="txtStockName" max="32767" attributes="0"/>
                                                               <Group type="102" attributes="0">
                                                                   <Group type="103" groupAlignment="1" attributes="0">
                                                                       <Component id="txtStockQty" max="32767" attributes="0"/>
-                                                                      <Component id="jPanel11" alignment="0" pref="147" max="32767" attributes="0"/>
+                                                                      <Component id="jPanel11" alignment="0" pref="130" max="32767" attributes="0"/>
                                                                       <Component id="jLabel11" alignment="0" max="32767" attributes="0"/>
                                                                   </Group>
                                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                                       <Group type="102" attributes="0">
                                                                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                                                                          <Component id="jPanel13" pref="148" max="32767" attributes="0"/>
+                                                                          <Component id="jPanel13" pref="132" max="32767" attributes="0"/>
                                                                       </Group>
                                                                       <Group type="102" alignment="1" attributes="0">
                                                                           <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
@@ -3441,7 +3441,7 @@
                                                                   </Group>
                                                               </Group>
                                                               <Component id="cbStockCompany" alignment="0" max="32767" attributes="0"/>
-                                                              <Component id="jPanel17" alignment="0" pref="313" max="32767" attributes="0"/>
+                                                              <Component id="jPanel17" alignment="0" pref="280" max="32767" attributes="0"/>
                                                               <Group type="102" alignment="0" attributes="0">
                                                                   <Component id="jLabel16" min="-2" pref="130" max="-2" attributes="0"/>
                                                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
@@ -3458,12 +3458,12 @@
                                                       <Group type="102" attributes="0">
                                                           <Group type="103" groupAlignment="0" attributes="0">
                                                               <Component id="dpStockExpired" max="32767" attributes="0"/>
-                                                              <Component id="jPanel10" pref="472" max="32767" attributes="0"/>
+                                                              <Component id="jPanel10" pref="488" max="32767" attributes="0"/>
                                                               <Component id="txtStockAlertQty" alignment="1" max="32767" attributes="0"/>
-                                                              <Component id="jPanel15" alignment="0" pref="472" max="32767" attributes="0"/>
+                                                              <Component id="jPanel15" alignment="0" pref="488" max="32767" attributes="0"/>
                                                               <Component id="jLabel14" alignment="0" max="32767" attributes="0"/>
                                                               <Component id="cbStockBranch" alignment="0" max="32767" attributes="0"/>
-                                                              <Component id="jPanel18" alignment="0" pref="472" max="32767" attributes="0"/>
+                                                              <Component id="jPanel18" alignment="0" pref="488" max="32767" attributes="0"/>
                                                               <Group type="102" alignment="0" attributes="0">
                                                                   <Component id="jLabel17" min="-2" pref="130" max="-2" attributes="0"/>
                                                                   <EmptySpace min="0" pref="393" max="32767" attributes="0"/>
@@ -3478,12 +3478,12 @@
                                                   </Group>
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="cbStockCate" max="32767" attributes="0"/>
-                                                      <Component id="jPanel12" pref="302" max="32767" attributes="0"/>
+                                                      <Component id="jPanel12" pref="319" max="32767" attributes="0"/>
                                                       <Component id="txtStockPrice" alignment="1" max="32767" attributes="0"/>
-                                                      <Component id="jPanel16" alignment="0" pref="302" max="32767" attributes="0"/>
+                                                      <Component id="jPanel16" alignment="0" pref="319" max="32767" attributes="0"/>
                                                       <Component id="jLabel15" alignment="0" max="32767" attributes="0"/>
                                                       <Component id="cbStockSupplier" alignment="0" max="32767" attributes="0"/>
-                                                      <Component id="jPanel19" alignment="0" pref="302" max="32767" attributes="0"/>
+                                                      <Component id="jPanel19" alignment="0" pref="319" max="32767" attributes="0"/>
                                                       <Group type="102" attributes="0">
                                                           <Component id="jLabel18" min="-2" pref="130" max="-2" attributes="0"/>
                                                           <EmptySpace min="0" pref="222" max="32767" attributes="0"/>
@@ -4294,6 +4294,8 @@
                           <CardConstraints cardName="card2"/>
                         </Constraint>
                       </Constraints>
+
+                      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignFlowLayout"/>
                       <SubComponents>
                         <Component class="javax.swing.JLabel" name="jLabel6">
                           <Properties>
