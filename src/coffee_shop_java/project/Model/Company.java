@@ -29,13 +29,15 @@ public class Company extends Action {
     private String phone;
     private int userId;
     private int tblId;
+    private String comName;
 
-    public Company(int i, String name, String address, String email, String phone, int id) {
+    public Company(int i, String name, String address, String email, String phone, String comName, int id) {
         this.tblId = i;
         this.name = name;
         this.address = address;
         this.email = email;
         this.phone = phone;
+        this.comName = comName;
         this.id = id;
     }
     

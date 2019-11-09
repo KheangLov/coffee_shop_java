@@ -12,7 +12,6 @@ import coffee_shop_java.project.Model.Stock;
 import coffee_shop_java.project.Model.StockCategory;
 import coffee_shop_java.project.Model.Company;
 import coffee_shop_java.project.Model.User;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.Date;
@@ -49,6 +48,7 @@ public class Main_Menu extends javax.swing.JFrame {
     private int userId;
     private int roleId;
     private int stockCateId;
+    private int comId;
     StockCategory myStockCate = new StockCategory();
     Stock myStock = new Stock();
     Import myImport = new Import();
@@ -256,26 +256,29 @@ public class Main_Menu extends javax.swing.JFrame {
     
     public ArrayList<Company> getComList(){
         ArrayList<Company> list = new ArrayList<>();
-        String sql = "SELECT * FROM companies";
-            try {
-                ResultSet rs = AppHelper.selectQuery(sql);
-                Company userCom;
-                int i = 0;
-                while(rs.next()){
-                    i++;
-                    userCom = new Company(
-                        i,
-                        rs.getString("name"),
-                        rs.getString("address"),
-                        rs.getString("email"),
-                        rs.getString("phone"),
-                        rs.getInt("id")
-                    );
-                    list.add(userCom);
-                } 
-            } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, ex);
-            }
+        String sql = "SELECT companies.*, users.fullname as username "
+            + "FROM companies "
+            + "INNER JOIN users ON companies.user_id = users.id";
+        try {
+            ResultSet rs = AppHelper.selectQuery(sql);
+            Company userCom;
+            int i = 0;
+            while(rs.next()){
+                i++;
+                userCom = new Company(
+                    i,
+                    rs.getString("name"),
+                    rs.getString("address"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getString("username"),
+                    rs.getInt("id")
+                );
+                list.add(userCom);
+            } 
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
         return list;
     }
     
@@ -288,27 +291,33 @@ public class Main_Menu extends javax.swing.JFrame {
                 "Address",
                 "Email",
                 "Phone",
+                "User",
                 "id"
             }
         ));
         DefaultTableModel model = (DefaultTableModel) tblCom.getModel();
-        Object[] row = new Object[6];
+        Object[] row = new Object[7];
         for(int i=0; i<list.size(); i++){
             row[0] = list.get(i).getTblId();
             row[1] = list.get(i).getName();
             row[2] = list.get(i).getAddress();
             row[3] = list.get(i).getEmail();
             row[4] = list.get(i).getPhone();
-            row[5] = list.get(i).getId();
+            row[5] = list.get(i).getComName();
+            row[6] = list.get(i).getId();
             model.addRow(row);
         }
-        AppHelper.setColWidth(tblCom, 5, 0);
+        AppHelper.setColWidth(tblCom, 6, 0);
+        AppHelper.setColWidth(tblCom, 0, 50);
     }
     
     public ArrayList<Company> searchCom(String text) {
         ArrayList<Company> list = new ArrayList<>();
         if(AppHelper.currentUserCan(roleId, "companies", "read")) {
-            String sql = "SELECT * FROM companies WHERE LOWER(name) LIKE '%" + text + "%'";
+            String sql = "SELECT companies.*, users.fullname as username "
+                    + "FROM companies "
+                    + "INNER JOIN users ON companies.user_id = users.id "
+                    + "WHERE LOWER(companies.name) LIKE '%" + text + "%'";
             try {
                 ResultSet rs = AppHelper.selectQuery(sql);
                 Company company;
@@ -321,6 +330,7 @@ public class Main_Menu extends javax.swing.JFrame {
                         rs.getString("address"),
                         rs.getString("email"),
                         rs.getString("phone"),
+                        rs.getString("username"),
                         rs.getInt("id")
                     );
                     list.add(company);
@@ -405,16 +415,13 @@ public class Main_Menu extends javax.swing.JFrame {
         lblSearch = new javax.swing.JLabel();
         txtSearchCom = new javax.swing.JTextField();
         lineSearch = new javax.swing.JPanel();
-        pnlComAdd = new javax.swing.JPanel();
-        lblAddCom = new javax.swing.JLabel();
+        pnlComAction = new javax.swing.JPanel();
+        lblComAction = new javax.swing.JLabel();
         lblName = new javax.swing.JLabel();
         txtComName = new javax.swing.JTextField();
         LineName = new javax.swing.JPanel();
-        cbComUser = new javax.swing.JComboBox<>();
-        lblCbUser = new javax.swing.JLabel();
-        LineCbUser = new javax.swing.JPanel();
-        btnAddCom = new javax.swing.JPanel();
-        lblAddCompany = new javax.swing.JLabel();
+        btnCom = new javax.swing.JPanel();
+        lblComBtn = new javax.swing.JLabel();
         LineEmail = new javax.swing.JPanel();
         lbEmail = new javax.swing.JLabel();
         txtComEmail = new javax.swing.JTextField();
@@ -425,26 +432,6 @@ public class Main_Menu extends javax.swing.JFrame {
         txtComAddres = new javax.swing.JTextArea();
         LineTxtAddress = new javax.swing.JPanel();
         lblAddresss = new javax.swing.JLabel();
-        pnlComUpdate = new javax.swing.JPanel();
-        lblUpdateCom = new javax.swing.JLabel();
-        lblName1 = new javax.swing.JLabel();
-        txtUpdateName = new javax.swing.JTextField();
-        LineName1 = new javax.swing.JPanel();
-        cbComUser1 = new javax.swing.JComboBox<>();
-        lblCbUser1 = new javax.swing.JLabel();
-        LineCbUser1 = new javax.swing.JPanel();
-        btnUpdateCom = new javax.swing.JPanel();
-        lblUpdateCompany = new javax.swing.JLabel();
-        LineEmail1 = new javax.swing.JPanel();
-        lbEmail1 = new javax.swing.JLabel();
-        txtComEmail1 = new javax.swing.JTextField();
-        LinePhone1 = new javax.swing.JPanel();
-        lblPhone1 = new javax.swing.JLabel();
-        txtComPhone1 = new javax.swing.JTextField();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        txtComAddres1 = new javax.swing.JTextArea();
-        LineTxtAddress1 = new javax.swing.JPanel();
-        lblAddresss1 = new javax.swing.JLabel();
         btnComAdd = new javax.swing.JPanel();
         btnUserIconComAdd = new javax.swing.JLabel();
         btnUserLblComAdd = new javax.swing.JLabel();
@@ -521,8 +508,8 @@ public class Main_Menu extends javax.swing.JFrame {
         cbStockSupplier = new javax.swing.JComboBox<>();
         jLabel18 = new javax.swing.JLabel();
         jPanel19 = new javax.swing.JPanel();
-        btnAddStock = new javax.swing.JPanel();
-        lblAdd3 = new javax.swing.JLabel();
+        btnStock = new javax.swing.JPanel();
+        lblStockBtn = new javax.swing.JLabel();
         pnlStockList = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblStock = new javax.swing.JTable();
@@ -1340,14 +1327,14 @@ public class Main_Menu extends javax.swing.JFrame {
 
             },
             new String [] {
-                "#", "Name", "Address", "Email", "Phone", "User Id"
+                "#", "Name", "Address", "Email", "Phone", "User", "id"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false
+                false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1420,16 +1407,16 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(lineSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
         dynamicComPnl.add(pnlComList, "card2");
 
-        pnlComAdd.setBackground(new java.awt.Color(255, 255, 255));
+        pnlComAction.setBackground(new java.awt.Color(255, 255, 255));
 
-        lblAddCom.setFont(new java.awt.Font("Segoe UI", 0, 42)); // NOI18N
-        lblAddCom.setText("ADD COMPANY");
+        lblComAction.setFont(new java.awt.Font("Segoe UI", 0, 42)); // NOI18N
+        lblComAction.setText("ADD COMPANY");
 
         lblName.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblName.setText("Name:");
@@ -1463,57 +1450,31 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGap(0, 3, Short.MAX_VALUE)
         );
 
-        cbComUser.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        cbComUser.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbComUser.setPreferredSize(new java.awt.Dimension(300, 42));
-        cbComUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbComUserActionPerformed(evt);
-            }
-        });
-
-        lblCbUser.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lblCbUser.setText("User:");
-
-        LineCbUser.setBackground(new java.awt.Color(0, 0, 0));
-        LineCbUser.setPreferredSize(new java.awt.Dimension(100, 3));
-
-        javax.swing.GroupLayout LineCbUserLayout = new javax.swing.GroupLayout(LineCbUser);
-        LineCbUser.setLayout(LineCbUserLayout);
-        LineCbUserLayout.setHorizontalGroup(
-            LineCbUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        LineCbUserLayout.setVerticalGroup(
-            LineCbUserLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        btnAddCom.setBackground(new java.awt.Color(144, 202, 249));
-        btnAddCom.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnCom.setBackground(new java.awt.Color(144, 202, 249));
+        btnCom.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAddComMouseClicked(evt);
+                btnComMouseClicked(evt);
             }
         });
 
-        lblAddCompany.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        lblAddCompany.setForeground(new java.awt.Color(255, 255, 255));
-        lblAddCompany.setText("ADD");
+        lblComBtn.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        lblComBtn.setForeground(new java.awt.Color(255, 255, 255));
+        lblComBtn.setText("ADD");
 
-        javax.swing.GroupLayout btnAddComLayout = new javax.swing.GroupLayout(btnAddCom);
-        btnAddCom.setLayout(btnAddComLayout);
-        btnAddComLayout.setHorizontalGroup(
-            btnAddComLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddComLayout.createSequentialGroup()
+        javax.swing.GroupLayout btnComLayout = new javax.swing.GroupLayout(btnCom);
+        btnCom.setLayout(btnComLayout);
+        btnComLayout.setHorizontalGroup(
+            btnComLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnComLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(lblAddCompany)
+                .addComponent(lblComBtn)
                 .addGap(25, 25, 25))
         );
-        btnAddComLayout.setVerticalGroup(
-            btnAddComLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddComLayout.createSequentialGroup()
+        btnComLayout.setVerticalGroup(
+            btnComLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnComLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblAddCompany)
+                .addComponent(lblComBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -1580,13 +1541,24 @@ public class Main_Menu extends javax.swing.JFrame {
                 txtComPhoneActionPerformed(evt);
             }
         });
+        txtComPhone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtComPhoneKeyPressed(evt);
+            }
+        });
 
         jScrollPane5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
 
-        txtComAddres.setColumns(20);
+        txtComAddres.setColumns(5);
         txtComAddres.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        txtComAddres.setRows(5);
+        txtComAddres.setRows(1);
+        txtComAddres.setTabSize(5);
         txtComAddres.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        txtComAddres.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtComAddresFocusLost(evt);
+            }
+        });
         jScrollPane5.setViewportView(txtComAddres);
 
         LineTxtAddress.setBackground(new java.awt.Color(0, 0, 0));
@@ -1606,341 +1578,70 @@ public class Main_Menu extends javax.swing.JFrame {
         lblAddresss.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         lblAddresss.setText("Address:");
 
-        javax.swing.GroupLayout pnlComAddLayout = new javax.swing.GroupLayout(pnlComAdd);
-        pnlComAdd.setLayout(pnlComAddLayout);
-        pnlComAddLayout.setHorizontalGroup(
-            pnlComAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlComAddLayout.createSequentialGroup()
-                .addGroup(pnlComAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnAddCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlComAddLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(pnlComAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblAddCom, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlComAddLayout.createSequentialGroup()
-                                .addGroup(pnlComAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(LineName, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                                    .addComponent(txtComName, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                                    .addComponent(cbComUser, 0, 549, Short.MAX_VALUE)
-                                    .addComponent(LineCbUser, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                                    .addComponent(lblCbUser, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                                    .addComponent(lblName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(pnlComAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(LineEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                                    .addComponent(txtComEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                                    .addComponent(LinePhone, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                                    .addComponent(txtComPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                                    .addComponent(lbEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                                    .addComponent(lblPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)))
+        javax.swing.GroupLayout pnlComActionLayout = new javax.swing.GroupLayout(pnlComAction);
+        pnlComAction.setLayout(pnlComActionLayout);
+        pnlComActionLayout.setHorizontalGroup(
+            pnlComActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlComActionLayout.createSequentialGroup()
+                .addGroup(pnlComActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlComActionLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(pnlComActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlComActionLayout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(lblComAction)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(LineTxtAddress, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addGroup(pnlComActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(LineName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                                .addComponent(txtComName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                                .addComponent(lblName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(LinePhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                                .addComponent(txtComPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                                .addComponent(lblPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                                .addComponent(LineEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                                .addComponent(txtComEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                                .addComponent(lbEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE))
                             .addComponent(jScrollPane5)
-                            .addComponent(LineTxtAddress, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1117, Short.MAX_VALUE)
-                            .addComponent(lblAddresss, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1117, Short.MAX_VALUE))))
+                            .addComponent(lblAddresss, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(25, 25, 25))
         );
-        pnlComAddLayout.setVerticalGroup(
-            pnlComAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlComAddLayout.createSequentialGroup()
+        pnlComActionLayout.setVerticalGroup(
+            pnlComActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlComActionLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(lblAddCom)
+                .addComponent(lblComAction)
                 .addGap(18, 18, 18)
-                .addGroup(pnlComAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlComAddLayout.createSequentialGroup()
-                        .addGroup(pnlComAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(pnlComAddLayout.createSequentialGroup()
-                                .addComponent(lblName)
-                                .addGap(0, 0, 0)
-                                .addComponent(txtComName, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(LineName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlComAddLayout.createSequentialGroup()
-                                .addComponent(lbEmail)
-                                .addGap(0, 0, 0)
-                                .addComponent(txtComEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(LineEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(lblCbUser)
-                        .addGap(0, 0, 0)
-                        .addComponent(cbComUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(LineCbUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlComAddLayout.createSequentialGroup()
-                        .addComponent(lblPhone)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtComPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(LinePhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(lblName)
+                .addGap(0, 0, 0)
+                .addComponent(txtComName, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(LineName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lblPhone)
+                .addGap(0, 0, 0)
+                .addComponent(txtComPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(LinePhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(lbEmail)
+                .addGap(0, 0, 0)
+                .addComponent(txtComEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(LineEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblAddresss)
                 .addGap(0, 0, 0)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(LineTxtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(btnAddCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
         );
 
-        dynamicComPnl.add(pnlComAdd, "card2");
-
-        pnlComUpdate.setBackground(new java.awt.Color(255, 255, 255));
-
-        lblUpdateCom.setFont(new java.awt.Font("Segoe UI", 0, 42)); // NOI18N
-        lblUpdateCom.setText("UPDATE COMPANY");
-
-        lblName1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lblName1.setText("Name:");
-
-        txtUpdateName.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        txtUpdateName.setBorder(null);
-        txtUpdateName.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        txtUpdateName.setPreferredSize(new java.awt.Dimension(300, 36));
-        txtUpdateName.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtUpdateNameFocusLost(evt);
-            }
-        });
-        txtUpdateName.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUpdateNameActionPerformed(evt);
-            }
-        });
-
-        LineName1.setBackground(new java.awt.Color(0, 0, 0));
-        LineName1.setPreferredSize(new java.awt.Dimension(100, 3));
-
-        javax.swing.GroupLayout LineName1Layout = new javax.swing.GroupLayout(LineName1);
-        LineName1.setLayout(LineName1Layout);
-        LineName1Layout.setHorizontalGroup(
-            LineName1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        LineName1Layout.setVerticalGroup(
-            LineName1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        cbComUser1.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        cbComUser1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbComUser1.setPreferredSize(new java.awt.Dimension(300, 42));
-        cbComUser1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbComUser1ActionPerformed(evt);
-            }
-        });
-
-        lblCbUser1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lblCbUser1.setText("User:");
-
-        LineCbUser1.setBackground(new java.awt.Color(0, 0, 0));
-        LineCbUser1.setPreferredSize(new java.awt.Dimension(100, 3));
-
-        javax.swing.GroupLayout LineCbUser1Layout = new javax.swing.GroupLayout(LineCbUser1);
-        LineCbUser1.setLayout(LineCbUser1Layout);
-        LineCbUser1Layout.setHorizontalGroup(
-            LineCbUser1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        LineCbUser1Layout.setVerticalGroup(
-            LineCbUser1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        btnUpdateCom.setBackground(new java.awt.Color(19, 132, 150));
-        btnUpdateCom.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnUpdateComMouseClicked(evt);
-            }
-        });
-
-        lblUpdateCompany.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        lblUpdateCompany.setForeground(new java.awt.Color(255, 255, 255));
-        lblUpdateCompany.setText("update");
-
-        javax.swing.GroupLayout btnUpdateComLayout = new javax.swing.GroupLayout(btnUpdateCom);
-        btnUpdateCom.setLayout(btnUpdateComLayout);
-        btnUpdateComLayout.setHorizontalGroup(
-            btnUpdateComLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnUpdateComLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(lblUpdateCompany)
-                .addGap(25, 25, 25))
-        );
-        btnUpdateComLayout.setVerticalGroup(
-            btnUpdateComLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnUpdateComLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblUpdateCompany)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        LineEmail1.setBackground(new java.awt.Color(0, 0, 0));
-        LineEmail1.setPreferredSize(new java.awt.Dimension(100, 3));
-
-        javax.swing.GroupLayout LineEmail1Layout = new javax.swing.GroupLayout(LineEmail1);
-        LineEmail1.setLayout(LineEmail1Layout);
-        LineEmail1Layout.setHorizontalGroup(
-            LineEmail1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        LineEmail1Layout.setVerticalGroup(
-            LineEmail1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        lbEmail1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lbEmail1.setText("Email:");
-
-        txtComEmail1.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        txtComEmail1.setBorder(null);
-        txtComEmail1.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        txtComEmail1.setPreferredSize(new java.awt.Dimension(300, 36));
-        txtComEmail1.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtComEmail1FocusLost(evt);
-            }
-        });
-        txtComEmail1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtComEmail1ActionPerformed(evt);
-            }
-        });
-
-        LinePhone1.setBackground(new java.awt.Color(0, 0, 0));
-        LinePhone1.setPreferredSize(new java.awt.Dimension(100, 3));
-
-        javax.swing.GroupLayout LinePhone1Layout = new javax.swing.GroupLayout(LinePhone1);
-        LinePhone1.setLayout(LinePhone1Layout);
-        LinePhone1Layout.setHorizontalGroup(
-            LinePhone1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        LinePhone1Layout.setVerticalGroup(
-            LinePhone1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        lblPhone1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lblPhone1.setText("Phone:");
-
-        txtComPhone1.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        txtComPhone1.setBorder(null);
-        txtComPhone1.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        txtComPhone1.setPreferredSize(new java.awt.Dimension(300, 36));
-        txtComPhone1.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtComPhone1FocusLost(evt);
-            }
-        });
-        txtComPhone1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtComPhone1ActionPerformed(evt);
-            }
-        });
-
-        jScrollPane6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
-
-        txtComAddres1.setColumns(20);
-        txtComAddres1.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        txtComAddres1.setRows(5);
-        txtComAddres1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
-        jScrollPane6.setViewportView(txtComAddres1);
-
-        LineTxtAddress1.setBackground(new java.awt.Color(0, 0, 0));
-        LineTxtAddress1.setPreferredSize(new java.awt.Dimension(100, 3));
-
-        javax.swing.GroupLayout LineTxtAddress1Layout = new javax.swing.GroupLayout(LineTxtAddress1);
-        LineTxtAddress1.setLayout(LineTxtAddress1Layout);
-        LineTxtAddress1Layout.setHorizontalGroup(
-            LineTxtAddress1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        LineTxtAddress1Layout.setVerticalGroup(
-            LineTxtAddress1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        lblAddresss1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        lblAddresss1.setText("Address:");
-
-        javax.swing.GroupLayout pnlComUpdateLayout = new javax.swing.GroupLayout(pnlComUpdate);
-        pnlComUpdate.setLayout(pnlComUpdateLayout);
-        pnlComUpdateLayout.setHorizontalGroup(
-            pnlComUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlComUpdateLayout.createSequentialGroup()
-                .addGroup(pnlComUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnUpdateCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlComUpdateLayout.createSequentialGroup()
-                        .addGap(25, 25, 25)
-                        .addGroup(pnlComUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lblUpdateCom, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(pnlComUpdateLayout.createSequentialGroup()
-                                .addGroup(pnlComUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(LineName1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                                    .addComponent(txtUpdateName, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                                    .addComponent(cbComUser1, 0, 549, Short.MAX_VALUE)
-                                    .addComponent(LineCbUser1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                                    .addComponent(lblCbUser1, javax.swing.GroupLayout.DEFAULT_SIZE, 549, Short.MAX_VALUE)
-                                    .addComponent(lblName1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(pnlComUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(LineEmail1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                                    .addComponent(txtComEmail1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                                    .addComponent(LinePhone1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                                    .addComponent(txtComPhone1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                                    .addComponent(lbEmail1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
-                                    .addComponent(lblPhone1, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)))
-                            .addComponent(jScrollPane6)
-                            .addComponent(LineTxtAddress1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1117, Short.MAX_VALUE)
-                            .addComponent(lblAddresss1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1117, Short.MAX_VALUE))))
-                .addGap(25, 25, 25))
-        );
-        pnlComUpdateLayout.setVerticalGroup(
-            pnlComUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlComUpdateLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
-                .addComponent(lblUpdateCom)
-                .addGap(18, 18, 18)
-                .addGroup(pnlComUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(pnlComUpdateLayout.createSequentialGroup()
-                        .addGroup(pnlComUpdateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(pnlComUpdateLayout.createSequentialGroup()
-                                .addComponent(lblName1)
-                                .addGap(0, 0, 0)
-                                .addComponent(txtUpdateName, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(LineName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(pnlComUpdateLayout.createSequentialGroup()
-                                .addComponent(lbEmail1)
-                                .addGap(0, 0, 0)
-                                .addComponent(txtComEmail1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, 0)
-                                .addComponent(LineEmail1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addComponent(lblCbUser1)
-                        .addGap(0, 0, 0)
-                        .addComponent(cbComUser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(LineCbUser1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(pnlComUpdateLayout.createSequentialGroup()
-                        .addComponent(lblPhone1)
-                        .addGap(0, 0, 0)
-                        .addComponent(txtComPhone1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, 0)
-                        .addComponent(LinePhone1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(lblAddresss1)
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, 0)
-                .addComponent(LineTxtAddress1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(btnUpdateCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(25, 25, 25))
-        );
-
-        dynamicComPnl.add(pnlComUpdate, "card2");
+        dynamicComPnl.add(pnlComAction, "card2");
 
         btnComAdd.setBackground(new java.awt.Color(144, 202, 249));
         btnComAdd.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -2080,7 +1781,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGroup(comPanelLayout.createSequentialGroup()
                     .addGap(25, 25, 25)
                     .addGroup(comPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(dynamicComPnl, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(dynamicComPnl, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                         .addGroup(comPanelLayout.createSequentialGroup()
                             .addComponent(btnComAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
@@ -2404,9 +2105,9 @@ public class Main_Menu extends javax.swing.JFrame {
         btnUserRefreshLayout.setHorizontalGroup(
             btnUserRefreshLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnUserRefreshLayout.createSequentialGroup()
-                .addContainerGap(25, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnRoleIcon2)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         btnUserRefreshLayout.setVerticalGroup(
             btnUserRefreshLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2455,7 +2156,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1435, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1409, Short.MAX_VALUE)
                     .addComponent(txtSearchUser)
                     .addGroup(userPanelLayout.createSequentialGroup()
                         .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2780,31 +2481,31 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGap(0, 3, Short.MAX_VALUE)
         );
 
-        btnAddStock.setBackground(new java.awt.Color(144, 202, 249));
-        btnAddStock.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnStock.setBackground(new java.awt.Color(144, 202, 249));
+        btnStock.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAddStockMouseClicked(evt);
+                btnStockMouseClicked(evt);
             }
         });
 
-        lblAdd3.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        lblAdd3.setForeground(new java.awt.Color(255, 255, 255));
-        lblAdd3.setText("Add");
+        lblStockBtn.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        lblStockBtn.setForeground(new java.awt.Color(255, 255, 255));
+        lblStockBtn.setText("Add");
 
-        javax.swing.GroupLayout btnAddStockLayout = new javax.swing.GroupLayout(btnAddStock);
-        btnAddStock.setLayout(btnAddStockLayout);
-        btnAddStockLayout.setHorizontalGroup(
-            btnAddStockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddStockLayout.createSequentialGroup()
+        javax.swing.GroupLayout btnStockLayout = new javax.swing.GroupLayout(btnStock);
+        btnStock.setLayout(btnStockLayout);
+        btnStockLayout.setHorizontalGroup(
+            btnStockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnStockLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addComponent(lblAdd3)
+                .addComponent(lblStockBtn)
                 .addGap(25, 25, 25))
         );
-        btnAddStockLayout.setVerticalGroup(
-            btnAddStockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddStockLayout.createSequentialGroup()
+        btnStockLayout.setVerticalGroup(
+            btnStockLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnStockLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblAdd3)
+                .addComponent(lblStockBtn)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -2816,7 +2517,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                         .addContainerGap(1202, Short.MAX_VALUE)
-                        .addComponent(btnAddStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2825,24 +2526,24 @@ public class Main_Menu extends javax.swing.JFrame {
                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
+                                            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                                             .addComponent(txtStockName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                     .addComponent(txtStockQty)
-                                                    .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                                                    .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                                                     .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                         .addGap(18, 18, 18)
-                                                        .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 173, Short.MAX_VALUE))
+                                                        .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
                                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlStockImportLayout.createSequentialGroup()
                                                         .addGap(18, 18, 18)
                                                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                             .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                             .addComponent(cbStockMeasure, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
-                                            .addComponent(cbStockCompany, 0, 362, Short.MAX_VALUE)
-                                            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+                                            .addComponent(cbStockCompany, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                                             .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, Short.MAX_VALUE)))
@@ -2854,30 +2555,30 @@ public class Main_Menu extends javax.swing.JFrame {
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(dpStockExpired, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+                                            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                                             .addComponent(txtStockAlertQty, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+                                            .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                                             .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(cbStockBranch, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+                                            .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                                             .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                 .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addGap(0, 393, Short.MAX_VALUE)))
+                                                .addGap(0, 358, Short.MAX_VALUE)))
                                         .addGap(18, 18, 18))
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(207, 207, 207)))
                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbStockCate, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
                                     .addComponent(txtStockPrice, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
                                     .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cbStockSupplier, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                                    .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 222, Short.MAX_VALUE))
+                                        .addGap(0, 189, Short.MAX_VALUE))
                                     .addComponent(jLabel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addGap(25, 25, 25))
         );
@@ -2945,7 +2646,7 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
-                .addComponent(btnAddStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(25, 25, 25))
         );
 
@@ -3024,7 +2725,7 @@ public class Main_Menu extends javax.swing.JFrame {
             pnlStockListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtSearchStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1324, Short.MAX_VALUE)
             .addComponent(jScrollPane2)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1324, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1173, Short.MAX_VALUE)
             .addComponent(jLabel5)
         );
         pnlStockListLayout.setVerticalGroup(
@@ -3326,7 +3027,7 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGap(3, 3, 3)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 334, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                         .addGap(25, 25, 25))
                     .addGroup(pnlStockCateLayout.createSequentialGroup()
                         .addComponent(btnEditStockCate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -3584,7 +3285,7 @@ public class Main_Menu extends javax.swing.JFrame {
         dynamicLabel.setFont(new Font("Segoe UI", 0, 36));
         dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
         dynamicLabel.setText("DASHBOARD");
-        JOptionPane.showMessageDialog(null, "You have been logged in!");
+//        JOptionPane.showMessageDialog(null, "You have been logged in!");
     }//GEN-LAST:event_formWindowOpened
 
     private void exitIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitIconMouseClicked
@@ -4291,11 +3992,69 @@ public class Main_Menu extends javax.swing.JFrame {
         dynamicStockPane.add(pnlStockImport);
         dynamicStockPane.repaint();
         dynamicStockPane.revalidate();
+        lblStockAction.setText("IMPORT STOCK");
+        btnStock.setBackground(new Color(144, 202, 249));
+        lblStockBtn.setText("ADD");
+        cbStockCate.removeAllItems();
         AppHelper.getCombos("name", "stock_categories").forEach((r) -> cbStockCate.addItem(AppHelper.toCapitalize(r)));
+        txtStockName.setText("");
+        dpStockExpired.setDate(null);
+        txtStockQty.setText("");
+        cbStockCate.setSelectedIndex(0);
+        cbStockMeasure.setSelectedIndex(0);
+        txtStockAlertQty.setText("");
+        txtStockPrice.setText("");        
     }//GEN-LAST:event_btnStockImportMouseClicked
 
     private void btnStockEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStockEditMouseClicked
         // TODO add your handling code here:
+        if(!AppHelper.currentUserCan(roleId, "stocks", "update"))
+            AppHelper.permissionMessage();
+        else {
+            int row = tblStock.getSelectedRow();
+            if(row < 0)
+                JOptionPane.showMessageDialog(null, "Please select any stock first to edit!");
+            else {
+                int id = (int)tblStock.getValueAt(row, 5);
+                dynamicStockPane.removeAll();
+                dynamicStockPane.repaint();
+                dynamicStockPane.revalidate();
+                dynamicStockPane.add(pnlStockImport);
+                dynamicStockPane.repaint();
+                dynamicStockPane.revalidate();
+                lblStockAction.setText("EDIT STOCK");
+                btnStock.setBackground(new Color(19, 132, 150));
+                lblStockBtn.setText("EDIT");
+                cbStockCate.removeAllItems();
+                AppHelper.getCombos("name", "stock_categories").forEach((r) -> cbStockCate.addItem(AppHelper.toCapitalize(r)));
+                String sql = "SELECT `import_details`.`price` AS `import_price`, " +
+                    "`imports`.`supplier_id`, " +
+                    "`stocks`.*, " +
+                    "`stock_categories`.`name` AS stock_cate_name " +
+                    "FROM `import_details` " +
+                    "INNER JOIN `imports` " +
+                    "ON `import_details`.`import_id` = `imports`.`id` " +
+                    "INNER JOIN `stocks` " +
+                    "ON `import_details`.`stock_id` = `stocks`.`id` " +
+                    "INNER JOIN `stock_categories` " +
+                    "ON `stocks`.`stock_category_id` = `stock_categories`.`id` " +
+                    "WHERE `stocks`.`id` = ?";                
+                try {
+                    ResultSet rs = AppHelper.selectQuery(sql, id);
+                    if(rs.next()) {
+                        txtStockName.setText(rs.getString("name"));
+                        dpStockExpired.setDate(rs.getDate("expired_date"));
+                        txtStockQty.setText(rs.getString("qty"));
+                        cbStockCate.setSelectedItem(rs.getString("stock_cate_name"));
+                        cbStockMeasure.setSelectedItem(rs.getString("measure_unit"));
+                        txtStockAlertQty.setText(rs.getString("alert_qty"));
+                        txtStockPrice.setText(rs.getString("import_price"));
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Main_Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }    
     }//GEN-LAST:event_btnStockEditMouseClicked
 
     private void btnStockDelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStockDelMouseClicked
@@ -4361,7 +4120,7 @@ public class Main_Menu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtStockPriceActionPerformed
 
-    private void btnAddStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddStockMouseClicked
+    private void btnStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStockMouseClicked
         // TODO add your handling code here:
         if(
             txtStockName.getText().trim().equals("") || 
@@ -4428,7 +4187,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Expired date must not before current date!");
             }
         }
-    }//GEN-LAST:event_btnAddStockMouseClicked
+    }//GEN-LAST:event_btnStockMouseClicked
 
     private void btnStockListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStockListMouseClicked
         // TODO add your handling code here:
@@ -4556,11 +4315,27 @@ public class Main_Menu extends javax.swing.JFrame {
                 dynamicComPnl.removeAll();
                 dynamicComPnl.repaint();
                 dynamicComPnl.revalidate();
-                dynamicComPnl.add(pnlComUpdate);
+                dynamicComPnl.add(pnlComAction);
                 dynamicComPnl.repaint();
                 dynamicComPnl.revalidate();
+                lblComAction.setText("EDIT COMPANY");
+                btnCom.setBackground(new Color(19, 132, 150));
+                lblComBtn.setText("EDIT");
                 int id = (int)tblCom.getValueAt(row, 6);
-                new UserActions("edit", userId).setVisible(true);   
+                comId = id;
+                String sql = "SELECT * FROM `companies` "
+                    + "WHERE `id` = ?";
+                ResultSet rs = AppHelper.selectQuery(sql, id);
+                try {
+                    if(rs.next()) {
+                        txtComName.setText(rs.getString("name"));
+                        txtComEmail.setText(rs.getString("email"));
+                        txtComPhone.setText(rs.getString("phone"));
+                        txtComAddres.setText(rs.getString("address"));
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Main_Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }   
     }//GEN-LAST:event_btnComEditMouseClicked
@@ -4580,9 +4355,16 @@ public class Main_Menu extends javax.swing.JFrame {
             dynamicComPnl.removeAll();
             dynamicComPnl.repaint();
             dynamicComPnl.revalidate();
-            dynamicComPnl.add(pnlComAdd);
+            dynamicComPnl.add(pnlComAction);
             dynamicComPnl.repaint();
             dynamicComPnl.revalidate();
+            lblComAction.setText("ADD COMPANY");
+            btnCom.setBackground(new Color(144, 202, 249));
+            lblComBtn.setText("ADD");
+            txtComName.setText("");
+            txtComAddres.setText("");
+            txtComEmail.setText("");
+            txtComPhone.setText("");
         }
     }//GEN-LAST:event_btnComAddMouseClicked
 
@@ -4623,7 +4405,7 @@ public class Main_Menu extends javax.swing.JFrame {
         showCompanies(getComList());
     }//GEN-LAST:event_btnComListMouseClicked
 
-    private void btnAddComMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddComMouseClicked
+    private void btnComMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComMouseClicked
         // TODO add your handling code here:
         if(!AppHelper.currentUserCan(roleId, "companies", "create")) {
             AppHelper.permissionMessage();
@@ -4642,7 +4424,10 @@ public class Main_Menu extends javax.swing.JFrame {
                 myCompany.setAddress(address);
                 myCompany.setPhone(phone);
                 myCompany.setUserId(userId);
-                myCompany.insert();
+                if(lblComBtn.getText().toLowerCase().equals("add"))
+                    myCompany.insert();
+                else if(lblComBtn.getText().toLowerCase().equals("edit"))
+                    myCompany.update(comId);
                 txtComName.setText("");
                 txtComAddres.setText("");
                 txtComEmail.setText("");
@@ -4650,7 +4435,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 txtComName.requestFocus();
             }  
         }  
-    }//GEN-LAST:event_btnAddComMouseClicked
+    }//GEN-LAST:event_btnComMouseClicked
 
     private void txtComNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtComNameActionPerformed
         // TODO add your handling code here:
@@ -4678,16 +4463,11 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void txtComPhoneFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtComPhoneFocusLost
         // TODO add your handling code here:
-        
     }//GEN-LAST:event_txtComPhoneFocusLost
 
     private void txtComPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtComPhoneActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtComPhoneActionPerformed
-
-    private void cbComUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbComUserActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbComUserActionPerformed
 
     private void txtSearchStockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchStockActionPerformed
         // TODO add your handling code here:
@@ -4696,38 +4476,6 @@ public class Main_Menu extends javax.swing.JFrame {
     private void txtSearchUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchUserActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchUserActionPerformed
-
-    private void txtUpdateNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtUpdateNameFocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUpdateNameFocusLost
-
-    private void txtUpdateNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUpdateNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtUpdateNameActionPerformed
-
-    private void cbComUser1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbComUser1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbComUser1ActionPerformed
-
-    private void btnUpdateComMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateComMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnUpdateComMouseClicked
-
-    private void txtComEmail1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtComEmail1FocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtComEmail1FocusLost
-
-    private void txtComEmail1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtComEmail1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtComEmail1ActionPerformed
-
-    private void txtComPhone1FocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtComPhone1FocusLost
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtComPhone1FocusLost
-
-    private void txtComPhone1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtComPhone1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtComPhone1ActionPerformed
 
     private void tblComMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblComMouseClicked
         // TODO add your handling code here:
@@ -4743,6 +4491,21 @@ public class Main_Menu extends javax.swing.JFrame {
 //            btnUpdate.setEnabled(true);
 //        }
     }//GEN-LAST:event_tblComMouseClicked
+
+    private void txtComAddresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtComAddresFocusLost
+        // TODO add your handling code here:
+        int num = 255;
+        if(AppHelper.isMatchLength("max", num, txtComAddres.getText().trim().length()) == false)
+            AppHelper.errorMessage("name", num);
+    }//GEN-LAST:event_txtComAddresFocusLost
+
+    private void txtComPhoneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtComPhoneKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.numberOnly(evt))
+            txtComPhone.setEditable(true);
+        else
+            txtComPhone.setEditable(false);
+    }//GEN-LAST:event_txtComPhoneKeyPressed
 
     /**
      * @param args the command line arguments
@@ -4778,16 +4541,10 @@ public class Main_Menu extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel LineCbUser;
-    private javax.swing.JPanel LineCbUser1;
     private javax.swing.JPanel LineEmail;
-    private javax.swing.JPanel LineEmail1;
     private javax.swing.JPanel LineName;
-    private javax.swing.JPanel LineName1;
     private javax.swing.JPanel LinePhone;
-    private javax.swing.JPanel LinePhone1;
     private javax.swing.JPanel LineTxtAddress;
-    private javax.swing.JPanel LineTxtAddress1;
     private javax.swing.JPanel background;
     private javax.swing.JPanel braActive;
     private javax.swing.JPanel braBlink;
@@ -4796,16 +4553,15 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel branchIcon;
     private javax.swing.JPanel branchLabel;
     private javax.swing.JPanel branchPanel;
-    private javax.swing.JPanel btnAddCom;
-    private javax.swing.JPanel btnAddStock;
     private javax.swing.JPanel btnAddStockCate;
     private javax.swing.JPanel btnAddUser;
     private javax.swing.JPanel btnChangePass;
-    private javax.swing.JPanel btnDelStockCate;
+    private javax.swing.JPanel btnCom;
     private javax.swing.JPanel btnComAdd;
     private javax.swing.JPanel btnComDel;
     private javax.swing.JPanel btnComEdit;
     private javax.swing.JPanel btnComList;
+    private javax.swing.JPanel btnDelStockCate;
     private javax.swing.JPanel btnDelUser;
     private javax.swing.JPanel btnEditStockCate;
     private javax.swing.JPanel btnEditUser;
@@ -4817,12 +4573,12 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel btnRoleIcon2;
     private javax.swing.JLabel btnRoleLbl;
     private javax.swing.JLabel btnRoleLbl1;
+    private javax.swing.JPanel btnStock;
     private javax.swing.JPanel btnStockCate;
     private javax.swing.JPanel btnStockDel;
     private javax.swing.JPanel btnStockEdit;
     private javax.swing.JPanel btnStockImport;
     private javax.swing.JPanel btnStockList;
-    private javax.swing.JPanel btnUpdateCom;
     private javax.swing.JLabel btnUserIcon;
     private javax.swing.JLabel btnUserIcon1;
     private javax.swing.JLabel btnUserIcon11;
@@ -4850,8 +4606,6 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel btnUserLblComList;
     private javax.swing.JLabel btnUserLblDel;
     private javax.swing.JPanel btnUserRefresh;
-    private javax.swing.JComboBox<String> cbComUser;
-    private javax.swing.JComboBox<String> cbComUser1;
     private javax.swing.JComboBox<String> cbStockBranch;
     private javax.swing.JComboBox<String> cbStockCate;
     private javax.swing.JComboBox<String> cbStockCompany;
@@ -4918,32 +4672,22 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lbEmail;
-    private javax.swing.JLabel lbEmail1;
-    private javax.swing.JLabel lblAdd3;
     private javax.swing.JLabel lblAdd4;
     private javax.swing.JLabel lblAdd7;
-    private javax.swing.JLabel lblStockAction;
-    private javax.swing.JLabel lblStockCateAdd;
-    private javax.swing.JLabel lblAddCom;
-    private javax.swing.JLabel lblAddCompany;
     private javax.swing.JLabel lblAddresss;
-    private javax.swing.JLabel lblAddresss1;
-    private javax.swing.JLabel lblCbUser;
-    private javax.swing.JLabel lblCbUser1;
+    private javax.swing.JLabel lblComAction;
+    private javax.swing.JLabel lblComBtn;
     private javax.swing.JLabel lblName;
-    private javax.swing.JLabel lblName1;
     private javax.swing.JLabel lblPhone;
-    private javax.swing.JLabel lblPhone1;
     private javax.swing.JLabel lblSearch;
-    private javax.swing.JLabel lblUpdateCom;
-    private javax.swing.JLabel lblUpdateCompany;
+    private javax.swing.JLabel lblStockAction;
+    private javax.swing.JLabel lblStockBtn;
+    private javax.swing.JLabel lblStockCateAdd;
     private javax.swing.JPanel lineSearch;
-    private javax.swing.JPanel pnlComAdd;
+    private javax.swing.JPanel pnlComAction;
     private javax.swing.JPanel pnlComList;
-    private javax.swing.JPanel pnlComUpdate;
     private javax.swing.JPanel pnlStockCate;
     private javax.swing.JPanel pnlStockImport;
     private javax.swing.JPanel pnlStockList;
@@ -4979,12 +4723,9 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JTable tblStock;
     private javax.swing.JTable tblStockCate;
     private javax.swing.JTextArea txtComAddres;
-    private javax.swing.JTextArea txtComAddres1;
     private javax.swing.JTextField txtComEmail;
-    private javax.swing.JTextField txtComEmail1;
     private javax.swing.JTextField txtComName;
     private javax.swing.JTextField txtComPhone;
-    private javax.swing.JTextField txtComPhone1;
     private javax.swing.JTextField txtSearchCom;
     private javax.swing.JTextField txtSearchStock;
     private javax.swing.JTextField txtSearchStockCate;
@@ -4995,7 +4736,6 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JTextField txtStockName;
     private javax.swing.JTextField txtStockPrice;
     private javax.swing.JTextField txtStockQty;
-    private javax.swing.JTextField txtUpdateName;
     private javax.swing.JPanel userActive;
     private javax.swing.JPanel userBlink;
     private javax.swing.JLabel userIcon;

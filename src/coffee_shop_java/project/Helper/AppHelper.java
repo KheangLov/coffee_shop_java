@@ -6,7 +6,6 @@
 package coffee_shop_java.project.Helper;
 
 import coffee_shop_java.project.Model.DbConn;
-import coffee_shop_java.project.Model.User;
 import coffee_shop_java.project.UserActions;
 import java.awt.Dimension;
 import java.awt.Toolkit;
