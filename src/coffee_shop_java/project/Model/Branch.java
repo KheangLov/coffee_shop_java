@@ -15,26 +15,27 @@ import lombok.NoArgsConstructor;
 
 /**
  *
- * @author ASUS
+ * @author KHEANG
  */
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Company extends Action {
+public class Branch extends Action {
     PreparedStatement stmt;
     private int id;
-    private String name;
-    private String address;
-    private String email;
-    private String phone;
-    private int userId;
     private int tblId;
+    private String name;
+    private String email;
+    private String address;
+    private String phone;
+    private int comId;
     private String comName;
 
-    public Company(int i, String name, String address, String email, String phone, String comName, int id) {
-        this.tblId = i;
+    public Branch(int tblId, String name, String addr, String email, String phone, String comName, int id) {
+        this.tblId = tblId;
         this.name = name;
-        this.address = address;
+        this.address = addr;
         this.email = email;
         this.phone = phone;
         this.comName = comName;
@@ -43,20 +44,20 @@ public class Company extends Action {
     
     @Override
     public void insert() {
-        String sql = "INSERT INTO companies("
-                + "name, "
-                + "email, "
-                + "address, "
-                + "phone, "
-                + "user_id"
-                + ") VALUES(?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO branches("
+            + "name, "
+            + "email, "
+            + "address, "
+            + "phone, "
+            + "company_id"
+            + ") VALUES(?, ?, ?, ?, ?)";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
             stmt.setString(1, name);
             stmt.setString(2, email);
             stmt.setString(3, address);
             stmt.setString(4, phone);
-            stmt.setInt(5, userId);
+            stmt.setInt(5, comId);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 JOptionPane.showMessageDialog(null, "Data saved!");
@@ -70,11 +71,12 @@ public class Company extends Action {
 
     @Override
     public void update(int id) {
-        String sql = "UPDATE `companies` SET "
+        String sql = "UPDATE `branches` SET "
             + "`name` = ?, "
             + "`email` = ?, "
             + "`address` = ?, "
-            + "`phone` = ? "
+            + "`phone` = ?, "
+            + "`company_id` = ? "                
             + "WHERE `id` = ?";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
@@ -82,7 +84,8 @@ public class Company extends Action {
             stmt.setString(2, email);
             stmt.setString(3, address);
             stmt.setString(4, phone);
-            stmt.setInt(5, id);
+            stmt.setInt(5, comId);
+            stmt.setInt(6, id);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 JOptionPane.showMessageDialog(null, "Data updated!");
@@ -96,7 +99,7 @@ public class Company extends Action {
 
     @Override
     public void delete(int id) {
-        String sql = "DELETE FROM companies "
+        String sql = "DELETE FROM branches "
             + "WHERE id = ?";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);

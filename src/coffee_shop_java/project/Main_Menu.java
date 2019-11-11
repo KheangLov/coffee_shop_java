@@ -6,6 +6,7 @@
 package coffee_shop_java.project;
 
 import coffee_shop_java.project.Helper.AppHelper;
+import coffee_shop_java.project.Model.Branch;
 import coffee_shop_java.project.Model.Import;
 import coffee_shop_java.project.Model.ImportDetail;
 import coffee_shop_java.project.Model.Stock;
@@ -49,11 +50,15 @@ public class Main_Menu extends javax.swing.JFrame {
     private int roleId;
     private int stockCateId;
     private int comId;
+    private int branchId;
+    
     StockCategory myStockCate = new StockCategory();
     Stock myStock = new Stock();
     Import myImport = new Import();
     ImportDetail myImpDetail = new ImportDetail();
     Company myCompany = new Company();
+    Branch myBranch = new Branch();
+    
     public Main_Menu(int uId, int rId) {
         initComponents();
         userId = uId;
@@ -228,56 +233,61 @@ public class Main_Menu extends javax.swing.JFrame {
     
     public ArrayList<Stock> getAllStocks() {
         ArrayList<Stock> list = new ArrayList<>();
-        String sql = "SELECT `stocks`.*, `stock_categories`.`name` AS stock_cate_name "
-                + "FROM `stocks` "
-                + "INNER JOIN `stock_categories` "
-                + "ON `stocks`.`stock_category_id` = `stock_categories`.`id`";
-        try {
-            ResultSet rs = AppHelper.selectQuery(sql);
-            Stock stock;
-            int i = 0;            
-            while(rs.next()) {
-                i++;
-                stock = new Stock(
-                    i,
-                    rs.getString("name"),
-                    rs.getDouble("qty"),
-                    rs.getString("measure_unit"),
-                    rs.getString("stock_cate_name"),
-                    rs.getInt("id")
-                );
-                list.add(stock);
+        if(AppHelper.currentUserCan(roleId, "stocks", "read")) {
+            String sql = "SELECT `stocks`.*, `stock_categories`.`name` AS stock_cate_name "
+                    + "FROM `stocks` "
+                    + "INNER JOIN `stock_categories` "
+                    + "ON `stocks`.`stock_category_id` = `stock_categories`.`id`";
+            try {
+                ResultSet rs = AppHelper.selectQuery(sql);
+                Stock stock;
+                int i = 0;            
+                while(rs.next()) {
+                    i++;
+                    stock = new Stock(
+                        i,
+                        rs.getString("name"),
+                        rs.getDouble("qty"),
+                        rs.getString("measure_unit"),
+                        rs.getString("stock_cate_name"),
+                        rs.getInt("id")
+                    );
+                    list.add(stock);
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
             }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
         }
         return list;
     }
     
     public ArrayList<Company> getComList(){
         ArrayList<Company> list = new ArrayList<>();
-        String sql = "SELECT companies.*, users.fullname as username "
-            + "FROM companies "
-            + "INNER JOIN users ON companies.user_id = users.id";
-        try {
-            ResultSet rs = AppHelper.selectQuery(sql);
-            Company userCom;
-            int i = 0;
-            while(rs.next()){
-                i++;
-                userCom = new Company(
-                    i,
-                    rs.getString("name"),
-                    rs.getString("address"),
-                    rs.getString("email"),
-                    rs.getString("phone"),
-                    rs.getString("username"),
-                    rs.getInt("id")
-                );
-                list.add(userCom);
-            } 
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
+        if(AppHelper.currentUserCan(roleId, "companies", "read")) {
+            String sql = "SELECT companies.*, users.fullname as username "
+                + "FROM companies "
+                + "INNER JOIN users ON companies.user_id = users.id "
+                + "WHERE companies.user_id = ?";
+            try {
+                ResultSet rs = AppHelper.selectQuery(sql, userId);
+                Company userCom;
+                int i = 0;
+                while(rs.next()){
+                    i++;
+                    userCom = new Company(
+                        i,
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("username"),
+                        rs.getInt("id")
+                    );
+                    list.add(userCom);
+                } 
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
         }
         return list;
     }
@@ -317,9 +327,10 @@ public class Main_Menu extends javax.swing.JFrame {
             String sql = "SELECT companies.*, users.fullname as username "
                     + "FROM companies "
                     + "INNER JOIN users ON companies.user_id = users.id "
-                    + "WHERE LOWER(companies.name) LIKE '%" + text + "%'";
+                    + "WHERE companies.user_id = ? "
+                    + "AND LOWER(companies.name) LIKE '%" + text + "%'";
             try {
-                ResultSet rs = AppHelper.selectQuery(sql);
+                ResultSet rs = AppHelper.selectQuery(sql, userId);
                 Company company;
                 int i = 0;
                 while(rs.next()){
@@ -337,6 +348,112 @@ public class Main_Menu extends javax.swing.JFrame {
                 } 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex);
+            }
+        }
+        return list;
+    }
+    
+    public void showBranches(ArrayList<Branch> list) {
+        tblBranch.setModel(new DefaultTableModel(
+            null,
+            new String[]{
+                "#",
+                "Name",
+                "Address",
+                "Email",
+                "Phone",
+                "Company",
+                "id"
+            }
+        ));
+        DefaultTableModel model = (DefaultTableModel) tblBranch.getModel();
+        Object[] row = new Object[7];
+        for(int i=0; i<list.size(); i++){
+            row[0] = list.get(i).getTblId();
+            row[1] = list.get(i).getName();
+            row[2] = list.get(i).getAddress();
+            row[3] = list.get(i).getEmail();
+            row[4] = list.get(i).getPhone();
+            row[5] = list.get(i).getComName();
+            row[6] = list.get(i).getId();
+            model.addRow(row);
+        }
+        AppHelper.setColWidth(tblBranch, 6, 0);
+        AppHelper.setColWidth(tblBranch, 0, 50);
+    }
+    
+    public ArrayList<Branch> getBranchList() {
+        ArrayList<Branch> list = new ArrayList<>();
+        if(AppHelper.currentUserCan(roleId, "branches", "read")) {
+            String companyNames = "";
+            int i = 0;
+            for(Company c : getComList()) {            
+                companyNames += "'" + c.getName() + "'";
+                i++;
+                if(i < getComList().size())
+                    companyNames += ", ";
+            }
+            String sql = "SELECT `branches`.*, `companies`.`name` AS company_name FROM `branches` "
+                + "INNER JOIN `companies` ON `branches`.`company_id` = `companies`.`id` "
+                + "WHERE LOWER(`companies`.`name`) IN (" + companyNames + ")";
+            ResultSet rs = AppHelper.selectQuery(sql);
+            Branch branch;
+            int tblId = 0;
+            try {
+                while(rs.next()) {
+                    tblId++;
+                    branch = new Branch(
+                        tblId,
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("company_name"),
+                        rs.getInt("id")
+                    );
+                    list.add(branch);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Main_Menu.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return list;
+    }
+    
+    public ArrayList<Branch> searchBranch(String text) {
+        ArrayList<Branch> list = new ArrayList<>();
+        if(AppHelper.currentUserCan(roleId, "branches", "read")) {
+            String companyNames = "";
+            int i = 0;
+            for(Company c : getComList()) {            
+                companyNames += "'" + c.getName() + "'";
+                i++;
+                if(i < getComList().size())
+                    companyNames += ", ";
+            }
+            String sql = "SELECT `branches`.*, `companies`.`name` AS company_name FROM `branches` "
+                + "INNER JOIN `companies` ON `branches`.`company_id` = `companies`.`id` "
+                + "WHERE LOWER(`companies`.`name`) IN (" + companyNames + ")"
+                + "AND LOWER(`branches`.`name`) LIKE '%" + text + "%'";
+            ResultSet rs = AppHelper.selectQuery(sql);
+            Branch branch;
+            int tblId = 0;
+            try {
+                while(rs.next()) {
+                    tblId++;
+                    branch = new Branch(
+                        tblId,
+                        rs.getString("name"),
+                        rs.getString("address"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("company_name"),
+                        rs.getInt("id")
+                    );
+                    list.add(branch);
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(Main_Menu.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
         return list;
@@ -445,6 +562,45 @@ public class Main_Menu extends javax.swing.JFrame {
         btnUserIconComList = new javax.swing.JLabel();
         btnUserLblComList = new javax.swing.JLabel();
         branchPanel = new javax.swing.JPanel();
+        dynamicBranchPnl = new javax.swing.JLayeredPane();
+        pnlBranchList = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tblBranch = new javax.swing.JTable();
+        lblSearch1 = new javax.swing.JLabel();
+        txtSearchBranch = new javax.swing.JTextField();
+        lineSearch1 = new javax.swing.JPanel();
+        pnlBranchAction = new javax.swing.JPanel();
+        lblBranchAction = new javax.swing.JLabel();
+        lblName1 = new javax.swing.JLabel();
+        txtBranchName = new javax.swing.JTextField();
+        LineName1 = new javax.swing.JPanel();
+        btnBranch = new javax.swing.JPanel();
+        lblBranchBtn = new javax.swing.JLabel();
+        LineEmail1 = new javax.swing.JPanel();
+        lbEmail1 = new javax.swing.JLabel();
+        txtBranchPhone = new javax.swing.JTextField();
+        LinePhone1 = new javax.swing.JPanel();
+        lblPhone1 = new javax.swing.JLabel();
+        txtBranchEmail = new javax.swing.JTextField();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        txtBranchAddr = new javax.swing.JTextArea();
+        LineTxtAddress1 = new javax.swing.JPanel();
+        lblAddresss1 = new javax.swing.JLabel();
+        cbBranchCom = new javax.swing.JComboBox<>();
+        jPanel2 = new javax.swing.JPanel();
+        lblName2 = new javax.swing.JLabel();
+        btnBranchAdd = new javax.swing.JPanel();
+        btnUserIconComAdd1 = new javax.swing.JLabel();
+        btnUserLblComAdd1 = new javax.swing.JLabel();
+        btnBranchEdit = new javax.swing.JPanel();
+        btnUserIconComEdit1 = new javax.swing.JLabel();
+        btnUserLblComEdit1 = new javax.swing.JLabel();
+        btnBranchDel = new javax.swing.JPanel();
+        btnUserIconDel1 = new javax.swing.JLabel();
+        btnUserLblDel1 = new javax.swing.JLabel();
+        btnBranchList = new javax.swing.JPanel();
+        btnUserIconComList1 = new javax.swing.JLabel();
+        btnUserLblComList1 = new javax.swing.JLabel();
         proPanel = new javax.swing.JPanel();
         staffPanel = new javax.swing.JPanel();
         userPanel = new javax.swing.JPanel();
@@ -606,11 +762,11 @@ public class Main_Menu extends javax.swing.JFrame {
         comLabelLayout.setVerticalGroup(
             comLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(comLabelLayout.createSequentialGroup()
-                .addContainerGap(16, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(comLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(comIcon)
                     .addComponent(company, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         branchLabel.setBackground(new java.awt.Color(78, 45, 17));
@@ -648,11 +804,11 @@ public class Main_Menu extends javax.swing.JFrame {
         branchLabelLayout.setVerticalGroup(
             branchLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, branchLabelLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(branchLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(branchIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(branch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         proLabel.setBackground(new java.awt.Color(78, 45, 17));
@@ -690,11 +846,11 @@ public class Main_Menu extends javax.swing.JFrame {
         proLabelLayout.setVerticalGroup(
             proLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, proLabelLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(proLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(proIcon)
                     .addComponent(pro, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         staffLabel.setBackground(new java.awt.Color(78, 45, 17));
@@ -774,11 +930,11 @@ public class Main_Menu extends javax.swing.JFrame {
         stockLabelLayout.setVerticalGroup(
             stockLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(stockLabelLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(stockLabelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(stock, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(stockIcon))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         comLayer.setBackground(new java.awt.Color(255, 255, 255));
@@ -994,11 +1150,11 @@ public class Main_Menu extends javax.swing.JFrame {
         userPnlLayout.setVerticalGroup(
             userPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(userPnlLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(userPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(userIcon)
                     .addComponent(userLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         userLayp.setPreferredSize(new java.awt.Dimension(17, 80));
@@ -1071,11 +1227,11 @@ public class Main_Menu extends javax.swing.JFrame {
         dashPnlLayout.setVerticalGroup(
             dashPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(dashPnlLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(dashPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(dashIcon)
                     .addComponent(dashLbl, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dashLayp.setBackground(new java.awt.Color(78, 45, 17));
@@ -1142,11 +1298,11 @@ public class Main_Menu extends javax.swing.JFrame {
         btnLogoutLayout.setVerticalGroup(
             btnLogoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(btnLogoutLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(btnLogoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         supplierPnl.setBackground(new java.awt.Color(78, 45, 17));
@@ -1184,11 +1340,11 @@ public class Main_Menu extends javax.swing.JFrame {
         supplierPnlLayout.setVerticalGroup(
             supplierPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(supplierPnlLayout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(supplierPnlLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(stock1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(stockIcon1))
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         supplierLayp.setPreferredSize(new java.awt.Dimension(17, 80));
@@ -1287,7 +1443,7 @@ public class Main_Menu extends javax.swing.JFrame {
                                 .addGap(0, 0, 0)
                                 .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(staffLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE)
-                                    .addComponent(staffLayer, javax.swing.GroupLayout.DEFAULT_SIZE, 82, Short.MAX_VALUE))
+                                    .addComponent(staffLayer, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(0, 0, 0)
                                 .addGroup(sidebarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(proLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1407,7 +1563,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(lineSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -1593,16 +1749,15 @@ public class Main_Menu extends javax.swing.JFrame {
                                 .addComponent(lblComAction)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(LineTxtAddress, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
-                            .addGroup(pnlComActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(LineName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
-                                .addComponent(txtComName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
-                                .addComponent(lblName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(LinePhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
-                                .addComponent(txtComPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
-                                .addComponent(lblPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
-                                .addComponent(LineEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
-                                .addComponent(txtComEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
-                                .addComponent(lbEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE))
+                            .addComponent(LineName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(txtComName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(lblName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(LinePhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(txtComPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(lblPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(LineEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(txtComEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(lbEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
                             .addComponent(jScrollPane5)
                             .addComponent(lblAddresss, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(25, 25, 25))
@@ -1781,7 +1936,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGroup(comPanelLayout.createSequentialGroup()
                     .addGap(25, 25, 25)
                     .addGroup(comPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(dynamicComPnl, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(dynamicComPnl, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                         .addGroup(comPanelLayout.createSequentialGroup()
                             .addComponent(btnComAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
@@ -1810,17 +1965,544 @@ public class Main_Menu extends javax.swing.JFrame {
 
         dynamicPanel.add(comPanel, "card2");
 
-        branchPanel.setBackground(new java.awt.Color(204, 204, 204));
+        branchPanel.setBackground(new java.awt.Color(234, 234, 234));
+
+        dynamicBranchPnl.setBackground(new java.awt.Color(255, 255, 255));
+        dynamicBranchPnl.setLayout(new java.awt.CardLayout());
+
+        pnlBranchList.setBackground(new java.awt.Color(234, 234, 234));
+
+        jScrollPane6.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+
+        tblBranch.setAutoCreateRowSorter(true);
+        tblBranch.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        tblBranch.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        tblBranch.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "#", "Name", "Address", "Email", "Phone", "Company", "id"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblBranch.setEditingColumn(0);
+        tblBranch.setEditingRow(0);
+        tblBranch.setGridColor(new java.awt.Color(255, 255, 255));
+        tblBranch.setOpaque(false);
+        tblBranch.setPreferredSize(new java.awt.Dimension(1167, 744));
+        tblBranch.setRowHeight(34);
+        tblBranch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblBranchMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(tblBranch);
+
+        lblSearch1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblSearch1.setText("Search:");
+
+        txtSearchBranch.setBackground(new java.awt.Color(234, 234, 234));
+        txtSearchBranch.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        txtSearchBranch.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        txtSearchBranch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchBranchActionPerformed(evt);
+            }
+        });
+        txtSearchBranch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtSearchBranchKeyPressed(evt);
+            }
+        });
+
+        lineSearch1.setBackground(new java.awt.Color(0, 0, 0));
+        lineSearch1.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout lineSearch1Layout = new javax.swing.GroupLayout(lineSearch1);
+        lineSearch1.setLayout(lineSearch1Layout);
+        lineSearch1Layout.setHorizontalGroup(
+            lineSearch1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 826, Short.MAX_VALUE)
+        );
+        lineSearch1Layout.setVerticalGroup(
+            lineSearch1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout pnlBranchListLayout = new javax.swing.GroupLayout(pnlBranchList);
+        pnlBranchList.setLayout(pnlBranchListLayout);
+        pnlBranchListLayout.setHorizontalGroup(
+            pnlBranchListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(txtSearchBranch, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
+            .addComponent(jScrollPane6)
+            .addComponent(lineSearch1, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
+            .addComponent(lblSearch1)
+        );
+        pnlBranchListLayout.setVerticalGroup(
+            pnlBranchListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBranchListLayout.createSequentialGroup()
+                .addComponent(lblSearch1)
+                .addGap(0, 0, 0)
+                .addComponent(txtSearchBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(lineSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 659, Short.MAX_VALUE)
+                .addGap(0, 0, 0))
+        );
+
+        dynamicBranchPnl.add(pnlBranchList, "card2");
+
+        pnlBranchAction.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblBranchAction.setFont(new java.awt.Font("Segoe UI", 0, 42)); // NOI18N
+        lblBranchAction.setText("ADD BRANCH");
+
+        lblName1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblName1.setText("Name:");
+
+        txtBranchName.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        txtBranchName.setBorder(null);
+        txtBranchName.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        txtBranchName.setPreferredSize(new java.awt.Dimension(300, 36));
+        txtBranchName.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBranchNameFocusLost(evt);
+            }
+        });
+        txtBranchName.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBranchNameActionPerformed(evt);
+            }
+        });
+
+        LineName1.setBackground(new java.awt.Color(0, 0, 0));
+        LineName1.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout LineName1Layout = new javax.swing.GroupLayout(LineName1);
+        LineName1.setLayout(LineName1Layout);
+        LineName1Layout.setHorizontalGroup(
+            LineName1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        LineName1Layout.setVerticalGroup(
+            LineName1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        btnBranch.setBackground(new java.awt.Color(144, 202, 249));
+        btnBranch.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBranchMouseClicked(evt);
+            }
+        });
+
+        lblBranchBtn.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        lblBranchBtn.setForeground(new java.awt.Color(255, 255, 255));
+        lblBranchBtn.setText("ADD");
+
+        javax.swing.GroupLayout btnBranchLayout = new javax.swing.GroupLayout(btnBranch);
+        btnBranch.setLayout(btnBranchLayout);
+        btnBranchLayout.setHorizontalGroup(
+            btnBranchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnBranchLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(lblBranchBtn)
+                .addGap(25, 25, 25))
+        );
+        btnBranchLayout.setVerticalGroup(
+            btnBranchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnBranchLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblBranchBtn)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        LineEmail1.setBackground(new java.awt.Color(0, 0, 0));
+        LineEmail1.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout LineEmail1Layout = new javax.swing.GroupLayout(LineEmail1);
+        LineEmail1.setLayout(LineEmail1Layout);
+        LineEmail1Layout.setHorizontalGroup(
+            LineEmail1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        LineEmail1Layout.setVerticalGroup(
+            LineEmail1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        lbEmail1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lbEmail1.setText("Email:");
+
+        txtBranchPhone.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        txtBranchPhone.setBorder(null);
+        txtBranchPhone.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        txtBranchPhone.setPreferredSize(new java.awt.Dimension(300, 36));
+        txtBranchPhone.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBranchPhoneFocusLost(evt);
+            }
+        });
+        txtBranchPhone.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBranchPhoneActionPerformed(evt);
+            }
+        });
+        txtBranchPhone.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBranchPhoneKeyPressed(evt);
+            }
+        });
+
+        LinePhone1.setBackground(new java.awt.Color(0, 0, 0));
+        LinePhone1.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout LinePhone1Layout = new javax.swing.GroupLayout(LinePhone1);
+        LinePhone1.setLayout(LinePhone1Layout);
+        LinePhone1Layout.setHorizontalGroup(
+            LinePhone1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        LinePhone1Layout.setVerticalGroup(
+            LinePhone1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        lblPhone1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblPhone1.setText("Phone:");
+
+        txtBranchEmail.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        txtBranchEmail.setBorder(null);
+        txtBranchEmail.setMargin(new java.awt.Insets(2, 8, 2, 8));
+        txtBranchEmail.setPreferredSize(new java.awt.Dimension(300, 36));
+        txtBranchEmail.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBranchEmailFocusLost(evt);
+            }
+        });
+        txtBranchEmail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBranchEmailActionPerformed(evt);
+            }
+        });
+        txtBranchEmail.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBranchEmailKeyPressed(evt);
+            }
+        });
+
+        jScrollPane7.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+
+        txtBranchAddr.setColumns(5);
+        txtBranchAddr.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        txtBranchAddr.setRows(1);
+        txtBranchAddr.setTabSize(5);
+        txtBranchAddr.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        txtBranchAddr.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBranchAddrFocusLost(evt);
+            }
+        });
+        jScrollPane7.setViewportView(txtBranchAddr);
+
+        LineTxtAddress1.setBackground(new java.awt.Color(0, 0, 0));
+        LineTxtAddress1.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout LineTxtAddress1Layout = new javax.swing.GroupLayout(LineTxtAddress1);
+        LineTxtAddress1.setLayout(LineTxtAddress1Layout);
+        LineTxtAddress1Layout.setHorizontalGroup(
+            LineTxtAddress1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        LineTxtAddress1Layout.setVerticalGroup(
+            LineTxtAddress1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        lblAddresss1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblAddresss1.setText("Address:");
+
+        cbBranchCom.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
+        cbBranchCom.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        lblName2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblName2.setText("Company:");
+
+        javax.swing.GroupLayout pnlBranchActionLayout = new javax.swing.GroupLayout(pnlBranchAction);
+        pnlBranchAction.setLayout(pnlBranchActionLayout);
+        pnlBranchActionLayout.setHorizontalGroup(
+            pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBranchActionLayout.createSequentialGroup()
+                .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(pnlBranchActionLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(btnBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlBranchActionLayout.createSequentialGroup()
+                        .addGap(24, 24, 24)
+                        .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LineTxtAddress1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
+                            .addGroup(pnlBranchActionLayout.createSequentialGroup()
+                                .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblName1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlBranchActionLayout.createSequentialGroup()
+                                        .addGap(1, 1, 1)
+                                        .addComponent(lblBranchAction))
+                                    .addComponent(LineName1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                                    .addComponent(txtBranchName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblName2, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cbBranchCom, 0, 379, Short.MAX_VALUE)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBranchActionLayout.createSequentialGroup()
+                                .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(LinePhone1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                                    .addComponent(lblPhone1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                                    .addComponent(txtBranchPhone, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE))
+                                .addGap(18, 18, 18)
+                                .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtBranchEmail, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                                    .addComponent(LineEmail1, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)
+                                    .addComponent(lbEmail1, javax.swing.GroupLayout.DEFAULT_SIZE, 379, Short.MAX_VALUE)))
+                            .addComponent(lblAddresss1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane7))))
+                .addGap(25, 25, 25))
+        );
+        pnlBranchActionLayout.setVerticalGroup(
+            pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBranchActionLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(lblBranchAction)
+                .addGap(18, 18, 18)
+                .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblName1)
+                    .addComponent(lblName2))
+                .addGap(0, 0, 0)
+                .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtBranchName, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbBranchCom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlBranchActionLayout.createSequentialGroup()
+                        .addComponent(LineName1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lbEmail1)
+                            .addComponent(lblPhone1))
+                        .addGap(0, 0, 0)
+                        .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtBranchPhone, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBranchEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, 0)
+                        .addGroup(pnlBranchActionLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(LinePhone1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(LineEmail1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(lblAddresss1)
+                        .addGap(0, 0, 0)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addComponent(LineTxtAddress1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(btnBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(222, Short.MAX_VALUE))
+        );
+
+        dynamicBranchPnl.add(pnlBranchAction, "card2");
+
+        btnBranchAdd.setBackground(new java.awt.Color(144, 202, 249));
+        btnBranchAdd.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBranchAddMouseClicked(evt);
+            }
+        });
+
+        btnUserIconComAdd1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/plus_40px.png"))); // NOI18N
+
+        btnUserLblComAdd1.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        btnUserLblComAdd1.setForeground(new java.awt.Color(255, 255, 255));
+        btnUserLblComAdd1.setText("ADD");
+
+        javax.swing.GroupLayout btnBranchAddLayout = new javax.swing.GroupLayout(btnBranchAdd);
+        btnBranchAdd.setLayout(btnBranchAddLayout);
+        btnBranchAddLayout.setHorizontalGroup(
+            btnBranchAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnBranchAddLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnUserIconComAdd1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnUserLblComAdd1)
+                .addGap(25, 25, 25))
+        );
+        btnBranchAddLayout.setVerticalGroup(
+            btnBranchAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnUserLblComAdd1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnUserIconComAdd1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        btnBranchEdit.setBackground(new java.awt.Color(19, 132, 150));
+        btnBranchEdit.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBranchEditMouseClicked(evt);
+            }
+        });
+
+        btnUserIconComEdit1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/pencil_40px.png"))); // NOI18N
+
+        btnUserLblComEdit1.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        btnUserLblComEdit1.setForeground(new java.awt.Color(255, 255, 255));
+        btnUserLblComEdit1.setText("EDIT");
+
+        javax.swing.GroupLayout btnBranchEditLayout = new javax.swing.GroupLayout(btnBranchEdit);
+        btnBranchEdit.setLayout(btnBranchEditLayout);
+        btnBranchEditLayout.setHorizontalGroup(
+            btnBranchEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnBranchEditLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnUserIconComEdit1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnUserLblComEdit1)
+                .addGap(25, 25, 25))
+        );
+        btnBranchEditLayout.setVerticalGroup(
+            btnBranchEditLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnBranchEditLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(btnUserIconComEdit1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(btnUserLblComEdit1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        btnBranchDel.setBackground(new java.awt.Color(200, 35, 51));
+        btnBranchDel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBranchDelMouseClicked(evt);
+            }
+        });
+
+        btnUserIconDel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/delete_sign_40px.png"))); // NOI18N
+
+        btnUserLblDel1.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        btnUserLblDel1.setForeground(new java.awt.Color(255, 255, 255));
+        btnUserLblDel1.setText("DELETE");
+
+        javax.swing.GroupLayout btnBranchDelLayout = new javax.swing.GroupLayout(btnBranchDel);
+        btnBranchDel.setLayout(btnBranchDelLayout);
+        btnBranchDelLayout.setHorizontalGroup(
+            btnBranchDelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnBranchDelLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnUserIconDel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnUserLblDel1)
+                .addGap(25, 25, 25))
+        );
+        btnBranchDelLayout.setVerticalGroup(
+            btnBranchDelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnBranchDelLayout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(btnUserIconDel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(btnUserLblDel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        btnBranchList.setBackground(new java.awt.Color(0, 0, 0));
+        btnBranchList.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnBranchListMouseClicked(evt);
+            }
+        });
+
+        btnUserIconComList1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/coffee_shop_java/icons/list_40px.png"))); // NOI18N
+
+        btnUserLblComList1.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
+        btnUserLblComList1.setForeground(new java.awt.Color(255, 255, 255));
+        btnUserLblComList1.setText("LIST");
+
+        javax.swing.GroupLayout btnBranchListLayout = new javax.swing.GroupLayout(btnBranchList);
+        btnBranchList.setLayout(btnBranchListLayout);
+        btnBranchListLayout.setHorizontalGroup(
+            btnBranchListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnBranchListLayout.createSequentialGroup()
+                .addGap(25, 25, 25)
+                .addComponent(btnUserIconComList1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnUserLblComList1)
+                .addGap(25, 25, 25))
+        );
+        btnBranchListLayout.setVerticalGroup(
+            btnBranchListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnUserLblComList1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(btnBranchListLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addComponent(btnUserIconComList1, javax.swing.GroupLayout.DEFAULT_SIZE, 45, Short.MAX_VALUE)
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout branchPanelLayout = new javax.swing.GroupLayout(branchPanel);
         branchPanel.setLayout(branchPanelLayout);
         branchPanelLayout.setHorizontalGroup(
             branchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1374, Short.MAX_VALUE)
+            .addGap(0, 876, Short.MAX_VALUE)
+            .addGroup(branchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(branchPanelLayout.createSequentialGroup()
+                    .addGap(25, 25, 25)
+                    .addGroup(branchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(dynamicBranchPnl)
+                        .addGroup(branchPanelLayout.createSequentialGroup()
+                            .addComponent(btnBranchAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnBranchEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnBranchDel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnBranchList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGap(25, 25, 25)))
         );
         branchPanelLayout.setVerticalGroup(
             branchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 884, Short.MAX_VALUE)
+            .addGap(0, 893, Short.MAX_VALUE)
+            .addGroup(branchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(branchPanelLayout.createSequentialGroup()
+                    .addGap(25, 25, 25)
+                    .addGroup(branchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(btnBranchEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBranchAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBranchDel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnBranchList, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGap(18, 18, 18)
+                    .addComponent(dynamicBranchPnl)
+                    .addGap(25, 25, 25)))
         );
 
         dynamicPanel.add(branchPanel, "card3");
@@ -2156,7 +2838,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1409, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1427, Short.MAX_VALUE)
                     .addComponent(txtSearchUser)
                     .addGroup(userPanelLayout.createSequentialGroup()
                         .addGroup(userPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2526,24 +3208,24 @@ public class Main_Menu extends javax.swing.JFrame {
                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                                            .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                                             .addComponent(txtStockName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                                     .addComponent(txtStockQty)
-                                                    .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
+                                                    .addComponent(jPanel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE)
                                                     .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                         .addGap(18, 18, 18)
-                                                        .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 132, Short.MAX_VALUE))
+                                                        .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE))
                                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlStockImportLayout.createSequentialGroup()
                                                         .addGap(18, 18, 18)
                                                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                                             .addComponent(jLabel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                             .addComponent(cbStockMeasure, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                                             .addComponent(cbStockCompany, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
+                                            .addComponent(jPanel17, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                                             .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                 .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 0, Short.MAX_VALUE)))
@@ -2555,12 +3237,12 @@ public class Main_Menu extends javax.swing.JFrame {
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(dpStockExpired, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                                            .addComponent(jPanel10, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
                                             .addComponent(txtStockAlertQty, javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                                            .addComponent(jPanel15, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
                                             .addComponent(jLabel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                             .addComponent(cbStockBranch, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                            .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
+                                            .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, 492, Short.MAX_VALUE)
                                             .addGroup(pnlStockImportLayout.createSequentialGroup()
                                                 .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addGap(0, 358, Short.MAX_VALUE)))
@@ -2570,12 +3252,12 @@ public class Main_Menu extends javax.swing.JFrame {
                                         .addGap(207, 207, 207)))
                                 .addGroup(pnlStockImportLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbStockCate, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                                     .addComponent(txtStockPrice, javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                                    .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                                     .addComponent(jLabel15, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(cbStockSupplier, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, 319, Short.MAX_VALUE)
+                                    .addComponent(jPanel19, javax.swing.GroupLayout.DEFAULT_SIZE, 323, Short.MAX_VALUE)
                                     .addGroup(pnlStockImportLayout.createSequentialGroup()
                                         .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(0, 189, Short.MAX_VALUE))
@@ -2725,7 +3407,7 @@ public class Main_Menu extends javax.swing.JFrame {
             pnlStockListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtSearchStock, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1324, Short.MAX_VALUE)
             .addComponent(jScrollPane2)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1173, Short.MAX_VALUE)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, 1185, Short.MAX_VALUE)
             .addComponent(jLabel5)
         );
         pnlStockListLayout.setVerticalGroup(
@@ -2965,20 +3647,20 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGroup(pnlStockCateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlStockCateLayout.createSequentialGroup()
                                 .addGroup(pnlStockCateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, 475, Short.MAX_VALUE)
+                                    .addComponent(jPanel20, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
                                     .addGroup(pnlStockCateLayout.createSequentialGroup()
                                         .addComponent(jLabel19, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                                         .addGap(194, 194, 194))
                                     .addComponent(txtStockCateName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(pnlStockCateLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
+                                    .addComponent(jPanel30, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE)
                                     .addComponent(txtStockCateDesc, javax.swing.GroupLayout.DEFAULT_SIZE, 509, Short.MAX_VALUE)
                                     .addComponent(jLabel29, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addComponent(btnAddStockCate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane3)
-                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1123, Short.MAX_VALUE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, 1135, Short.MAX_VALUE)
                             .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator1)
                             .addGroup(pnlStockCateLayout.createSequentialGroup()
@@ -3278,14 +3960,57 @@ public class Main_Menu extends javax.swing.JFrame {
     
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
+        // JOptionPane.showMessageDialog(null, "You have been logged in!");
+        com = false;
+        bra = false;
+        prod = false;
+        stocks = false;
+        staffs = false;
+        user = false;
+        dash = true;
+        sup = false;
+        
+        //dynamicPanel
         dynamicPanel.removeAll();
         dynamicPanel.repaint();
         dynamicPanel.revalidate();
         dynamicPanel.add(dashPanel);
-        dynamicLabel.setFont(new Font("Segoe UI", 0, 36));
+        dynamicPanel.repaint();
+        dynamicPanel.revalidate();
+        dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
         dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
         dynamicLabel.setText("DASHBOARD");
-//        JOptionPane.showMessageDialog(null, "You have been logged in!");
+        
+        //braLayer
+        branchLabel.setBackground(new Color(78, 45, 17));
+        braActive.setBackground(new Color(78, 45, 17));
+        
+        //comLayer
+        comLabel.setBackground(new Color(78, 45, 17));
+        comActive.setBackground(new Color(78, 45, 17));
+        
+        //proLayer
+        proLabel.setBackground(new Color(78, 45, 17));
+        proActive.setBackground(new Color(78, 45, 17));
+        
+        //staffLayer
+        staffLabel.setBackground(new Color(78, 45, 17));
+        staffActive.setBackground(new Color(78, 45, 17));
+        
+        stockLabel.setBackground(new Color(78, 45, 17));
+        stockActive.setBackground(new Color(78, 45, 17));
+        
+        userPnl.setBackground(new Color(78, 45, 17));
+        userActive.setBackground(new Color(78, 45, 17));
+        
+        supplierPnl.setBackground(new Color(78, 45, 17));
+        supplierActive.setBackground(new Color(78, 45, 17));
+        
+        dashPnl.setBackground(new Color(102, 51, 0));
+        dashLayp.add(dashBlink, 1);
+        dashLayp.add(dashActive, 0);
+        dashActive.setBackground(new Color(255, 255, 255));
+        dashPnl.setBackground(new Color(102, 51, 0));
     }//GEN-LAST:event_formWindowOpened
 
     private void exitIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitIconMouseClicked
@@ -3391,6 +4116,12 @@ public class Main_Menu extends javax.swing.JFrame {
         dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
         dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
         dynamicLabel.setText("BRANCH");
+        showBranches(getBranchList());
+        JTableHeader header = tblBranch.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        header.setOpaque(false);
+        header.setForeground(Color.WHITE);
+        header.setBackground(Color.black);
         
         //comLayer
         comActive.setBackground(new Color(78, 45, 17));
@@ -4351,7 +5082,9 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void btnComAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComAddMouseClicked
         // TODO add your handling code here:
-        if(AppHelper.currentUserCan(roleId, "companies", "create")) {
+        if(!AppHelper.currentUserCan(roleId, "companies", "create")) {
+            AppHelper.permissionMessage();
+        } else {
             dynamicComPnl.removeAll();
             dynamicComPnl.repaint();
             dynamicComPnl.revalidate();
@@ -4377,7 +5110,7 @@ public class Main_Menu extends javax.swing.JFrame {
             if(row < 0)
                 JOptionPane.showMessageDialog(null, "Please select any companies first to delete!");
             else {
-                int id = (int)tblCom.getValueAt(row, 5);
+                int id = (int)tblCom.getValueAt(row, 6);
                 int res = JOptionPane.showConfirmDialog(
                     this, 
                     "Are you sure you want to delete this?", 
@@ -4396,45 +5129,54 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void btnComListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComListMouseClicked
         // TODO add your handling code here:
-        dynamicComPnl.removeAll();
-        dynamicComPnl.repaint();
-        dynamicComPnl.revalidate();
-        dynamicComPnl.add(pnlComList);
-        dynamicComPnl.repaint();
-        dynamicComPnl.revalidate();
-        showCompanies(getComList());
+        if(!AppHelper.currentUserCan(roleId, "companies", "read")){
+            AppHelper.permissionMessage();
+        } else {
+            dynamicComPnl.removeAll();
+            dynamicComPnl.repaint();
+            dynamicComPnl.revalidate();
+            dynamicComPnl.add(pnlComList);
+            dynamicComPnl.repaint();
+            dynamicComPnl.revalidate();
+            showCompanies(getComList());
+        }
     }//GEN-LAST:event_btnComListMouseClicked
 
     private void btnComMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComMouseClicked
         // TODO add your handling code here:
-        if(!AppHelper.currentUserCan(roleId, "companies", "create")) {
-            AppHelper.permissionMessage();
-        } else {
-            String name = txtComName.getText().trim();
-            String email = txtComEmail.getText().trim();
-            String address = txtComAddres.getText().trim();
-            String phone = txtComPhone.getText().trim();
+        String name = txtComName.getText().trim();
+        String email = txtComEmail.getText().trim();
+        String address = txtComAddres.getText().trim();
+        String phone = txtComPhone.getText().trim();
 
-            if(name.equals("") || address.equals("") || phone.equals("") || email.equals("")) {
-                AppHelper.fieldRequiredMsg();
-                txtComName.requestFocus();
-            } else {
-                myCompany.setName(name);
-                myCompany.setEmail(email);
-                myCompany.setAddress(address);
-                myCompany.setPhone(phone);
-                myCompany.setUserId(userId);
-                if(lblComBtn.getText().toLowerCase().equals("add"))
+        if(name.equals("") || address.equals("") || phone.equals("") || email.equals("")) {
+            AppHelper.fieldRequiredMsg();
+            txtComName.requestFocus();
+        } else {
+            myCompany.setName(name);
+            myCompany.setEmail(email);
+            myCompany.setAddress(address);
+            myCompany.setPhone(phone);
+            myCompany.setUserId(userId);
+            if(lblComBtn.getText().toLowerCase().equals("add")) {
+                if(AppHelper.isExist("companies", "name", name) == true)
+                    AppHelper.existMsg();
+                else {
                     myCompany.insert();
-                else if(lblComBtn.getText().toLowerCase().equals("edit"))
+                    txtComName.setText("");
+                    txtComAddres.setText("");
+                    txtComEmail.setText("");
+                    txtComPhone.setText("");
+                    txtComName.requestFocus(); 
+                }
+            }
+            else if(lblComBtn.getText().toLowerCase().equals("edit")) {
+                if(AppHelper.isExist("companies", "name", name, comId) == true)
+                    AppHelper.existMsg();
+                else
                     myCompany.update(comId);
-                txtComName.setText("");
-                txtComAddres.setText("");
-                txtComEmail.setText("");
-                txtComPhone.setText("");
-                txtComName.requestFocus();
-            }  
-        }  
+            }              
+        }
     }//GEN-LAST:event_btnComMouseClicked
 
     private void txtComNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtComNameActionPerformed
@@ -4479,17 +5221,6 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void tblComMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblComMouseClicked
         // TODO add your handling code here:
-//        int row = tblCom.getSelectedRow();
-//        DefaultTableModel model = (DefaultTableModel)tblCom.getModel();
-//        txt.setText(model.getValueAt( row, 1).toString());
-//        txtPhone.setText(model.getValueAt( row, 2).toString());
-//        txtEmail.setText(model.getValueAt( row, 3).toString());
-//        txtAddress.setText(model.getValueAt( row, 4).toString());
-//        cbCompanies.setSelectedItem(model.getValueAt( row, 5).toString());
-//        System.out.println(row);
-//        if(row >= 0){
-//            btnUpdate.setEnabled(true);
-//        }
     }//GEN-LAST:event_tblComMouseClicked
 
     private void txtComAddresFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtComAddresFocusLost
@@ -4506,6 +5237,217 @@ public class Main_Menu extends javax.swing.JFrame {
         else
             txtComPhone.setEditable(false);
     }//GEN-LAST:event_txtComPhoneKeyPressed
+
+    private void tblBranchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblBranchMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tblBranchMouseClicked
+
+    private void txtSearchBranchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchBranchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchBranchActionPerformed
+
+    private void txtSearchBranchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchBranchKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.alphOnly(evt))
+            txtSearchBranch.setEditable(true);
+        else
+            txtSearchBranch.setEditable(false);
+        showBranches(searchBranch(txtSearchBranch.getText().toLowerCase().trim()));
+    }//GEN-LAST:event_txtSearchBranchKeyPressed
+
+    private void txtBranchNameFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBranchNameFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBranchNameFocusLost
+
+    private void txtBranchNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBranchNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBranchNameActionPerformed
+    
+    private void btnBranchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBranchMouseClicked
+        // TODO add your handling code here:
+        String name = txtBranchName.getText().trim();
+        String email = txtBranchEmail.getText().trim();
+        String address = txtBranchAddr.getText().trim();
+        String phone = txtBranchPhone.getText().trim();
+        String comName = String.valueOf(cbBranchCom.getSelectedItem());
+
+        if(name.equals("") || address.equals("") || phone.equals("") || email.equals("")) {
+            AppHelper.fieldRequiredMsg();
+            txtComName.requestFocus();
+        } else {
+            int companyId = AppHelper.getId(comName, "id", "companies", "name");
+            myBranch.setName(name);
+            myBranch.setEmail(email);
+            myBranch.setAddress(address);
+            myBranch.setPhone(phone);
+            myBranch.setComId(companyId);
+            if(lblBranchBtn.getText().toLowerCase().equals("add")) {
+                if(AppHelper.isExist("branches", "name", name) == true)
+                    AppHelper.existMsg();
+                else {
+                    myBranch.insert();
+                    txtBranchName.setText("");
+                    txtBranchAddr.setText("");
+                    txtBranchEmail.setText("");
+                    txtBranchPhone.setText("");
+                    txtBranchName.requestFocus();
+                }               
+            }
+            else if(lblBranchBtn.getText().toLowerCase().equals("edit")) {
+                if(AppHelper.isExist("branches", "name", name, branchId) == true)
+                    AppHelper.existMsg();
+                else
+                    myBranch.update(branchId);
+            }                
+        }
+    }//GEN-LAST:event_btnBranchMouseClicked
+
+    private void txtBranchPhoneFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBranchPhoneFocusLost
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBranchPhoneFocusLost
+
+    private void txtBranchPhoneActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBranchPhoneActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBranchPhoneActionPerformed
+
+    private void txtBranchEmailFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBranchEmailFocusLost
+        // TODO add your handling code here:
+        if(!txtBranchEmail.getText().trim().equals("") && !AppHelper.isValid(txtBranchEmail.getText().trim())){
+            AppHelper.errorMessage("email", 0);
+            txtBranchEmail.requestFocus();
+        }
+    }//GEN-LAST:event_txtBranchEmailFocusLost
+
+    private void txtBranchEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBranchEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBranchEmailActionPerformed
+
+    private void txtBranchEmailKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBranchEmailKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBranchEmailKeyPressed
+
+    private void txtBranchAddrFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBranchAddrFocusLost
+        // TODO add your handling code here:
+        int num = 255;
+        if(AppHelper.isMatchLength("max", num, txtBranchAddr.getText().trim().length()) == false)
+            AppHelper.errorMessage("name", num);
+    }//GEN-LAST:event_txtBranchAddrFocusLost
+
+    private void btnBranchAddMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBranchAddMouseClicked
+        // TODO add your handling code here:
+        if(!AppHelper.currentUserCan(roleId, "branches", "create")) {
+            AppHelper.permissionMessage();
+        } else {
+            dynamicBranchPnl.removeAll();
+            dynamicBranchPnl.repaint();
+            dynamicBranchPnl.revalidate();
+            dynamicBranchPnl.add(pnlBranchAction);
+            dynamicBranchPnl.repaint();
+            dynamicBranchPnl.revalidate();
+            lblBranchAction.setText("ADD BRANCH");
+            btnBranch.setBackground(new Color(144, 202, 249));
+            lblBranchBtn.setText("ADD");
+            txtBranchName.setText("");
+            txtBranchAddr.setText("");
+            txtBranchPhone.setText("");
+            txtBranchEmail.setText("");
+            cbBranchCom.removeAllItems();
+            AppHelper.getCombos("name", "companies").forEach((r) -> cbBranchCom.addItem(r));
+            cbBranchCom.setSelectedIndex(0);
+        }
+    }//GEN-LAST:event_btnBranchAddMouseClicked
+
+    private void btnBranchEditMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBranchEditMouseClicked
+        // TODO add your handling code here:
+        if(!AppHelper.currentUserCan(roleId, "branches", "update")){
+            AppHelper.permissionMessage();
+        } else {
+            int row = tblBranch.getSelectedRow();
+            if(row < 0)
+                JOptionPane.showMessageDialog(null, "Please select any branch first to edit!");
+            else {
+                dynamicBranchPnl.removeAll();
+                dynamicBranchPnl.repaint();
+                dynamicBranchPnl.revalidate();
+                dynamicBranchPnl.add(pnlBranchAction);
+                dynamicBranchPnl.repaint();
+                dynamicBranchPnl.revalidate();
+                lblBranchAction.setText("EDIT BRANCH");
+                btnBranch.setBackground(new Color(19, 132, 150));
+                lblBranchBtn.setText("EDIT");
+                cbBranchCom.removeAllItems();
+                AppHelper.getCombos("name", "companies").forEach((r) -> cbBranchCom.addItem(r));
+                int id = (int)tblBranch.getValueAt(row, 6);
+                branchId = id;
+                String sql = "SELECT `branches`.*, "
+                    + "`companies`.`name` AS company_name "
+                    + "FROM `branches` "
+                    + "INNER JOIN `companies` ON `branches`.`company_id` = `companies`.`id`"
+                    + "WHERE `branches`.`id` = ?";
+                ResultSet rs = AppHelper.selectQuery(sql, id);
+                try {
+                    if(rs.next()) {
+                        txtBranchName.setText(rs.getString("name"));
+                        txtBranchEmail.setText(rs.getString("email"));
+                        txtBranchPhone.setText(rs.getString("phone"));
+                        txtBranchAddr.setText(rs.getString("address"));
+                        cbBranchCom.setSelectedItem(rs.getString("company_name"));
+                    }
+                } catch (SQLException ex) {
+                    Logger.getLogger(Main_Menu.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }  
+    }//GEN-LAST:event_btnBranchEditMouseClicked
+
+    private void btnBranchDelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBranchDelMouseClicked
+        // TODO add your handling code here:
+        if(!AppHelper.currentUserCan(roleId, "branches", "delete")){
+            AppHelper.permissionMessage();
+        } else {
+            int row = tblBranch.getSelectedRow();
+            if(row < 0)
+                JOptionPane.showMessageDialog(null, "Please select any branch first to delete!");
+            else {
+                int id = (int)tblBranch.getValueAt(row, 6);
+                int res = JOptionPane.showConfirmDialog(
+                    this, 
+                    "Are you sure you want to delete this?", 
+                    "Confirm message", 
+                    JOptionPane.YES_NO_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE
+                );
+                if(res == JOptionPane.YES_OPTION) {
+                    Branch myB = new Branch();
+                    myB.delete(id);
+                    showBranches(getBranchList());
+                }
+            }
+        }
+    }//GEN-LAST:event_btnBranchDelMouseClicked
+
+    private void btnBranchListMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnBranchListMouseClicked
+        // TODO add your handling code here:
+        if(!AppHelper.currentUserCan(roleId, "branches", "read")) {
+            AppHelper.permissionMessage();
+        } else {
+            dynamicBranchPnl.removeAll();
+            dynamicBranchPnl.repaint();
+            dynamicBranchPnl.revalidate();
+            dynamicBranchPnl.add(pnlBranchList);
+            dynamicBranchPnl.repaint();
+            dynamicBranchPnl.revalidate();
+            showBranches(getBranchList());
+        }
+    }//GEN-LAST:event_btnBranchListMouseClicked
+
+    private void txtBranchPhoneKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBranchPhoneKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.numberOnly(evt))
+            txtBranchPhone.setEditable(true);
+        else
+            txtBranchPhone.setEditable(false);
+    }//GEN-LAST:event_txtBranchPhoneKeyPressed
 
     /**
      * @param args the command line arguments
@@ -4542,9 +5484,13 @@ public class Main_Menu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel LineEmail;
+    private javax.swing.JPanel LineEmail1;
     private javax.swing.JPanel LineName;
+    private javax.swing.JPanel LineName1;
     private javax.swing.JPanel LinePhone;
+    private javax.swing.JPanel LinePhone1;
     private javax.swing.JPanel LineTxtAddress;
+    private javax.swing.JPanel LineTxtAddress1;
     private javax.swing.JPanel background;
     private javax.swing.JPanel braActive;
     private javax.swing.JPanel braBlink;
@@ -4555,6 +5501,11 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JPanel branchPanel;
     private javax.swing.JPanel btnAddStockCate;
     private javax.swing.JPanel btnAddUser;
+    private javax.swing.JPanel btnBranch;
+    private javax.swing.JPanel btnBranchAdd;
+    private javax.swing.JPanel btnBranchDel;
+    private javax.swing.JPanel btnBranchEdit;
+    private javax.swing.JPanel btnBranchList;
     private javax.swing.JPanel btnChangePass;
     private javax.swing.JPanel btnCom;
     private javax.swing.JPanel btnComAdd;
@@ -4589,9 +5540,13 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel btnUserIcon7;
     private javax.swing.JLabel btnUserIcon9;
     private javax.swing.JLabel btnUserIconComAdd;
+    private javax.swing.JLabel btnUserIconComAdd1;
     private javax.swing.JLabel btnUserIconComEdit;
+    private javax.swing.JLabel btnUserIconComEdit1;
     private javax.swing.JLabel btnUserIconComList;
+    private javax.swing.JLabel btnUserIconComList1;
     private javax.swing.JLabel btnUserIconDel;
+    private javax.swing.JLabel btnUserIconDel1;
     private javax.swing.JLabel btnUserLbl;
     private javax.swing.JLabel btnUserLbl1;
     private javax.swing.JLabel btnUserLbl11;
@@ -4602,10 +5557,15 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JLabel btnUserLbl7;
     private javax.swing.JLabel btnUserLbl9;
     private javax.swing.JLabel btnUserLblComAdd;
+    private javax.swing.JLabel btnUserLblComAdd1;
     private javax.swing.JLabel btnUserLblComEdit;
+    private javax.swing.JLabel btnUserLblComEdit1;
     private javax.swing.JLabel btnUserLblComList;
+    private javax.swing.JLabel btnUserLblComList1;
     private javax.swing.JLabel btnUserLblDel;
+    private javax.swing.JLabel btnUserLblDel1;
     private javax.swing.JPanel btnUserRefresh;
+    private javax.swing.JComboBox<String> cbBranchCom;
     private javax.swing.JComboBox<String> cbStockBranch;
     private javax.swing.JComboBox<String> cbStockCate;
     private javax.swing.JComboBox<String> cbStockCompany;
@@ -4628,6 +5588,7 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JPanel dashPanel;
     private javax.swing.JPanel dashPnl;
     private com.toedter.calendar.JDateChooser dpStockExpired;
+    private javax.swing.JLayeredPane dynamicBranchPnl;
     private javax.swing.JLayeredPane dynamicComPnl;
     private javax.swing.JLabel dynamicLabel;
     private javax.swing.JLayeredPane dynamicPanel;
@@ -4662,6 +5623,7 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
     private javax.swing.JPanel jPanel19;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel20;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel30;
@@ -4672,20 +5634,33 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lbEmail;
+    private javax.swing.JLabel lbEmail1;
     private javax.swing.JLabel lblAdd4;
     private javax.swing.JLabel lblAdd7;
     private javax.swing.JLabel lblAddresss;
+    private javax.swing.JLabel lblAddresss1;
+    private javax.swing.JLabel lblBranchAction;
+    private javax.swing.JLabel lblBranchBtn;
     private javax.swing.JLabel lblComAction;
     private javax.swing.JLabel lblComBtn;
     private javax.swing.JLabel lblName;
+    private javax.swing.JLabel lblName1;
+    private javax.swing.JLabel lblName2;
     private javax.swing.JLabel lblPhone;
+    private javax.swing.JLabel lblPhone1;
     private javax.swing.JLabel lblSearch;
+    private javax.swing.JLabel lblSearch1;
     private javax.swing.JLabel lblStockAction;
     private javax.swing.JLabel lblStockBtn;
     private javax.swing.JLabel lblStockCateAdd;
     private javax.swing.JPanel lineSearch;
+    private javax.swing.JPanel lineSearch1;
+    private javax.swing.JPanel pnlBranchAction;
+    private javax.swing.JPanel pnlBranchList;
     private javax.swing.JPanel pnlComAction;
     private javax.swing.JPanel pnlComList;
     private javax.swing.JPanel pnlStockCate;
@@ -4719,13 +5694,19 @@ public class Main_Menu extends javax.swing.JFrame {
     private javax.swing.JPanel supplierBlink;
     private javax.swing.JLayeredPane supplierLayp;
     private javax.swing.JPanel supplierPnl;
+    private javax.swing.JTable tblBranch;
     private javax.swing.JTable tblCom;
     private javax.swing.JTable tblStock;
     private javax.swing.JTable tblStockCate;
+    private javax.swing.JTextArea txtBranchAddr;
+    private javax.swing.JTextField txtBranchEmail;
+    private javax.swing.JTextField txtBranchName;
+    private javax.swing.JTextField txtBranchPhone;
     private javax.swing.JTextArea txtComAddres;
     private javax.swing.JTextField txtComEmail;
     private javax.swing.JTextField txtComName;
     private javax.swing.JTextField txtComPhone;
+    private javax.swing.JTextField txtSearchBranch;
     private javax.swing.JTextField txtSearchCom;
     private javax.swing.JTextField txtSearchStock;
     private javax.swing.JTextField txtSearchStockCate;

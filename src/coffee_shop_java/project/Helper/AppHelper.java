@@ -100,11 +100,11 @@ public class AppHelper {
         return false;
     }
     
-    public static boolean isExist(String tblName, String name, int id) {
+    public static boolean isExist(String tblName, String colName, String name, int id) {
         PreparedStatement st = null;
         ResultSet rs;
         String sql = "SELECT * FROM `" + tblName + "` "
-            + "WHERE LOWER(`fullname`) = ? AND `id` != ?";
+            + "WHERE LOWER(`" + colName + "`) = ? AND `id` != ?";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
             st.setString(1, name.toLowerCase());
@@ -150,7 +150,7 @@ public class AppHelper {
     }
     
     public static void existMsg() {
-        JOptionPane.showMessageDialog(null, "User already exist!");
+        JOptionPane.showMessageDialog(null, "Data already existed!");
     }
     
     public static ArrayList<String> getCombos(String col, String tblName) {
@@ -173,7 +173,7 @@ public class AppHelper {
     public static Integer getId(String data, String colName, String tblName, String colWhere) {
         PreparedStatement st;
         ResultSet rs;
-        String sql = "SELECT `" + colName + "` FROM `" + tblName + "` "
+        String sql = "SELECT " + colName + " FROM `" + tblName + "` "
             + "WHERE LOWER(`" + colWhere + "`) = ?";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
