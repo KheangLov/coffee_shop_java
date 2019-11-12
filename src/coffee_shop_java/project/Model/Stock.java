@@ -7,7 +7,6 @@ package coffee_shop_java.project.Model;
 
 import coffee_shop_java.project.Action.Action;
 import coffee_shop_java.project.Helper.AppHelper;
-import java.util.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -38,6 +37,7 @@ public class Stock extends Action {
     private int companyId;
     private int branchId;
     private String stockCateName;
+    private boolean inserted;
 
     public Stock(int tblId, String name, double qty, String measureUnit, String stockCateName, int id) {
         this.tblId = tblId;
@@ -75,8 +75,10 @@ public class Stock extends Action {
             int i = stmt.executeUpdate();
             if(i > 0) {
                 this.id = AppHelper.getLastRecordId("stocks");
+                this.inserted = true;
             } else {
                 JOptionPane.showMessageDialog(null, "Data failed to save!");
+                this.inserted = false;
             }
         } catch (SQLException ex) {
             Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
@@ -85,12 +87,25 @@ public class Stock extends Action {
 
     @Override
     public void update(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
     }
 
     @Override
     public void delete(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "DELETE FROM stocks "
+            + "WHERE id = ?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setInt(1, id);
+            int i = stmt.executeUpdate();
+            if(i > 0) {
+                JOptionPane.showMessageDialog(null, "Data deleted!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data failed to delete!");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }
     
 }

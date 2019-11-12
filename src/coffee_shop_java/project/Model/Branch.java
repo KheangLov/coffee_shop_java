@@ -31,6 +31,7 @@ public class Branch extends Action {
     private String phone;
     private int comId;
     private String comName;
+    private int userId;
 
     public Branch(int tblId, String name, String addr, String email, String phone, String comName, int id) {
         this.tblId = tblId;
@@ -49,8 +50,9 @@ public class Branch extends Action {
             + "email, "
             + "address, "
             + "phone, "
-            + "company_id"
-            + ") VALUES(?, ?, ?, ?, ?)";
+            + "company_id, "
+            + "user_id"
+            + ") VALUES(?, ?, ?, ?, ?, ?)";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
             stmt.setString(1, name);
@@ -58,6 +60,7 @@ public class Branch extends Action {
             stmt.setString(3, address);
             stmt.setString(4, phone);
             stmt.setInt(5, comId);
+            stmt.setInt(6, userId);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 JOptionPane.showMessageDialog(null, "Data saved!");
@@ -76,7 +79,8 @@ public class Branch extends Action {
             + "`email` = ?, "
             + "`address` = ?, "
             + "`phone` = ?, "
-            + "`company_id` = ? "                
+            + "`company_id` = ? " 
+            + "`user_id` = ? " 
             + "WHERE `id` = ?";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
@@ -85,7 +89,8 @@ public class Branch extends Action {
             stmt.setString(3, address);
             stmt.setString(4, phone);
             stmt.setInt(5, comId);
-            stmt.setInt(6, id);
+            stmt.setInt(6, userId);
+            stmt.setInt(7, id);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 JOptionPane.showMessageDialog(null, "Data updated!");

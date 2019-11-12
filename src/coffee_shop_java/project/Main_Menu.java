@@ -5401,7 +5401,17 @@ public class Main_Menu extends javax.swing.JFrame {
         btnStock.setBackground(new Color(144, 202, 249));
         lblStockBtn.setText("ADD");
         cbStockCate.removeAllItems();
-        AppHelper.getCombos("name", "stock_categories").forEach((r) -> cbStockCate.addItem(AppHelper.toCapitalize(r)));
+        AppHelper.getCombos("name", "stock_categories")
+            .forEach((r) -> cbStockCate.addItem(AppHelper.toCapitalize(r)));
+        cbStockCompany.removeAllItems();
+        AppHelper.getCombos("name", "companies", "user_id", userId)
+            .forEach((r) -> cbStockCompany.addItem(r));
+        cbStockBranch.removeAllItems();
+        AppHelper.getCombos("name", "branches", "user_id", userId)
+            .forEach((r) -> cbStockBranch.addItem(r));
+        cbStockSupplier.removeAllItems();
+        AppHelper.getCombos("name", "suppliers", "user_id", userId)
+            .forEach((r) -> cbStockSupplier.addItem(r));
         txtStockName.setText("");
         dpStockExpired.setDate(null);
         txtStockQty.setText("");
@@ -5431,7 +5441,17 @@ public class Main_Menu extends javax.swing.JFrame {
                 btnStock.setBackground(new Color(19, 132, 150));
                 lblStockBtn.setText("EDIT");
                 cbStockCate.removeAllItems();
-                AppHelper.getCombos("name", "stock_categories").forEach((r) -> cbStockCate.addItem(AppHelper.toCapitalize(r)));
+                AppHelper.getCombos("name", "stock_categories")
+                    .forEach((r) -> cbStockCate.addItem(AppHelper.toCapitalize(r)));
+                cbStockCompany.removeAllItems();
+                AppHelper.getCombos("name", "companies", "user_id", userId)
+                    .forEach((r) -> cbStockCompany.addItem(r));
+                cbStockBranch.removeAllItems();
+                AppHelper.getCombos("name", "branches", "user_id", userId)
+                    .forEach((r) -> cbStockBranch.addItem(r));
+                cbStockSupplier.removeAllItems();
+                AppHelper.getCombos("name", "suppliers", "user_id", userId)
+                    .forEach((r) -> cbStockSupplier.addItem(r));
                 String sql = "SELECT `import_details`.`price` AS `import_price`, " +
                     "`imports`.`supplier_id`, " +
                     "`stocks`.*, " +
@@ -5549,45 +5569,79 @@ public class Main_Menu extends javax.swing.JFrame {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
             
             if(expiredDate.compareTo(currentDate) > 0) {
+                int scId = AppHelper.getId(
+                    String.valueOf(cbStockCate.getSelectedItem()), 
+                    "id", 
+                    "stock_categories", 
+                    "name"
+                );
+                int cId = AppHelper.getId(
+                    String.valueOf(cbStockCompany.getSelectedItem()), 
+                    "id", 
+                    "companies", 
+                    "name"
+                );
+                int bId = AppHelper.getId(
+                    String.valueOf(cbStockBranch.getSelectedItem()), 
+                    "id", 
+                    "branches", 
+                    "name"
+                );
                 myStock.setName(name);            
                 myStock.setExpiredDate(df.format(expiredDate));
                 myStock.setQty(qty);
                 myStock.setAlertQty(alertQty);
                 myStock.setAlerted(0);
                 myStock.setMeasureUnit(String.valueOf(cbStockMeasure.getSelectedItem()));
-                myStock.setStockCateId(
-                    AppHelper.getId(
-                        String.valueOf(cbStockCate.getSelectedItem()), 
-                        "id", 
-                        "stock_categories", 
-                        "name"
-                    )
-                );
-                myStock.setCompanyId(0);
-                myStock.setBranchId(0);
+                myStock.setStockCateId(scId);
+                myStock.setCompanyId(cId);
+                myStock.setBranchId(bId);
                 myStock.insert();
 
-                myImport.setDate(dtf.format(currentDate));
-                myImport.setUserId(userId);
-                myImport.setSupplierId(0);
-                myImport.insert();
-
-                myImpDetail.setImportId(myImport.getId());
-                myImpDetail.setStockId(myStock.getId());
-                myImpDetail.setQty(qty);
-                myImpDetail.setPrice(price);
-                myImpDetail.insert();
-                txtStockName.setText("");
-                txtStockQty.setText("");
-                txtStockPrice.setText("");
-                txtStockAlertQty.setText("");
-                dpStockExpired.setDateFormatString("");
-                cbStockCate.setSelectedIndex(0);
-                cbStockMeasure.setSelectedIndex(0);
-    //            cbStockCompany.setSelectedIndex(0);
-    //            cbStockBranch.setSelectedIndex(0);
-    //            cbStockSupplier.setSelectedIndex(0);
-                txtStockName.requestFocus();
+                if(myStock.isInserted()) {
+                    int sId = AppHelper.getId(
+                        String.valueOf(cbStockSupplier.getSelectedItem()), 
+                        "id", 
+                        "suppliers", 
+                        "name"
+                    );
+                    myImport.setCreatedDate(dtf.format(currentDate));
+                    myImport.setUpdatedDate(dtf.format(currentDate));
+                    myImport.setUserId(userId);
+                    myImport.setSupplierId(sId);
+                    myImport.insert();
+                    
+                    if(myImport.isInserted()) {
+                        myImpDetail.setImportId(myImport.getId());
+                        myImpDetail.setStockId(myStock.getId());
+                        myImpDetail.setQty(qty);
+                        myImpDetail.setPrice(price);
+                        myImpDetail.insert();
+                        
+                        if(myImpDetail.isInserted()) {
+                            JOptionPane.showMessageDialog(null, myImpDetail.getMessage());
+                            txtStockName.setText("");
+                            txtStockQty.setText("");
+                            txtStockPrice.setText("");
+                            txtStockAlertQty.setText("");
+                            dpStockExpired.setDateFormatString("");
+                            cbStockCate.setSelectedIndex(0);
+                            cbStockMeasure.setSelectedIndex(0);
+                            cbStockCompany.setSelectedIndex(0);
+                            cbStockBranch.setSelectedIndex(0);
+                            cbStockSupplier.setSelectedIndex(0);
+                            txtStockName.requestFocus();
+                        } else {
+                            myImport.delete(myImport.getId());
+                            JOptionPane.showMessageDialog(null, myImpDetail.getMessage());
+                        }
+                    } else {
+                        myStock.delete(myStock.getId());
+                        JOptionPane.showMessageDialog(null, "Failed to insert import!");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Failed to insert stock!");
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Expired date must not before current date!");
             }
@@ -5956,6 +6010,7 @@ public class Main_Menu extends javax.swing.JFrame {
             myBranch.setAddress(address);
             myBranch.setPhone(phone);
             myBranch.setComId(companyId);
+            myBranch.setUserId(userId);
             if(lblBranchBtn.getText().toLowerCase().equals("add")) {
                 if(AppHelper.isExist("branches", "name", name) == true)
                     AppHelper.existMsg();
@@ -6027,7 +6082,8 @@ public class Main_Menu extends javax.swing.JFrame {
             txtBranchPhone.setText("");
             txtBranchEmail.setText("");
             cbBranchCom.removeAllItems();
-            AppHelper.getCombos("name", "companies").forEach((r) -> cbBranchCom.addItem(r));
+            AppHelper.getCombos("name", "companies", "user_id", userId)
+                .forEach((r) -> cbBranchCom.addItem(r));
             cbBranchCom.setSelectedIndex(0);
         }
     }//GEN-LAST:event_btnBranchAddMouseClicked
@@ -6051,7 +6107,8 @@ public class Main_Menu extends javax.swing.JFrame {
                 btnBranch.setBackground(new Color(19, 132, 150));
                 lblBranchBtn.setText("EDIT");
                 cbBranchCom.removeAllItems();
-                AppHelper.getCombos("name", "companies").forEach((r) -> cbBranchCom.addItem(r));
+                AppHelper.getCombos("name", "companies", "user_id", userId)
+                    .forEach((r) -> cbBranchCom.addItem(r));
                 int id = (int)tblBranch.getValueAt(row, 6);
                 branchId = id;
                 String sql = "SELECT `branches`.*, "
@@ -6245,7 +6302,8 @@ public class Main_Menu extends javax.swing.JFrame {
             txtSupEmail.setText("");
             txtSupPhone.setText("");            
             cbSupBranch.removeAllItems();
-            AppHelper.getCombos("name", "branches").forEach((r) -> cbSupBranch.addItem(r));
+            AppHelper.getCombos("name", "branches", "user_id", userId)
+                .forEach((r) -> cbSupBranch.addItem(r));
             cbSupBranch.setSelectedIndex(0);
         }
     }//GEN-LAST:event_btnSupAddMouseClicked
@@ -6269,7 +6327,8 @@ public class Main_Menu extends javax.swing.JFrame {
                 btnSup.setBackground(new Color(19, 132, 150));
                 lblSupBtn.setText("EDIT");
                 cbSupBranch.removeAllItems();
-                AppHelper.getCombos("name", "branches").forEach((r) -> cbSupBranch.addItem(r));
+                AppHelper.getCombos("name", "branches", "user_id", userId)
+                    .forEach((r) -> cbSupBranch.addItem(r));
                 cbSupBranch.setSelectedIndex(0);
                 int id = (int)tblSup.getValueAt(row, 7);
                 supId = id;

@@ -157,9 +157,30 @@ public class AppHelper {
         ArrayList<String> list = new ArrayList<>();
         PreparedStatement st;
         ResultSet rs;
-        String sql = "SELECT `" + col + "` FROM `" + tblName + "` ORDER BY `" + col + "`";
+        String sql = "SELECT `" + col + "` FROM `" + tblName + "` "
+            + "ORDER BY `" + col + "`";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
+            rs = st.executeQuery();
+            while(rs.next())
+                list.add(rs.getString(col));
+            return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static ArrayList<String> getCombos(String col, String tblName, String whereCol, int id) {
+        ArrayList<String> list = new ArrayList<>();
+        PreparedStatement st;
+        ResultSet rs;
+        String sql = "SELECT `" + col + "` FROM `" + tblName + "` "
+            + "WHERE `" + whereCol + "` = ? "
+            + "ORDER BY `" + col + "`";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
+            st.setInt(1, id);
             rs = st.executeQuery();
             while(rs.next())
                 list.add(rs.getString(col));
