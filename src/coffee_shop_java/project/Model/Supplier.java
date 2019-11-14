@@ -33,6 +33,7 @@ public class Supplier extends Action {
     private String comName;
     private int branchId;
     private String branchName;
+    private int userId;
     
     public Supplier(
         int tblId, 
@@ -63,8 +64,9 @@ public class Supplier extends Action {
             + "address, "
             + "phone, "
             + "company_id, "
-            + "branch_id"
-            + ") VALUES(?, ?, ?, ?, ?, ?)";
+            + "branch_id, "
+            + "user_id"
+            + ") VALUES(?, ?, ?, ?, ?, ?, ?)";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
             stmt.setString(1, name);
@@ -73,6 +75,7 @@ public class Supplier extends Action {
             stmt.setString(4, phone);
             stmt.setInt(5, comId);
             stmt.setInt(6, branchId);
+            stmt.setInt(7, userId);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 JOptionPane.showMessageDialog(null, "Data saved!");
@@ -92,7 +95,8 @@ public class Supplier extends Action {
             + "`address` = ?, "
             + "`phone` = ?, "
             + "`company_id` = ?, "
-            + "`branch_id` = ? "                
+            + "`branch_id` = ?, "
+            + "`user_id` = ? "                
             + "WHERE `id` = ?";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
@@ -102,7 +106,8 @@ public class Supplier extends Action {
             stmt.setString(4, phone);
             stmt.setInt(5, comId);
             stmt.setInt(6, branchId);
-            stmt.setInt(7, id);
+            stmt.setInt(7, userId);
+            stmt.setInt(8, id);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 JOptionPane.showMessageDialog(null, "Data updated!");

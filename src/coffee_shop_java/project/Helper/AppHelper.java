@@ -242,6 +242,12 @@ public class AppHelper {
         return false;
     }
     
+    public static boolean checkDot(char ch, String text) {
+        if(ch != '.' || text.contains("."))
+            return false;
+        return true;
+    }
+    
     public static boolean isMatchLength(String type, int maxMin, int inputLength) {
         if("max".equals(type) && inputLength > maxMin)
             return false;

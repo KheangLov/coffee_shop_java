@@ -1679,7 +1679,7 @@ public class Main_Menu extends javax.swing.JFrame {
         lineSearch.setLayout(lineSearchLayout);
         lineSearchLayout.setHorizontalGroup(
             lineSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 826, Short.MAX_VALUE)
+            .addGap(0, 1167, Short.MAX_VALUE)
         );
         lineSearchLayout.setVerticalGroup(
             lineSearchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1690,7 +1690,7 @@ public class Main_Menu extends javax.swing.JFrame {
         pnlComList.setLayout(pnlComListLayout);
         pnlComListLayout.setHorizontalGroup(
             pnlComListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtSearchCom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
+            .addComponent(txtSearchCom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1167, Short.MAX_VALUE)
             .addComponent(jScrollPane4)
             .addComponent(lineSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
             .addComponent(lblSearch)
@@ -1704,7 +1704,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(lineSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -1891,14 +1891,14 @@ public class Main_Menu extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(LineTxtAddress, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
                             .addComponent(LineName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
-                            .addComponent(txtComName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
+                            .addComponent(txtComName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
                             .addComponent(lblName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(LinePhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
-                            .addComponent(txtComPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
-                            .addComponent(lblPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
+                            .addComponent(txtComPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(lblPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
                             .addComponent(LineEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
-                            .addComponent(txtComEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
-                            .addComponent(lbEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
+                            .addComponent(txtComEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(lbEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
                             .addComponent(jScrollPane5)
                             .addComponent(lblAddresss, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGap(25, 25, 25))
@@ -2072,7 +2072,7 @@ public class Main_Menu extends javax.swing.JFrame {
         comPanel.setLayout(comPanelLayout);
         comPanelLayout.setHorizontalGroup(
             comPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 876, Short.MAX_VALUE)
+            .addGap(0, 1217, Short.MAX_VALUE)
             .addGroup(comPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(comPanelLayout.createSequentialGroup()
                     .addGap(25, 25, 25)
@@ -2090,7 +2090,7 @@ public class Main_Menu extends javax.swing.JFrame {
         );
         comPanelLayout.setVerticalGroup(
             comPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 881, Short.MAX_VALUE)
+            .addGap(0, 884, Short.MAX_VALUE)
             .addGroup(comPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(comPanelLayout.createSequentialGroup()
                     .addGap(25, 25, 25)
@@ -3232,6 +3232,11 @@ public class Main_Menu extends javax.swing.JFrame {
                 txtStockPriceActionPerformed(evt);
             }
         });
+        txtStockPrice.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtStockPriceKeyPressed(evt);
+            }
+        });
 
         jPanel16.setBackground(new java.awt.Color(0, 0, 0));
         jPanel16.setPreferredSize(new java.awt.Dimension(100, 3));
@@ -4028,7 +4033,7 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGroup(stockPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(stockPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dynamicStockPane, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(dynamicStockPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(stockPanelLayout.createSequentialGroup()
                         .addComponent(btnStockImport, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -5748,7 +5753,7 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void txtStockQtyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockQtyKeyPressed
         // TODO add your handling code here:
-        if(AppHelper.numberOnly(evt))
+        if(AppHelper.numberOnly(evt) || AppHelper.checkDot(evt.getKeyChar(), txtStockQty.getText()))
             txtStockQty.setEditable(true);
         else
             txtStockQty.setEditable(false);
@@ -5756,7 +5761,7 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void txtStockAlertQtyKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockAlertQtyKeyPressed
         // TODO add your handling code here:
-        if(AppHelper.numberOnly(evt))
+        if(AppHelper.numberOnly(evt) || AppHelper.checkDot(evt.getKeyChar(), txtStockAlertQty.getText()))
             txtStockAlertQty.setEditable(true);
         else
             txtStockAlertQty.setEditable(false);
@@ -6226,6 +6231,7 @@ public class Main_Menu extends javax.swing.JFrame {
             mySupplier.setPhone(phone);
             mySupplier.setComId(companyId);
             mySupplier.setBranchId(bId);
+            mySupplier.setUserId(userId);
             if(lblSupBtn.getText().toLowerCase().equals("add")) {
                 if(AppHelper.isExist("suppliers", "name", name) == true)
                     AppHelper.existMsg();
@@ -6394,6 +6400,14 @@ public class Main_Menu extends javax.swing.JFrame {
             showSup(getSupList());
         }
     }//GEN-LAST:event_btnSupListMouseClicked
+
+    private void txtStockPriceKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStockPriceKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.numberOnly(evt) || AppHelper.checkDot(evt.getKeyChar(), txtStockPrice.getText()))
+            txtStockPrice.setEditable(true);
+        else
+            txtStockPrice.setEditable(false);
+    }//GEN-LAST:event_txtStockPriceKeyPressed
 
     /**
      * @param args the command line arguments
