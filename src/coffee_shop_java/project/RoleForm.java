@@ -687,7 +687,6 @@ public class RoleForm extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblRolePer.setColumnSelectionAllowed(true);
         tblRolePer.setGridColor(new java.awt.Color(255, 255, 255));
         tblRolePer.setOpaque(false);
         tblRolePer.setRowHeight(30);

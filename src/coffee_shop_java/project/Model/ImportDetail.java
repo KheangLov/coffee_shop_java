@@ -29,6 +29,8 @@ public class ImportDetail extends Action {
     private int stockId;
     private double qty;
     private double price;
+    private boolean inserted;
+    private String message;
 
     @Override
     public void insert() {
@@ -46,9 +48,11 @@ public class ImportDetail extends Action {
             stmt.setDouble(4, price);
             int i = stmt.executeUpdate();
             if(i > 0) {
-                JOptionPane.showMessageDialog(null, "Data saved!");
+                this.message = "Data saved!";
+                this.inserted = true;
             } else {
-                JOptionPane.showMessageDialog(null, "Data failed to saved!");
+                this.message = "Data failed to saved!";
+                this.inserted = false;
             }
         } catch (SQLException ex) {
             Logger.getLogger(ImportDetail.class.getName()).log(Level.SEVERE, null, ex);
@@ -62,7 +66,20 @@ public class ImportDetail extends Action {
 
     @Override
     public void delete(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "DELETE FROM import_details "
+            + "WHERE id = ?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setInt(1, id);
+            int i = stmt.executeUpdate();
+            if(i > 0) {
+                JOptionPane.showMessageDialog(null, "Data deleted!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data failed to delete!");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }
     
 }
