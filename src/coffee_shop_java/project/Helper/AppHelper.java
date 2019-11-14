@@ -100,11 +100,11 @@ public class AppHelper {
         return false;
     }
     
-    public static boolean isExist(String tblName, String name, int id) {
+    public static boolean isExist(String tblName, String colName, String name, int id) {
         PreparedStatement st = null;
         ResultSet rs;
         String sql = "SELECT * FROM `" + tblName + "` "
-            + "WHERE LOWER(`fullname`) = ? AND `id` != ?";
+            + "WHERE LOWER(`" + colName + "`) = ? AND `id` != ?";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
             st.setString(1, name.toLowerCase());
@@ -150,16 +150,37 @@ public class AppHelper {
     }
     
     public static void existMsg() {
-        JOptionPane.showMessageDialog(null, "User already exist!");
+        JOptionPane.showMessageDialog(null, "Data already existed!");
     }
     
     public static ArrayList<String> getCombos(String col, String tblName) {
         ArrayList<String> list = new ArrayList<>();
         PreparedStatement st;
         ResultSet rs;
-        String sql = "SELECT `" + col + "` FROM `" + tblName + "` ORDER BY `" + col + "`";
+        String sql = "SELECT `" + col + "` FROM `" + tblName + "` "
+            + "ORDER BY `" + col + "`";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
+            rs = st.executeQuery();
+            while(rs.next())
+                list.add(rs.getString(col));
+            return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
+    public static ArrayList<String> getCombos(String col, String tblName, String whereCol, int id) {
+        ArrayList<String> list = new ArrayList<>();
+        PreparedStatement st;
+        ResultSet rs;
+        String sql = "SELECT `" + col + "` FROM `" + tblName + "` "
+            + "WHERE `" + whereCol + "` = ? "
+            + "ORDER BY `" + col + "`";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
+            st.setInt(1, id);
             rs = st.executeQuery();
             while(rs.next())
                 list.add(rs.getString(col));
@@ -173,7 +194,7 @@ public class AppHelper {
     public static Integer getId(String data, String colName, String tblName, String colWhere) {
         PreparedStatement st;
         ResultSet rs;
-        String sql = "SELECT `" + colName + "` FROM `" + tblName + "` "
+        String sql = "SELECT " + colName + " FROM `" + tblName + "` "
             + "WHERE LOWER(`" + colWhere + "`) = ?";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
@@ -219,6 +240,12 @@ public class AppHelper {
         if(evt.getKeyChar() >= '0' && evt.getKeyChar() <= '9' ||  Character.isISOControl(evt.getKeyChar()))
             return true;
         return false;
+    }
+    
+    public static boolean checkDot(char ch, String text) {
+        if(ch != '.' || text.contains("."))
+            return false;
+        return true;
     }
     
     public static boolean isMatchLength(String type, int maxMin, int inputLength) {

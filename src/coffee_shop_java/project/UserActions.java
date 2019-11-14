@@ -262,6 +262,11 @@ public class UserActions extends javax.swing.JFrame {
                 txtFnameActionPerformed(evt);
             }
         });
+        txtFname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtFnameKeyPressed(evt);
+            }
+        });
 
         btnUpdateUser.setBackground(new java.awt.Color(19, 132, 150));
         btnUpdateUser.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -305,6 +310,11 @@ public class UserActions extends javax.swing.JFrame {
         txtLname.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtLnameActionPerformed(evt);
+            }
+        });
+        txtLname.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtLnameKeyPressed(evt);
             }
         });
 
@@ -1145,7 +1155,7 @@ public class UserActions extends javax.swing.JFrame {
             AppHelper.fieldRequiredMsg();
             txtFname.requestFocus();
         } else {
-            Boolean checkExist = AppHelper.isExist("users", fullname, userId);
+            Boolean checkExist = AppHelper.isExist("users", "fullname", fullname, userId);
             if(checkExist.equals(true)) {
                 AppHelper.existMsg();
                 txtFname.requestFocus();
@@ -1317,6 +1327,22 @@ public class UserActions extends javax.swing.JFrame {
         else
             txtAddLname.setEditable(false);
     }//GEN-LAST:event_txtAddLnameKeyPressed
+
+    private void txtFnameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFnameKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.alphOnly(evt))
+            txtFname.setEditable(true);
+        else
+            txtFname.setEditable(false);
+    }//GEN-LAST:event_txtFnameKeyPressed
+
+    private void txtLnameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLnameKeyPressed
+        // TODO add your handling code here:
+        if(AppHelper.alphOnly(evt))
+            txtLname.setEditable(true);
+        else
+            txtLname.setEditable(false);
+    }//GEN-LAST:event_txtLnameKeyPressed
 
     /**
      * @param args the command line arguments

@@ -43,7 +43,9 @@ public class Login extends javax.swing.JFrame {
             txtUsername.requestFocus();
         } else {
             String sql = "SELECT * FROM `users` "
-                + "WHERE LOWER(`fullname`) = ? AND `password` = ?";
+                + "WHERE LOWER(`fullname`) = ? "
+                + "AND `password` = ? "
+                + "AND LOWER(`status`) = 'active'";
 
             try {
                 st = DbConn.getConnection().prepareStatement(sql);
@@ -71,8 +73,6 @@ public class Login extends javax.swing.JFrame {
                     new Main_Menu(id, roleId).setVisible(true);
                 } else {
                     JOptionPane.showMessageDialog(null, "Wrong username or password!");
-                    txtPassword.setText("");
-                    txtUsername.setText("");
                     txtUsername.requestFocus();
                 }
             } catch (SQLException ex) {
