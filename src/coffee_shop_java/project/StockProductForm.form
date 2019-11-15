@@ -9,9 +9,6 @@
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
   </SyntheticProperties>
-  <Events>
-    <EventHandler event="windowOpened" listener="java.awt.event.WindowListener" parameters="java.awt.event.WindowEvent" handler="formWindowOpened"/>
-  </Events>
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -77,7 +74,7 @@
             <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
               <Color blue="ff" green="ff" red="ff" type="rgb"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="PERMISSION"/>
+            <Property name="text" type="java.lang.String" value="STOCK PRODUCT"/>
           </Properties>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
@@ -104,7 +101,7 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   <Component id="pnlFormAdd" min="-2" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
@@ -115,11 +112,11 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="pnlFormAdd" min="-2" max="-2" attributes="0"/>
                       <Component id="pnlContent" min="-2" max="-2" attributes="0"/>
+                      <Component id="pnlFormAdd" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
               </Group>
@@ -140,17 +137,17 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jPanel2" pref="290" max="32767" attributes="0"/>
+                          <Component id="jPanel2" alignment="1" pref="290" max="32767" attributes="0"/>
                           <Component id="jPanel1" alignment="0" pref="290" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnAddPer" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnAddStockPro" min="-2" max="-2" attributes="0"/>
                               <EmptySpace pref="42" max="32767" attributes="0"/>
-                              <Component id="btnDelPer1" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnUpdateStockPro" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="txtAction" alignment="0" max="32767" attributes="0"/>
-                          <Component id="cbName" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtUsage" alignment="0" max="32767" attributes="0"/>
+                          <Component id="cbStock" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
@@ -162,19 +159,19 @@
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="cbName" min="-2" max="-2" attributes="0"/>
+                      <Component id="cbStock" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
-                      <Component id="txtAction" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtUsage" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnAddPer" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnDelPer1" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnAddStockPro" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnUpdateStockPro" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
@@ -187,17 +184,17 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Name:"/>
+                <Property name="text" type="java.lang.String" value="Stock:"/>
               </Properties>
             </Component>
-            <Container class="javax.swing.JPanel" name="btnAddPer">
+            <Container class="javax.swing.JPanel" name="btnAddStockPro">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f9" green="ca" red="90" type="rgb"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnAddPerMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnAddStockProMouseClicked"/>
               </Events>
 
               <Layout>
@@ -239,10 +236,10 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="18" style="0"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Action:"/>
+                <Property name="text" type="java.lang.String" value="Usage:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="txtAction">
+            <Component class="javax.swing.JTextField" name="txtUsage">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="26" style="0"/>
@@ -255,7 +252,8 @@
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtActionActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtUsageActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtUsageKeyPressed"/>
               </Events>
             </Component>
             <Container class="javax.swing.JPanel" name="jPanel1">
@@ -304,7 +302,7 @@
                 </DimensionLayout>
               </Layout>
             </Container>
-            <Component class="javax.swing.JComboBox" name="cbName">
+            <Component class="javax.swing.JComboBox" name="cbStock">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="ff" green="33" red="66" type="rgb"/>
@@ -328,14 +326,14 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Container class="javax.swing.JPanel" name="btnDelPer1">
+            <Container class="javax.swing.JPanel" name="btnUpdateStockPro">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="96" green="84" red="13" type="rgb"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnDelPer1MouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnUpdateStockProMouseClicked"/>
               </Events>
 
               <Layout>
@@ -385,9 +383,9 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace pref="25" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="jPanel3" pref="629" max="32767" attributes="0"/>
+                          <Component id="jPanel3" alignment="1" pref="629" max="32767" attributes="0"/>
                           <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jScrollPane1" alignment="0" pref="629" max="32767" attributes="0"/>
                           <Component id="txtSearch" alignment="0" max="32767" attributes="0"/>
@@ -429,7 +427,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tblPermission">
+                <Component class="javax.swing.JTable" name="tblStockPro">
                   <Properties>
                     <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                       <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -444,13 +442,13 @@
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="4" rowCount="9">
                         <Column editable="false" title="#" type="java.lang.Integer"/>
-                        <Column editable="false" title="Name" type="java.lang.String"/>
-                        <Column editable="false" title="Action" type="java.lang.String"/>
+                        <Column editable="false" title="Stock" type="java.lang.String"/>
+                        <Column editable="false" title="Product" type="java.lang.String"/>
                         <Column editable="false" title="id" type="java.lang.Integer"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
-                      <TableColumnModel selectionModel="1">
+                      <TableColumnModel selectionModel="0">
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title/>
                           <Editor/>

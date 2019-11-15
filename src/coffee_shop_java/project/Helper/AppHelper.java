@@ -6,7 +6,6 @@
 package coffee_shop_java.project.Helper;
 
 import coffee_shop_java.project.Model.DbConn;
-import coffee_shop_java.project.UserActions;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.sql.PreparedStatement;
@@ -76,6 +75,19 @@ public class AppHelper {
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
             stmt.setInt(1, frtData);
+            return stmt.executeQuery();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return null;
+    }
+    
+    public static ResultSet selectQuery(String sql, int frtData, int secData) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setInt(1, frtData);
+            stmt.setInt(2, secData);
             return stmt.executeQuery();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
@@ -266,7 +278,7 @@ public class AppHelper {
     }
     
     public static void addBackground(JFrame frame,ImageIcon img) {
-        frame.setExtendedState(UserActions.MAXIMIZED_BOTH);
+        frame.setExtendedState(frame.MAXIMIZED_BOTH);
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         frame.setPreferredSize(new Dimension(screenSize.width, screenSize.height));
         frame.setSize(new Dimension(screenSize.width, screenSize.height));

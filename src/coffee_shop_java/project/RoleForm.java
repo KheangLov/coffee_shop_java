@@ -792,7 +792,6 @@ public class RoleForm extends javax.swing.JFrame {
                 AppHelper.setColWidth(tblRolePer, 0, 50);
                 AppHelper.setColWidth(tblRolePer, 3, 0);
                 cbRole.setSelectedIndex(0);
-                cbPermName.setSelectedIndex(0);
                 cbPermAction.setSelectedIndex(0);
             }
         }
@@ -853,7 +852,7 @@ public class RoleForm extends javax.swing.JFrame {
                 txtDesc.setText("");
                 txtName.requestFocus(true);
             } else {
-                myRole.setName(name);
+                myRole.setName(name.toLowerCase());
                 myRole.setDescription(description);
                 myRole.insert();
                 showRole();
