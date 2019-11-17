@@ -40,13 +40,13 @@ public class ProductVariant extends Action {
         String proName, 
         String size, 
         double sellingPrice,
-        int proId
+        int id
     ) {
         this.tblId = tblId;
         this.proName = proName;
         this.size = size;
         this.sellingPrice = sellingPrice;
-        this.proId = proId;        
+        this.id = id;        
     }
 
     @Override

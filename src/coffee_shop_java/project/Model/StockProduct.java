@@ -47,7 +47,7 @@ public class StockProduct extends Action {
         String sql = "INSERT INTO `stock_products`("
             + "`stock_id`, "
             + "`product_variant_id`, "
-            + "`usage`, "
+            + "`usages`, "
             + "`user_id`"
             + ") VALUES(?, ?, ?, ?)";
         try {        
@@ -72,7 +72,7 @@ public class StockProduct extends Action {
         String sql = "UPDATE `stock_products` SET "
             + "`stock_id` = ?, "
             + "`product_variant_id` = ?, "
-            + "`usage` = ? "
+            + "`usages` = ? "
             + "`user_id` = ? "
             + "WHERE `id` = ?";
         try {

@@ -31,11 +31,12 @@ public class Stock extends Action {
     private String expiredDate;
     private double qty;
     private String measureUnit;
-    private int alertQty;
+    private double alertQty;
     private int alerted;
     private int stockCateId;
     private int companyId;
     private int branchId;
+    private int userId;
     private String stockCateName;
     private boolean inserted;
 
@@ -59,8 +60,9 @@ public class Stock extends Action {
             + "`alerted`, "
             + "`stock_category_id`, "
             + "`company_id`, "
-            + "`branch_id`"
-            + ") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            + "`branch_id`, "
+            + "`user_id`"
+            + ") VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try {        
             stmt = DbConn.getConnection().prepareStatement(sql);
             stmt.setString(1, name);
@@ -72,6 +74,7 @@ public class Stock extends Action {
             stmt.setInt(7, stockCateId);
             stmt.setInt(8, companyId);
             stmt.setInt(9, branchId);
+            stmt.setInt(10, userId);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 this.id = AppHelper.getLastRecordId("stocks");
@@ -87,7 +90,7 @@ public class Stock extends Action {
 
     @Override
     public void update(int id) {
-
+        
     }
 
     @Override
@@ -108,4 +111,17 @@ public class Stock extends Action {
         }
     }
     
+    public void update(int id, String col, double data) {
+        String sql = "UPDATE stocks SET "
+            + col + " = ? "
+            + "WHERE id = ?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setDouble(1, data);
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
 }

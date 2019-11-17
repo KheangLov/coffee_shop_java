@@ -6,6 +6,7 @@
 package coffee_shop_java.project.Model;
 
 import coffee_shop_java.project.Action.Action;
+import coffee_shop_java.project.Helper.AppHelper;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -32,6 +33,7 @@ public class Branch extends Action {
     private int comId;
     private String comName;
     private int userId;
+    private boolean inserted;
 
     public Branch(int tblId, String name, String addr, String email, String phone, String comName, int id) {
         this.tblId = tblId;
@@ -50,9 +52,8 @@ public class Branch extends Action {
             + "email, "
             + "address, "
             + "phone, "
-            + "company_id, "
-            + "user_id"
-            + ") VALUES(?, ?, ?, ?, ?, ?)";
+            + "company_id"
+            + ") VALUES(?, ?, ?, ?, ?)";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
             stmt.setString(1, name);
@@ -60,12 +61,13 @@ public class Branch extends Action {
             stmt.setString(3, address);
             stmt.setString(4, phone);
             stmt.setInt(5, comId);
-            stmt.setInt(6, userId);
             int i = stmt.executeUpdate();
             if(i > 0) {
-                JOptionPane.showMessageDialog(null, "Data saved!");
+                this.id = AppHelper.getLastRecordId("branches");
+                this.inserted = true;
             } else {
                 JOptionPane.showMessageDialog(null, "Data failed to save!");
+                this.inserted = false;
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
@@ -80,7 +82,6 @@ public class Branch extends Action {
             + "`address` = ?, "
             + "`phone` = ?, "
             + "`company_id` = ? " 
-            + "`user_id` = ? " 
             + "WHERE `id` = ?";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
@@ -89,8 +90,7 @@ public class Branch extends Action {
             stmt.setString(3, address);
             stmt.setString(4, phone);
             stmt.setInt(5, comId);
-            stmt.setInt(6, userId);
-            stmt.setInt(7, id);
+            stmt.setInt(6, id);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 JOptionPane.showMessageDialog(null, "Data updated!");

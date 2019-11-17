@@ -6,7 +6,7 @@
 package coffee_shop_java.project;
 
 import coffee_shop_java.project.Helper.AppHelper;
-import coffee_shop_java.project.Model.StockProduct;
+import coffee_shop_java.project.Model.UserBranch;
 import java.awt.Color;
 import java.awt.Font;
 import java.sql.ResultSet;
@@ -20,97 +20,68 @@ import javax.swing.table.JTableHeader;
  *
  * @author KHEANG
  */
-public class StockProductForm extends javax.swing.JFrame {
+public class UserBranchForm extends javax.swing.JFrame {
 
     /**
-     * Creates new form StockProduct
+     * Creates new form UserBranchForm
      */
-    
-    private int proVarId;
-    private int roleId;
     private int userId;
+    UserBranch myUB = new UserBranch();
     
-    StockProduct myStockPro = new StockProduct();
-    
-    public StockProductForm() {
+    public UserBranchForm() {
         initComponents();
     }
     
-    public StockProductForm(int pvId, int rId, int uId) {
+    public UserBranchForm(int uId) {
         initComponents();
-        proVarId = pvId;
-        roleId = rId;
         userId = uId;
-        JTableHeader header = tblStockPro.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        header.setOpaque(false);
-        header.setForeground(Color.WHITE);
-        header.setBackground(Color.black);
-        cbStock.removeAllItems();
-        AppHelper.getCombos("name", "stocks", "user_id", userId)
-            .forEach((r) -> cbStock.addItem(AppHelper.toCapitalize(r)));
-        showStockProduct(getAllStockProducts());
     }
     
-    private void showStockProduct(ArrayList<StockProduct> list) {
-        tblStockPro.setModel(new DefaultTableModel(
+    private void showUserBranch(ArrayList<UserBranch> list) {
+        tblUserBranch.setModel(new DefaultTableModel(
             null, 
             new String[]{
                 "#", 
-                "Stock", 
-                "Product",
-                "Usage",
+                "User", 
+                "Branch",
                 "id"
             }
         ));
-        DefaultTableModel model = (DefaultTableModel) tblStockPro.getModel();
-        Object[] rows = new Object[5];
+        DefaultTableModel model = (DefaultTableModel) tblUserBranch.getModel();
+        Object[] rows = new Object[4];
         for(int i=0; i<list.size(); i++){
             rows[0] = list.get(i).getTblId();
-            rows[1] = list.get(i).getStock();
-            rows[2] = list.get(i).getProduct();
-            rows[3] = list.get(i).getUsage();
-            rows[4] = list.get(i).getId();
+            rows[1] = list.get(i).getUserName();
+            rows[2] = list.get(i).getBranchName();
+            rows[3] = list.get(i).getId();
             model.addRow(rows);
         }
-        AppHelper.setColWidth(tblStockPro, 4, 0);
-        AppHelper.setColWidth(tblStockPro, 0, 50);
+        AppHelper.setColWidth(tblUserBranch, 3, 0);
+        AppHelper.setColWidth(tblUserBranch, 0, 50);
     }
     
-    private ArrayList<StockProduct> getAllStockProducts() {
-        ArrayList<StockProduct> list = new ArrayList<>();
-        if(AppHelper.currentUserCan(roleId, "products", "read")) {
-            String sql = "SELECT stock_products.*, "
-                + "stocks.name AS stock_name, "
-                + "products.name AS product_name "
-                + "FROM stock_products "
-                + "INNER JOIN stocks "
-                + "ON stock_products.stock_id = stocks.id "
-                + "INNER JOIN product_variants "
-                + "ON stock_products.product_variant_id = product_variants.id "
-                + "INNER JOIN products ON product_variants.product_id = products.id "
-                + "WHERE stock_products.user_id = ? "
-                + "AND stock_products.product_variant_id = ?";
+    private ArrayList<UserBranch> getAllUserBranches() {
+        ArrayList<UserBranch> list = new ArrayList<>();
+        String sql = "SELECT branches.*, users.id AS user_id, users.fullname AS user_name FROM `branches` "
+            + "INNER JOIN user_branches ON branches.id = user_branches.branch_id "
+            + "INNER JOIN users ON user_branches.user_id = users.id";
             try {
-                ResultSet rs = AppHelper.selectQuery(sql, userId, proVarId);
-                StockProduct stockPro;
+                ResultSet rs = AppHelper.selectQuery(sql);
+                UserBranch userBranch;
                 int i = 0;            
-                if(rs.next()) {
+                while(rs.next()) {
                     i++;
-                    stockPro = new StockProduct(
+                    userBranch = new UserBranch(
                         i,
-                        rs.getString("stock_name"),
-                        rs.getString("product_name"),
-                        rs.getDouble("usage"),
+                        rs.getString("user_name"),
+                        rs.getString("name"),
                         rs.getInt("id")
                     );
-                    System.out.print(stockPro);
-                    list.add(stockPro);
+                    list.add(userBranch);
                 }
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, ex);
             }
-        }
         return list;
     }
 
@@ -129,18 +100,18 @@ public class StockProductForm extends javax.swing.JFrame {
         pnlWrapper = new javax.swing.JPanel();
         pnlFormAdd = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        btnAddStockPro = new javax.swing.JPanel();
+        btnAddUserBranch = new javax.swing.JPanel();
         lblPer = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        txtUsage = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        cbStock = new javax.swing.JComboBox<>();
-        btnUpdateStockPro = new javax.swing.JPanel();
+        cbUser = new javax.swing.JComboBox<>();
+        btnDelUserBranch = new javax.swing.JPanel();
         lblPer3 = new javax.swing.JLabel();
+        jPanel4 = new javax.swing.JPanel();
+        cbBranch = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
         pnlContent = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblStockPro = new javax.swing.JTable();
+        tblUserBranch = new javax.swing.JTable();
         txtSearch = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
@@ -166,7 +137,7 @@ public class StockProductForm extends javax.swing.JFrame {
 
         lblFormName.setFont(new java.awt.Font("Segoe UI", 0, 32)); // NOI18N
         lblFormName.setForeground(new java.awt.Color(255, 255, 255));
-        lblFormName.setText("STOCK PRODUCT");
+        lblFormName.setText("USER BRANCH");
         pnlNavbar.add(lblFormName, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 0, -1, 60));
 
         pnlWrapper.setBackground(new java.awt.Color(234, 234, 234));
@@ -175,12 +146,12 @@ public class StockProductForm extends javax.swing.JFrame {
         pnlFormAdd.setBackground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel1.setText("Stock:");
+        jLabel1.setText("User:");
 
-        btnAddStockPro.setBackground(new java.awt.Color(144, 202, 249));
-        btnAddStockPro.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnAddUserBranch.setBackground(new java.awt.Color(144, 202, 249));
+        btnAddUserBranch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAddStockProMouseClicked(evt);
+                btnAddUserBranchMouseClicked(evt);
             }
         });
 
@@ -188,39 +159,22 @@ public class StockProductForm extends javax.swing.JFrame {
         lblPer.setForeground(new java.awt.Color(255, 255, 255));
         lblPer.setText("ADD");
 
-        javax.swing.GroupLayout btnAddStockProLayout = new javax.swing.GroupLayout(btnAddStockPro);
-        btnAddStockPro.setLayout(btnAddStockProLayout);
-        btnAddStockProLayout.setHorizontalGroup(
-            btnAddStockProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddStockProLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+        javax.swing.GroupLayout btnAddUserBranchLayout = new javax.swing.GroupLayout(btnAddUserBranch);
+        btnAddUserBranch.setLayout(btnAddUserBranchLayout);
+        btnAddUserBranchLayout.setHorizontalGroup(
+            btnAddUserBranchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnAddUserBranchLayout.createSequentialGroup()
+                .addContainerGap(25, Short.MAX_VALUE)
                 .addComponent(lblPer)
                 .addContainerGap(25, Short.MAX_VALUE))
         );
-        btnAddStockProLayout.setVerticalGroup(
-            btnAddStockProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddStockProLayout.createSequentialGroup()
+        btnAddUserBranchLayout.setVerticalGroup(
+            btnAddUserBranchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnAddUserBranchLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblPer)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        jLabel2.setText("Usage:");
-
-        txtUsage.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
-        txtUsage.setBorder(null);
-        txtUsage.setMargin(new java.awt.Insets(2, 8, 2, 8));
-        txtUsage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtUsageActionPerformed(evt);
-            }
-        });
-        txtUsage.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtUsageKeyPressed(evt);
-            }
-        });
 
         jPanel1.setBackground(new java.awt.Color(0, 0, 0));
         jPanel1.setPreferredSize(new java.awt.Dimension(100, 3));
@@ -236,52 +190,60 @@ public class StockProductForm extends javax.swing.JFrame {
             .addGap(0, 3, Short.MAX_VALUE)
         );
 
-        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
-        jPanel2.setPreferredSize(new java.awt.Dimension(100, 3));
+        cbUser.setBackground(new java.awt.Color(102, 51, 255));
+        cbUser.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbUser.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        cbUser.setLightWeightPopupEnabled(false);
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 3, Short.MAX_VALUE)
-        );
-
-        cbStock.setBackground(new java.awt.Color(102, 51, 255));
-        cbStock.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        cbStock.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
-        cbStock.setLightWeightPopupEnabled(false);
-
-        btnUpdateStockPro.setBackground(new java.awt.Color(19, 132, 150));
-        btnUpdateStockPro.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnDelUserBranch.setBackground(new java.awt.Color(200, 35, 51));
+        btnDelUserBranch.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnUpdateStockProMouseClicked(evt);
+                btnDelUserBranchMouseClicked(evt);
             }
         });
 
         lblPer3.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
         lblPer3.setForeground(new java.awt.Color(255, 255, 255));
-        lblPer3.setText("UPDATE");
+        lblPer3.setText("DELETE");
 
-        javax.swing.GroupLayout btnUpdateStockProLayout = new javax.swing.GroupLayout(btnUpdateStockPro);
-        btnUpdateStockPro.setLayout(btnUpdateStockProLayout);
-        btnUpdateStockProLayout.setHorizontalGroup(
-            btnUpdateStockProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnUpdateStockProLayout.createSequentialGroup()
-                .addGap(25, 25, 25)
+        javax.swing.GroupLayout btnDelUserBranchLayout = new javax.swing.GroupLayout(btnDelUserBranch);
+        btnDelUserBranch.setLayout(btnDelUserBranchLayout);
+        btnDelUserBranchLayout.setHorizontalGroup(
+            btnDelUserBranchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnDelUserBranchLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblPer3)
-                .addGap(25, 25, 25))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        btnUpdateStockProLayout.setVerticalGroup(
-            btnUpdateStockProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnUpdateStockProLayout.createSequentialGroup()
+        btnDelUserBranchLayout.setVerticalGroup(
+            btnDelUserBranchLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnDelUserBranchLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblPer3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        jPanel4.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel4.setPreferredSize(new java.awt.Dimension(100, 3));
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 3, Short.MAX_VALUE)
+        );
+
+        cbBranch.setBackground(new java.awt.Color(102, 51, 255));
+        cbBranch.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        cbBranch.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
+        cbBranch.setLightWeightPopupEnabled(false);
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setText("Branch:");
 
         javax.swing.GroupLayout pnlFormAddLayout = new javax.swing.GroupLayout(pnlFormAdd);
         pnlFormAdd.setLayout(pnlFormAddLayout);
@@ -289,17 +251,19 @@ public class StockProductForm extends javax.swing.JFrame {
             pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(pnlFormAddLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
-                .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormAddLayout.createSequentialGroup()
-                        .addComponent(btnAddStockPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                        .addComponent(btnUpdateStockPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(txtUsage, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cbStock, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(cbBranch, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 290, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormAddLayout.createSequentialGroup()
+                            .addComponent(btnAddUserBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(18, 18, 18)
+                            .addComponent(btnDelUserBranch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(cbUser, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGap(25, 25, 25))
         );
         pnlFormAddLayout.setVerticalGroup(
@@ -308,19 +272,19 @@ public class StockProductForm extends javax.swing.JFrame {
                 .addGap(25, 25, 25)
                 .addComponent(jLabel1)
                 .addGap(0, 0, 0)
-                .addComponent(cbStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLabel2)
+                .addComponent(jLabel4)
                 .addGap(0, 0, 0)
-                .addComponent(txtUsage, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(cbBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAddStockPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdateStockPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnAddUserBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelUserBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25))
         );
 
@@ -328,9 +292,9 @@ public class StockProductForm extends javax.swing.JFrame {
 
         jScrollPane1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
 
-        tblStockPro.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
-        tblStockPro.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        tblStockPro.setModel(new javax.swing.table.DefaultTableModel(
+        tblUserBranch.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 0, true));
+        tblUserBranch.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
+        tblUserBranch.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -343,7 +307,7 @@ public class StockProductForm extends javax.swing.JFrame {
                 {null, null, null, null}
             },
             new String [] {
-                "#", "Stock", "Product", "id"
+                "#", "User", "Branch", "id"
             }
         ) {
             Class[] types = new Class [] {
@@ -361,10 +325,10 @@ public class StockProductForm extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblStockPro.setGridColor(new java.awt.Color(255, 255, 255));
-        tblStockPro.setOpaque(false);
-        tblStockPro.setRowHeight(30);
-        jScrollPane1.setViewportView(tblStockPro);
+        tblUserBranch.setGridColor(new java.awt.Color(255, 255, 255));
+        tblUserBranch.setOpaque(false);
+        tblUserBranch.setRowHeight(30);
+        jScrollPane1.setViewportView(tblUserBranch);
 
         txtSearch.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
         txtSearch.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
@@ -465,51 +429,52 @@ public class StockProductForm extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_exitIconMouseClicked
 
-    private void btnAddStockProMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddStockProMouseClicked
-        // TODO add your handling code here:        
-        if(txtUsage.getText().trim().equals("")) {
-            AppHelper.fieldRequiredMsg();
-            txtUsage.requestFocus();
+    private void btnAddUserBranchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddUserBranchMouseClicked
+        // TODO add your handling code here:
+        int uId = AppHelper.getId(
+            String.valueOf(cbUser.getSelectedItem()), 
+            "id", 
+            "users", 
+            "fullname"
+        );
+        int bId = AppHelper.getId(
+            String.valueOf(cbBranch.getSelectedItem()), 
+            "id", 
+            "branches", 
+            "name"
+        );
+        
+        if(bId <= 0 || uId <= 0) {
+            JOptionPane.showMessageDialog(null, "Wrong user id or branch id!");
         } else {
-            double usage = Double.valueOf(txtUsage.getText().trim());
-            int sId = AppHelper.getId(
-                String.valueOf(cbStock.getSelectedItem()), 
-                "id", 
-                "stocks", 
-                "name"
-            );
-            
-            myStockPro.setUsage(usage);
-            myStockPro.setStockId(sId);
-            myStockPro.setProVarId(proVarId);
-            myStockPro.setUserId(userId);
-            myStockPro.insert();
-            this.dispose();
+            myUB.setUserId(uId);
+            myUB.setBranchId(bId);
+            myUB.insert();
         }
-    }//GEN-LAST:event_btnAddStockProMouseClicked
+    }//GEN-LAST:event_btnAddUserBranchMouseClicked
 
-    private void txtUsageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsageActionPerformed
+    private void btnDelUserBranchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDelUserBranchMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsageActionPerformed
-
-    private void btnUpdateStockProMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateStockProMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnUpdateStockProMouseClicked
+    }//GEN-LAST:event_btnDelUserBranchMouseClicked
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSearchActionPerformed
 
-    private void txtUsageKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtUsageKeyPressed
-        // TODO add your handling code here:
-        if(AppHelper.numberOnly(evt) || AppHelper.checkDot(evt.getKeyChar(), txtUsage.getText()))
-            txtUsage.setEditable(true);
-        else
-            txtUsage.setEditable(false);
-    }//GEN-LAST:event_txtUsageKeyPressed
-
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
+        // TODO add your handling code here:        
+        JTableHeader header = tblUserBranch.getTableHeader();
+        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        header.setOpaque(false);
+        header.setForeground(Color.WHITE);
+        header.setBackground(Color.black);
+        cbBranch.removeAllItems();
+        AppHelper.getComboBranch(userId)
+            .forEach((r) -> cbBranch.addItem(AppHelper.toCapitalize(r)));
+        cbUser.removeAllItems();
+        AppHelper.getCombos("fullname", "users")
+            .forEach((r) -> cbUser.addItem(AppHelper.toCapitalize(r)));
+        showUserBranch(getAllUserBranches());
     }//GEN-LAST:event_formWindowOpened
 
     /**
@@ -529,33 +494,34 @@ public class StockProductForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StockProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserBranchForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StockProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserBranchForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StockProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserBranchForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StockProduct.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UserBranchForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
-            new StockProductForm().setVisible(true);
+            new UserBranchForm().setVisible(true);
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel btnAddStockPro;
-    private javax.swing.JPanel btnUpdateStockPro;
-    private javax.swing.JComboBox<String> cbStock;
+    private javax.swing.JPanel btnAddUserBranch;
+    private javax.swing.JPanel btnDelUserBranch;
+    private javax.swing.JComboBox<String> cbBranch;
+    private javax.swing.JComboBox<String> cbUser;
     private javax.swing.JLabel exitIcon;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblFormName;
     private javax.swing.JLabel lblPer;
@@ -564,8 +530,7 @@ public class StockProductForm extends javax.swing.JFrame {
     private javax.swing.JPanel pnlFormAdd;
     private javax.swing.JPanel pnlNavbar;
     private javax.swing.JPanel pnlWrapper;
-    private javax.swing.JTable tblStockPro;
+    private javax.swing.JTable tblUserBranch;
     private javax.swing.JTextField txtSearch;
-    private javax.swing.JTextField txtUsage;
     // End of variables declaration//GEN-END:variables
 }

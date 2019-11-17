@@ -95,6 +95,32 @@ public class AppHelper {
         return null;
     }
     
+    public static ResultSet selectQuery(String sql, int frtData, String secData) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setInt(1, frtData);
+            stmt.setString(2, secData);
+            return stmt.executeQuery();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return null;
+    }
+    
+    public static ResultSet selectQuery(String sql, String frtData, String secData) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setString(1, frtData);
+            stmt.setString(2, secData);
+            return stmt.executeQuery();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return null;
+    }
+    
     public static boolean isExist(String tblName, String colName, String name) {
         PreparedStatement st = null;
         ResultSet rs;
@@ -183,6 +209,28 @@ public class AppHelper {
         return null;
     }
     
+    public static ArrayList<String> getComboBranch(int userId) {
+        ArrayList<String> list = new ArrayList<>();
+        PreparedStatement st;
+        ResultSet rs;
+        String sql = "SELECT branches.*, users.id AS user_id, companies.name AS company_name FROM `branches` "
+            + "INNER JOIN companies ON branches.company_id = companies.id "
+            + "INNER JOIN user_branches ON branches.id = user_branches.branch_id "
+            + "INNER JOIN users ON user_branches.user_id = users.id "
+            + "WHERE users.id = ?";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
+            st.setInt(1, userId);
+            rs = st.executeQuery();
+            while(rs.next())
+                list.add(rs.getString("name"));
+            return list;
+        } catch (SQLException ex) {
+            Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public static ArrayList<String> getCombos(String col, String tblName, String whereCol, int id) {
         ArrayList<String> list = new ArrayList<>();
         PreparedStatement st;
@@ -220,6 +268,23 @@ public class AppHelper {
         return null;
     }
     
+    public static String getName(int id, String colName, String tblName, String colWhere) {
+        PreparedStatement st;
+        ResultSet rs;
+        String sql = "SELECT `" + colName + "` FROM `" + tblName + "` "
+            + "WHERE `" + colWhere + "` = ?";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
+            st.setInt(1, id);
+            rs = st.executeQuery();
+            if(rs.next())
+                return rs.getString(colName);
+        } catch (SQLException ex) {
+            Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public static Integer getLastRecordId(String tblName) {
         PreparedStatement st;
         ResultSet rs;
@@ -230,6 +295,22 @@ public class AppHelper {
             rs = st.executeQuery();
             if(rs.next())
                 return rs.getInt("id");
+        } catch (SQLException ex) {
+            Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }        
+        return 0;
+    }
+    
+    public static Integer getWaitNum() {
+        PreparedStatement st;
+        ResultSet rs;
+        String sql = "SELECT * FROM `orders` "
+            + "ORDER BY `id` DESC LIMIT 1";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
+            rs = st.executeQuery();
+            if(rs.next())
+                return rs.getInt("waiting_number");
         } catch (SQLException ex) {
             Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
         }        

@@ -6,6 +6,7 @@
 package coffee_shop_java.project.Model;
 
 import coffee_shop_java.project.Action.Action;
+import coffee_shop_java.project.Helper.AppHelper;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -23,46 +24,43 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Product extends Action {
+public class Order extends Action {
     PreparedStatement stmt;
     private int id;
     private int tblId;
-    private String name;
-    private String description;
-    private String proCate;
-    private int proCateId;
-    private int branchId;
-    private int comId;
+    private int waitingNum;
+    private String status;
+    private String date;
     private int userId;
+    private int memberId;
+    private int companyId;    
+    private int branchId;
+    private int inserted;
     
-    public Product(int tblId, String name, String proCate, int id) {
+    public Order(int tblId, int id, int waitingNum, String status) {
         this.tblId = tblId;
-        this.name = name;
-        this.proCate = proCate;
         this.id = id;
+        this.waitingNum = waitingNum;
+        this.status = status;        
     }
-    
+
     @Override
     public void insert() {
-        String sql = "INSERT INTO `products`("
-            + "`name`, "
-            + "`description`, "
-            + "`product_category_id`, "
-            + "`company_id`, "
-            + "`branch_id`, "
-            + "`user_id`"
-            + ") VALUES(?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO `orders`("
+            + "`date`, "
+            + "`status`, "
+            + "`user_id`, "
+            + "`waiting_number`"
+            + ") VALUES(?, ?, ?, ?)";
         try {        
             stmt = DbConn.getConnection().prepareStatement(sql);
-            stmt.setString(1, name);
-            stmt.setString(2, description);
-            stmt.setInt(3, proCateId);
-            stmt.setInt(4, comId);
-            stmt.setInt(5, branchId);
-            stmt.setInt(6, userId);
+            stmt.setString(1, date);
+            stmt.setString(2, status);
+            stmt.setInt(3, userId);
+            stmt.setInt(4, waitingNum);
             int i = stmt.executeUpdate();
             if(i > 0) {
-                JOptionPane.showMessageDialog(null, "Data saved!");
+                this.id = AppHelper.getLastRecordId("orders");
             } else {
                 JOptionPane.showMessageDialog(null, "Data failed to save!");
             }
@@ -73,37 +71,12 @@ public class Product extends Action {
 
     @Override
     public void update(int id) {
-        String sql = "UPDATE `products` SET "
-            + "`name` = ?, "
-            + "`description` = ?, "
-            + "`product_category_id` = ?, "
-            + "`company_id` = ?, "
-            + "`branch_id` = ?, "
-            + "`user_id` = ? " 
-            + "WHERE `id` = ?";
-        try {
-            stmt = DbConn.getConnection().prepareStatement(sql);
-            stmt.setString(1, name);
-            stmt.setString(2, description);
-            stmt.setInt(3, proCateId);
-            stmt.setInt(4, comId);
-            stmt.setInt(5, branchId);
-            stmt.setInt(6, userId);
-            stmt.setInt(7, id);
-            int i = stmt.executeUpdate();
-            if(i > 0) {
-                JOptionPane.showMessageDialog(null, "Data updated!");
-            } else {
-                JOptionPane.showMessageDialog(null, "Data failed to update!");
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, ex);
-        }
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public void delete(int id) {
-        String sql = "DELETE FROM `products` "
+        String sql = "DELETE FROM orders "
             + "WHERE id = ?";
         try {
             stmt = DbConn.getConnection().prepareStatement(sql);
@@ -111,6 +84,25 @@ public class Product extends Action {
             int i = stmt.executeUpdate();
             if(i > 0) {
                 JOptionPane.showMessageDialog(null, "Data deleted!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data failed to delete!");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+    
+    public void update(int id, String col, String data) {
+        String sql = "UPDATE orders SET "
+            + col + " = ? "
+            + "WHERE id = ?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setString(1, data);
+            stmt.setInt(2, id);
+            int i = stmt.executeUpdate();
+            if(i > 0) {
+                JOptionPane.showMessageDialog(null, "Order completed!");
             } else {
                 JOptionPane.showMessageDialog(null, "Data failed to delete!");
             }
