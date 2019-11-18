@@ -14,6 +14,7 @@ import coffee_shop_java.project.Model.Stock;
 import coffee_shop_java.project.Model.StockCategory;
 import coffee_shop_java.project.Model.StockProduct;
 import coffee_shop_java.project.Model.Company;
+import coffee_shop_java.project.Model.DbConn;
 import coffee_shop_java.project.Model.Order;
 import coffee_shop_java.project.Model.OrderDetail;
 import coffee_shop_java.project.Model.Product;
@@ -27,6 +28,7 @@ import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.sql.PreparedStatement;
 import org.apache.commons.io.FileUtils;
 import java.util.Date;
 import java.sql.ResultSet;
@@ -72,6 +74,7 @@ public class Main_Menu extends javax.swing.JFrame {
     private int supId;
     private int proCateId;
     private String companyNames = "";
+    private String branchIds = "";
     private ArrayList<StockProduct> proStock;
     
     StockCategory myStockCate = new StockCategory();
@@ -100,6 +103,14 @@ public class Main_Menu extends javax.swing.JFrame {
             i++;
             if(i < getComList().size())
                 companyNames += ", ";
+        }
+        ArrayList<Integer> ids = AppHelper.getIds(uId, "branch_id", "user_branches", "user_id");
+        int j = 0;
+        for(Integer id : ids) {
+            branchIds += id;
+            j++;
+            if(j < ids.size())
+                branchIds += ", ";
         }
     }
 
@@ -755,7 +766,7 @@ public class Main_Menu extends javax.swing.JFrame {
         Object[] rows = new Object[4];
         for(int i=0; i<list.size(); i++){
             rows[0] = list.get(i).getTblId();
-            rows[1] = String.format("%06d", list.get(i).getId());
+            rows[1] = String.format("%06d", list.get(i).getNumber());
             rows[2] = list.get(i).getWaitingNum();
             rows[3] = list.get(i).getStatus();            
             model.addRow(rows);
@@ -778,6 +789,7 @@ public class Main_Menu extends javax.swing.JFrame {
                     order = new Order(
                         i,
                         rs.getInt("id"),
+                        rs.getString("number"),
                         rs.getInt("waiting_number"),
                         rs.getString("status")
                     );
@@ -2118,7 +2130,7 @@ public class Main_Menu extends javax.swing.JFrame {
             pnlComListLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(txtSearchCom, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1167, Short.MAX_VALUE)
             .addComponent(jScrollPane4)
-            .addComponent(lineSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 1167, Short.MAX_VALUE)
+            .addComponent(lineSearch, javax.swing.GroupLayout.DEFAULT_SIZE, 826, Short.MAX_VALUE)
             .addComponent(lblSearch)
         );
         pnlComListLayout.setVerticalGroup(
@@ -2315,14 +2327,14 @@ public class Main_Menu extends javax.swing.JFrame {
                                 .addGap(1, 1, 1)
                                 .addComponent(lblComAction)
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(LineTxtAddress, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
-                            .addComponent(LineName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(LineTxtAddress, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
+                            .addComponent(LineName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
                             .addComponent(txtComName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
                             .addComponent(lblName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(LinePhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(LinePhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
                             .addComponent(txtComPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
                             .addComponent(lblPhone, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
-                            .addComponent(LineEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
+                            .addComponent(LineEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 777, Short.MAX_VALUE)
                             .addComponent(txtComEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
                             .addComponent(lbEmail, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1118, Short.MAX_VALUE)
                             .addComponent(jScrollPane5)
@@ -4917,7 +4929,7 @@ public class Main_Menu extends javax.swing.JFrame {
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1219, Short.MAX_VALUE)
+            .addGap(0, 1305, Short.MAX_VALUE)
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4928,8 +4940,8 @@ public class Main_Menu extends javax.swing.JFrame {
         pnlOrderProducts.setLayout(pnlOrderProductsLayout);
         pnlOrderProductsLayout.setHorizontalGroup(
             pnlOrderProductsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(txtSearchOrderPro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1219, Short.MAX_VALUE)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 1219, Short.MAX_VALUE)
+            .addComponent(txtSearchOrderPro, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1305, Short.MAX_VALUE)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, 1305, Short.MAX_VALUE)
             .addGroup(pnlOrderProductsLayout.createSequentialGroup()
                 .addComponent(jLabel37)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -4980,7 +4992,7 @@ public class Main_Menu extends javax.swing.JFrame {
         jPanel21.setLayout(jPanel21Layout);
         jPanel21Layout.setHorizontalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 572, Short.MAX_VALUE)
+            .addGap(0, 574, Short.MAX_VALUE)
         );
         jPanel21Layout.setVerticalGroup(
             jPanel21Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -4999,7 +5011,7 @@ public class Main_Menu extends javax.swing.JFrame {
         jPanel24.setLayout(jPanel24Layout);
         jPanel24Layout.setHorizontalGroup(
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 576, Short.MAX_VALUE)
+            .addGap(0, 619, Short.MAX_VALUE)
         );
         jPanel24Layout.setVerticalGroup(
             jPanel24Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5043,7 +5055,7 @@ public class Main_Menu extends javax.swing.JFrame {
         jPanel29.setLayout(jPanel29Layout);
         jPanel29Layout.setHorizontalGroup(
             jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 575, Short.MAX_VALUE)
+            .addGap(0, 618, Short.MAX_VALUE)
         );
         jPanel29Layout.setVerticalGroup(
             jPanel29Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5072,7 +5084,7 @@ public class Main_Menu extends javax.swing.JFrame {
         jPanel38.setLayout(jPanel38Layout);
         jPanel38Layout.setHorizontalGroup(
             jPanel38Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 579, Short.MAX_VALUE)
+            .addGap(0, 663, Short.MAX_VALUE)
         );
         jPanel38Layout.setVerticalGroup(
             jPanel38Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -5202,29 +5214,29 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addComponent(jSeparator5)
                     .addGroup(pnlPro1Layout.createSequentialGroup()
                         .addGroup(pnlPro1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel21, javax.swing.GroupLayout.DEFAULT_SIZE, 572, Short.MAX_VALUE)
+                            .addComponent(jPanel21, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
                             .addComponent(lblProAction1)
                             .addComponent(txtProName1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jLabel22, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(pnlPro1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel38, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
-                            .addComponent(txtProDesc1, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
-                            .addComponent(jLabel45, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)))
+                            .addComponent(jPanel38, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
+                            .addComponent(txtProDesc1, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)
+                            .addComponent(jLabel45, javax.swing.GroupLayout.DEFAULT_SIZE, 663, Short.MAX_VALUE)))
                     .addGroup(pnlPro1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(btnPro1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(pnlPro1Layout.createSequentialGroup()
                         .addGroup(pnlPro1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbProBranch1, 0, 575, Short.MAX_VALUE)
-                            .addComponent(jPanel29, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE)
-                            .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, 575, Short.MAX_VALUE))
+                            .addComponent(cbProBranch1, 0, 618, Short.MAX_VALUE)
+                            .addComponent(jPanel29, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE)
+                            .addComponent(jLabel27, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE))
                         .addGap(18, 18, 18)
                         .addGroup(pnlPro1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cbProCate1, 0, 576, Short.MAX_VALUE)
-                            .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)
-                            .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, 576, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1169, Short.MAX_VALUE)
+                            .addComponent(cbProCate1, 0, 619, Short.MAX_VALUE)
+                            .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)
+                            .addComponent(jLabel24, javax.swing.GroupLayout.DEFAULT_SIZE, 619, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane15, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1255, Short.MAX_VALUE)
                     .addGroup(pnlPro1Layout.createSequentialGroup()
                         .addComponent(jLabel28, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -5232,7 +5244,7 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnProDel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(txtProSearch1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel33, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1169, Short.MAX_VALUE)
+                    .addComponent(jPanel33, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 1255, Short.MAX_VALUE)
                     .addComponent(jLabel46, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(25, 25, 25))
         );
@@ -5517,20 +5529,20 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGroup(pnlProCate1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(pnlProCate1Layout.createSequentialGroup()
                                 .addGroup(pnlProCate1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel39, javax.swing.GroupLayout.DEFAULT_SIZE, 523, Short.MAX_VALUE)
+                                    .addComponent(jPanel39, javax.swing.GroupLayout.DEFAULT_SIZE, 566, Short.MAX_VALUE)
                                     .addGroup(pnlProCate1Layout.createSequentialGroup()
                                         .addComponent(jLabel48, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGap(194, 194, 194))
                                     .addComponent(txtProCateName1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(pnlProCate1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel40, javax.swing.GroupLayout.DEFAULT_SIZE, 507, Short.MAX_VALUE)
+                                    .addComponent(jPanel40, javax.swing.GroupLayout.DEFAULT_SIZE, 550, Short.MAX_VALUE)
                                     .addComponent(txtProCateDesc1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel49, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(18, 18, 18)
                                 .addComponent(btnAddProCate1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane16)
-                            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 1169, Short.MAX_VALUE)
+                            .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, 1255, Short.MAX_VALUE)
                             .addComponent(jLabel50, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator6)
                             .addGroup(pnlProCate1Layout.createSequentialGroup()
@@ -5703,6 +5715,11 @@ public class Main_Menu extends javax.swing.JFrame {
 
         cbOrderProduct.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
         cbOrderProduct.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Ice", "Hot" }));
+        cbOrderProduct.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbOrderProductItemStateChanged(evt);
+            }
+        });
 
         jPanel43.setBackground(new java.awt.Color(0, 0, 0));
         jPanel43.setPreferredSize(new java.awt.Dimension(100, 3));
@@ -5746,15 +5763,12 @@ public class Main_Menu extends javax.swing.JFrame {
         jDesktopPane3Layout.setHorizontalGroup(
             jDesktopPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane3Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(orderProImg, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, 0)
+                .addComponent(orderProImg, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jDesktopPane3Layout.setVerticalGroup(
             jDesktopPane3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jDesktopPane3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(orderProImg, javax.swing.GroupLayout.PREFERRED_SIZE, 586, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addComponent(orderProImg, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         jSeparator7.setBackground(new java.awt.Color(234, 234, 234));
@@ -5929,28 +5943,28 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addGroup(pnlMakeOrderLayout.createSequentialGroup()
                         .addGap(25, 25, 25)
                         .addGroup(pnlMakeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane17, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 801, Short.MAX_VALUE)
+                            .addComponent(jScrollPane17, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(pnlMakeOrderLayout.createSequentialGroup()
                                 .addGroup(pnlMakeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel41, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                                    .addComponent(jPanel41, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
                                     .addComponent(txtOrderQty, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel52, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(pnlMakeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(txtOrderDis, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel30, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel42, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)))
+                                    .addComponent(jPanel42, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)))
                             .addComponent(jSeparator7)
                             .addComponent(jLabel54, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(pnlMakeOrderLayout.createSequentialGroup()
                                 .addGroup(pnlMakeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jPanel44, javax.swing.GroupLayout.DEFAULT_SIZE, 391, Short.MAX_VALUE)
+                                    .addComponent(jPanel44, javax.swing.GroupLayout.DEFAULT_SIZE, 434, Short.MAX_VALUE)
                                     .addComponent(cbOrderProduct, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(18, 18, 18)
                                 .addGroup(pnlMakeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(cbOrderSize, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                     .addComponent(jLabel53, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel43, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE)))
+                                    .addComponent(jPanel43, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)))
                             .addGroup(pnlMakeOrderLayout.createSequentialGroup()
                                 .addGroup(pnlMakeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(lblProVarAction1)
@@ -5961,7 +5975,7 @@ public class Main_Menu extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(txtTotal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(pnlMakeOrderLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(264, Short.MAX_VALUE)
                         .addComponent(btnOrderPaid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnOrderCancel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -6024,13 +6038,13 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel57)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane17, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane17, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addGroup(pnlMakeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(pnlMakeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel55)))
-                    .addComponent(jDesktopPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25))
+                            .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jDesktopPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE))
+                .addGap(28, 28, 28))
         );
 
         dynamicDashPane.add(pnlMakeOrder, "card2");
@@ -7738,68 +7752,86 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void exitIconMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_exitIconMouseClicked
         // TODO add your handling code here:
-        System.exit(0);
+        if(ordering) {
+            int i = JOptionPane.showConfirmDialog(
+                this, 
+                "You're in ordering mode!, Are you sure you want to exit?", 
+                "Confirm message", 
+                JOptionPane.YES_NO_OPTION, 
+                JOptionPane.QUESTION_MESSAGE
+            );
+            if(i == JOptionPane.YES_OPTION) {
+                myOrder.delete(myOrder.getId());
+                System.exit(0);
+            }
+        } else {
+            System.exit(0);
+        }        
     }//GEN-LAST:event_exitIconMouseClicked
 
     private void comLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comLabelMouseClicked
         // TODO add your handling code here:
-        com = true;
-        bra = false;
-        prod = false;
-        stocks = false;
-        staffs = false;
-        user = false;
-        dash = false;
-        sup = false;
-        
-        //dyanmicPanel
-        dynamicPanel.removeAll();
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicPanel.add(comPanel);
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicLabel.setFont(new Font("Segoe UI", 0, 36)); 
-        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
-        dynamicLabel.setText("COMPANY");
-        showCompanies(getComList());
-        JTableHeader header = tblCom.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        header.setOpaque(false);
-        header.setForeground(Color.WHITE);
-        header.setBackground(Color.black);
-        
-        //braLayer
-        braActive.setBackground(new Color(78, 45, 17));
-        branchLabel.setBackground(new Color(78, 45, 17));
+        if(ordering) {
+            AppHelper.orderMessage();
+        } else {
+            com = true;
+            bra = false;
+            prod = false;
+            stocks = false;
+            staffs = false;
+            user = false;
+            dash = false;
+            sup = false;
 
-        //proLayer
-        proActive.setBackground(new Color(78, 45, 17));
-        proLabel.setBackground(new Color(78, 45, 17));
-        
-        //stockLayer
-        stockLabel.setBackground(new Color(78, 45, 17));
-        stockActive.setBackground(new Color(78, 45, 17));
-        
-        //staffLayer
-        staffActive.setBackground(new Color(78, 45, 17));
-        staffLabel.setBackground(new Color(78, 45, 17));
-        
-        userPnl.setBackground(new Color(78, 45, 17));
-        userActive.setBackground(new Color(78, 45, 17));
-        
-        dashPnl.setBackground(new Color(78, 45, 17));
-        dashActive.setBackground(new Color(78, 45, 17));
-        
-        supplierPnl.setBackground(new Color(78, 45, 17));
-        supplierActive.setBackground(new Color(78, 45, 17));
-        
-        //comLayer
-        comLayer.removeAll();
-        comLayer.add(comActive, 0);
-        comLayer.add(comBlink, 1);
-        comActive.setBackground(new Color(255, 255, 255));
-        comLabel.setBackground(new Color(102, 51, 0));
+            //dyanmicPanel
+            dynamicPanel.removeAll();
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicPanel.add(comPanel);
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicLabel.setFont(new Font("Segoe UI", 0, 36)); 
+            dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
+            dynamicLabel.setText("COMPANY");
+            showCompanies(getComList());
+            JTableHeader header = tblCom.getTableHeader();
+            header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+            header.setOpaque(false);
+            header.setForeground(Color.WHITE);
+            header.setBackground(Color.black);
+
+            //braLayer
+            braActive.setBackground(new Color(78, 45, 17));
+            branchLabel.setBackground(new Color(78, 45, 17));
+
+            //proLayer
+            proActive.setBackground(new Color(78, 45, 17));
+            proLabel.setBackground(new Color(78, 45, 17));
+
+            //stockLayer
+            stockLabel.setBackground(new Color(78, 45, 17));
+            stockActive.setBackground(new Color(78, 45, 17));
+
+            //staffLayer
+            staffActive.setBackground(new Color(78, 45, 17));
+            staffLabel.setBackground(new Color(78, 45, 17));
+
+            userPnl.setBackground(new Color(78, 45, 17));
+            userActive.setBackground(new Color(78, 45, 17));
+
+            dashPnl.setBackground(new Color(78, 45, 17));
+            dashActive.setBackground(new Color(78, 45, 17));
+
+            supplierPnl.setBackground(new Color(78, 45, 17));
+            supplierActive.setBackground(new Color(78, 45, 17));
+
+            //comLayer
+            comLayer.removeAll();
+            comLayer.add(comActive, 0);
+            comLayer.add(comBlink, 1);
+            comActive.setBackground(new Color(255, 255, 255));
+            comLabel.setBackground(new Color(102, 51, 0));
+        }
     }//GEN-LAST:event_comLabelMouseClicked
 
     private void comLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_comLabelMouseEntered
@@ -7820,63 +7852,67 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void branchLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_branchLabelMouseClicked
         // TODO add your handling code here:
-        com = false;
-        bra = true;
-        prod = false;
-        stocks = false;
-        staffs = false;
-        user = false;
-        dash = false;
-        sup = false;
-        
-        //dynamicPanel
-        dynamicPanel.removeAll();
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicPanel.add(branchPanel);
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
-        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
-        dynamicLabel.setText("BRANCH");
-        showBranches(getBranchList());
-        JTableHeader header = tblBranch.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        header.setOpaque(false);
-        header.setForeground(Color.WHITE);
-        header.setBackground(Color.black);
-        
-        //comLayer
-        comActive.setBackground(new Color(78, 45, 17));
-        comLabel.setBackground(new Color(78, 45, 17));
-        
-        //proLayer
-        proActive.setBackground(new Color(78, 45, 17));
-        proLabel.setBackground(new Color(78, 45, 17));
-        
-        //stafffLayer
-        staffLabel.setBackground(new Color(78, 45, 17));
-        staffActive.setBackground(new Color(78, 45, 17));
-        
-        //stockLayer
-        stockLabel.setBackground(new Color(78, 45, 17));
-        stockActive.setBackground(new Color(78, 45, 17));
-        
-        userPnl.setBackground(new Color(78, 45, 17));
-        userActive.setBackground(new Color(78, 45, 17));
-        
-        dashPnl.setBackground(new Color(78, 45, 17));
-        dashActive.setBackground(new Color(78, 45, 17));
-        
-        supplierPnl.setBackground(new Color(78, 45, 17));
-        supplierActive.setBackground(new Color(78, 45, 17));
-        
-        //braLayer
-        braLayer.removeAll();       
-        braLayer.add(braActive, 0);
-        braLayer.add(braBlink, 1);
-        braActive.setBackground(new Color(255, 255, 255));
-        branchLabel.setBackground(new Color(102, 51, 0));
+        if(ordering) {
+            AppHelper.orderMessage();
+        } else {
+            com = false;
+            bra = true;
+            prod = false;
+            stocks = false;
+            staffs = false;
+            user = false;
+            dash = false;
+            sup = false;
+
+            //dynamicPanel
+            dynamicPanel.removeAll();
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicPanel.add(branchPanel);
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
+            dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
+            dynamicLabel.setText("BRANCH");
+            showBranches(getBranchList());
+            JTableHeader header = tblBranch.getTableHeader();
+            header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+            header.setOpaque(false);
+            header.setForeground(Color.WHITE);
+            header.setBackground(Color.black);
+
+            //comLayer
+            comActive.setBackground(new Color(78, 45, 17));
+            comLabel.setBackground(new Color(78, 45, 17));
+
+            //proLayer
+            proActive.setBackground(new Color(78, 45, 17));
+            proLabel.setBackground(new Color(78, 45, 17));
+
+            //stafffLayer
+            staffLabel.setBackground(new Color(78, 45, 17));
+            staffActive.setBackground(new Color(78, 45, 17));
+
+            //stockLayer
+            stockLabel.setBackground(new Color(78, 45, 17));
+            stockActive.setBackground(new Color(78, 45, 17));
+
+            userPnl.setBackground(new Color(78, 45, 17));
+            userActive.setBackground(new Color(78, 45, 17));
+
+            dashPnl.setBackground(new Color(78, 45, 17));
+            dashActive.setBackground(new Color(78, 45, 17));
+
+            supplierPnl.setBackground(new Color(78, 45, 17));
+            supplierActive.setBackground(new Color(78, 45, 17));
+
+            //braLayer
+            braLayer.removeAll();       
+            braLayer.add(braActive, 0);
+            braLayer.add(braBlink, 1);
+            braActive.setBackground(new Color(255, 255, 255));
+            branchLabel.setBackground(new Color(102, 51, 0));
+        }
     }//GEN-LAST:event_branchLabelMouseClicked
 
     private void branchLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_branchLabelMouseEntered
@@ -7896,76 +7932,80 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void proLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_proLabelMouseClicked
         // TODO add your handling code here:
-        com = false;
-        bra = false;
-        prod = true;
-        stocks = false;
-        staffs = false;
-        user = false;
-        dash = false;
-        sup = false;
-        
-        //dynamicPanel
-        dynamicPanel.removeAll();
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicPanel.add(proPanel);
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
-        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
-        dynamicLabel.setText("PRODUCT");
-        showProductVar(getAllProductVars());
-        JTableHeader header = tblPro.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        header.setOpaque(false);
-        header.setForeground(Color.WHITE);
-        header.setBackground(Color.black);
-        
-        dynamicProPane.removeAll();
-        dynamicProPane.repaint();
-        dynamicProPane.revalidate();
-        
-        cbProCate.removeAllItems();
-        AppHelper.getCombos("name", "product_categories")
-            .forEach((r) -> cbProCate.addItem(AppHelper.toCapitalize(r)));
-        cbProBranch.removeAllItems();
-        AppHelper.getComboBranch(userId)
-            .forEach((r) -> cbProBranch.addItem(r));
-        
-        //comLayer
-        comLabel.setBackground(new Color(78, 45, 17));
-        
-        //braLayer
-        braActive.setBackground(new Color(78, 45, 17));
-        branchLabel.setBackground(new Color(78, 45, 17));
+        if(ordering) {
+            AppHelper.orderMessage();
+        } else {
+            com = false;
+            bra = false;
+            prod = true;
+            stocks = false;
+            staffs = false;
+            user = false;
+            dash = false;
+            sup = false;
 
-        //comLayer
-        comActive.setBackground(new Color(78, 45, 17));
-        
-        //stockLayer
-        stockLabel.setBackground(new Color(78, 45, 17));
-        stockActive.setBackground(new Color(78, 45, 17));
-        
-        //staffLayer
-        staffLabel.setBackground(new Color(78, 45, 17));
-        staffActive.setBackground(new Color(78, 45, 17));
-        
-        userPnl.setBackground(new Color(78, 45, 17));
-        userActive.setBackground(new Color(78, 45, 17));
-        
-        dashPnl.setBackground(new Color(78, 45, 17));
-        dashActive.setBackground(new Color(78, 45, 17));
-        
-        supplierPnl.setBackground(new Color(78, 45, 17));
-        supplierActive.setBackground(new Color(78, 45, 17));
-        
-        //proLayer
-        proLayer.removeAll();
-        proLayer.add(proActive, 0);
-        proLayer.add(proBlink, 1);
-        proActive.setBackground(new Color(255, 255, 255));
-        proLabel.setBackground(new Color(102, 51, 0));
+            //dynamicPanel
+            dynamicPanel.removeAll();
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicPanel.add(proPanel);
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
+            dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
+            dynamicLabel.setText("PRODUCT");
+            showProductVar(getAllProductVars());
+            JTableHeader header = tblPro.getTableHeader();
+            header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+            header.setOpaque(false);
+            header.setForeground(Color.WHITE);
+            header.setBackground(Color.black);
+
+            dynamicProPane.removeAll();
+            dynamicProPane.repaint();
+            dynamicProPane.revalidate();
+
+            cbProCate.removeAllItems();
+            AppHelper.getCombos("name", "product_categories")
+                .forEach((r) -> cbProCate.addItem(AppHelper.toCapitalize(r)));
+            cbProBranch.removeAllItems();
+            AppHelper.getComboBranch(userId)
+                .forEach((r) -> cbProBranch.addItem(r));
+
+            //comLayer
+            comLabel.setBackground(new Color(78, 45, 17));
+
+            //braLayer
+            braActive.setBackground(new Color(78, 45, 17));
+            branchLabel.setBackground(new Color(78, 45, 17));
+
+            //comLayer
+            comActive.setBackground(new Color(78, 45, 17));
+
+            //stockLayer
+            stockLabel.setBackground(new Color(78, 45, 17));
+            stockActive.setBackground(new Color(78, 45, 17));
+
+            //staffLayer
+            staffLabel.setBackground(new Color(78, 45, 17));
+            staffActive.setBackground(new Color(78, 45, 17));
+
+            userPnl.setBackground(new Color(78, 45, 17));
+            userActive.setBackground(new Color(78, 45, 17));
+
+            dashPnl.setBackground(new Color(78, 45, 17));
+            dashActive.setBackground(new Color(78, 45, 17));
+
+            supplierPnl.setBackground(new Color(78, 45, 17));
+            supplierActive.setBackground(new Color(78, 45, 17));
+
+            //proLayer
+            proLayer.removeAll();
+            proLayer.add(proActive, 0);
+            proLayer.add(proBlink, 1);
+            proActive.setBackground(new Color(255, 255, 255));
+            proLabel.setBackground(new Color(102, 51, 0));
+        }
     }//GEN-LAST:event_proLabelMouseClicked
 
     private void proLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_proLabelMouseEntered
@@ -7985,56 +8025,60 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void staffLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staffLabelMouseClicked
         // TODO add your handling code here:
-        com = false;
-        bra = false;
-        prod = false;
-        stocks = false;
-        staffs = true;
-        user = false;
-        dash = false;
-        sup = false;
-        
-        //dynamicPanel
-        dynamicPanel.removeAll();
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicPanel.add(branchPanel);
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
-        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
-        dynamicLabel.setText("STAFF");
-        
-        //braLayer
-        branchLabel.setBackground(new Color(78, 45, 17));
-        braActive.setBackground(new Color(78, 45, 17));
-        
-        //comLayer
-        comLabel.setBackground(new Color(78, 45, 17));
-        comActive.setBackground(new Color(78, 45, 17));
-        
-        //proLayer
-        proLabel.setBackground(new Color(78, 45, 17));
-        proActive.setBackground(new Color(78, 45, 17));
-        
-        dashPnl.setBackground(new Color(78, 45, 17));
-        dashActive.setBackground(new Color(78, 45, 17));
-        
-        //stockLayer
-        stockLabel.setBackground(new Color(78, 45, 17));
-        stockActive.setBackground(new Color(78, 45, 17));
-        
-        userPnl.setBackground(new Color(78, 45, 17));
-        userActive.setBackground(new Color(78, 45, 17));
-        
-        supplierPnl.setBackground(new Color(78, 45, 17));
-        supplierActive.setBackground(new Color(78, 45, 17));
-        
-        //staffLayer
-        staffLayer.add(staffBlink, 1);
-        staffLayer.add(staffActive, 0);
-        staffActive.setBackground(new Color(255, 255, 255));
-        staffLabel.setBackground(new Color(102, 51, 0));
+        if(ordering) {
+            AppHelper.orderMessage();
+        } else {
+            com = false;
+            bra = false;
+            prod = false;
+            stocks = false;
+            staffs = true;
+            user = false;
+            dash = false;
+            sup = false;
+
+            //dynamicPanel
+            dynamicPanel.removeAll();
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicPanel.add(branchPanel);
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
+            dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
+            dynamicLabel.setText("STAFF");
+
+            //braLayer
+            branchLabel.setBackground(new Color(78, 45, 17));
+            braActive.setBackground(new Color(78, 45, 17));
+
+            //comLayer
+            comLabel.setBackground(new Color(78, 45, 17));
+            comActive.setBackground(new Color(78, 45, 17));
+
+            //proLayer
+            proLabel.setBackground(new Color(78, 45, 17));
+            proActive.setBackground(new Color(78, 45, 17));
+
+            dashPnl.setBackground(new Color(78, 45, 17));
+            dashActive.setBackground(new Color(78, 45, 17));
+
+            //stockLayer
+            stockLabel.setBackground(new Color(78, 45, 17));
+            stockActive.setBackground(new Color(78, 45, 17));
+
+            userPnl.setBackground(new Color(78, 45, 17));
+            userActive.setBackground(new Color(78, 45, 17));
+
+            supplierPnl.setBackground(new Color(78, 45, 17));
+            supplierActive.setBackground(new Color(78, 45, 17));
+
+            //staffLayer
+            staffLayer.add(staffBlink, 1);
+            staffLayer.add(staffActive, 0);
+            staffActive.setBackground(new Color(255, 255, 255));
+            staffLabel.setBackground(new Color(102, 51, 0));
+        }
     }//GEN-LAST:event_staffLabelMouseClicked
 
     private void staffLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_staffLabelMouseEntered
@@ -8054,72 +8098,76 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void stockLabelMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_stockLabelMouseClicked
         // TODO add your handling code here:
-        com = false;
-        bra = false;
-        prod = false;
-        stocks = true;
-        staffs = false;
-        user = false;
-        dash = false;
-        sup = false;
-        
-        //dynamicPanel
-        dynamicPanel.removeAll();
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicPanel.add(stockPanel);
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
-        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
-        dynamicLabel.setText("STOCK");
-        
-        dynamicStockPane.removeAll();
-        dynamicStockPane.repaint();
-        dynamicStockPane.revalidate();
-        dynamicStockPane.add(pnlStockList);
-        dynamicStockPane.repaint();
-        dynamicStockPane.revalidate();
-        
-        showStocks(getAllStocks());
-        
-        JTableHeader header = tblStock.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        header.setOpaque(false);
-        header.setForeground(Color.WHITE);
-        header.setBackground(Color.black);
-        
-        //braLayer
-        branchLabel.setBackground(new Color(78, 45, 17));
-        braActive.setBackground(new Color(78, 45, 17));
-        
-        //comLayer
-        comLabel.setBackground(new Color(78, 45, 17));
-        comActive.setBackground(new Color(78, 45, 17));
-        
-        //proLayer
-        proLabel.setBackground(new Color(78, 45, 17));
-        proActive.setBackground(new Color(78, 45, 17));
-        
-        //staffLayer
-        staffLabel.setBackground(new Color(78, 45, 17));
-        staffActive.setBackground(new Color(78, 45, 17));
-        
-        userPnl.setBackground(new Color(78, 45, 17));
-        userActive.setBackground(new Color(78, 45, 17));
-        
-        dashPnl.setBackground(new Color(78, 45, 17));
-        dashActive.setBackground(new Color(78, 45, 17));
-        
-        supplierPnl.setBackground(new Color(78, 45, 17));
-        supplierActive.setBackground(new Color(78, 45, 17));
-        
-        //stockLayer
-        stockLabel.setBackground(new Color(102, 51, 0));
-        stockLayer.add(stockBlink, 1);
-        stockLayer.add(stockActive, 0);
-        stockActive.setBackground(new Color(255, 255, 255));
-        stockLabel.setBackground(new Color(102, 51, 0));
+        if(ordering) {
+            AppHelper.orderMessage();
+        } else {
+            com = false;
+            bra = false;
+            prod = false;
+            stocks = true;
+            staffs = false;
+            user = false;
+            dash = false;
+            sup = false;
+
+            //dynamicPanel
+            dynamicPanel.removeAll();
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicPanel.add(stockPanel);
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
+            dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
+            dynamicLabel.setText("STOCK");
+
+            dynamicStockPane.removeAll();
+            dynamicStockPane.repaint();
+            dynamicStockPane.revalidate();
+            dynamicStockPane.add(pnlStockList);
+            dynamicStockPane.repaint();
+            dynamicStockPane.revalidate();
+
+            showStocks(getAllStocks());
+
+            JTableHeader header = tblStock.getTableHeader();
+            header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+            header.setOpaque(false);
+            header.setForeground(Color.WHITE);
+            header.setBackground(Color.black);
+
+            //braLayer
+            branchLabel.setBackground(new Color(78, 45, 17));
+            braActive.setBackground(new Color(78, 45, 17));
+
+            //comLayer
+            comLabel.setBackground(new Color(78, 45, 17));
+            comActive.setBackground(new Color(78, 45, 17));
+
+            //proLayer
+            proLabel.setBackground(new Color(78, 45, 17));
+            proActive.setBackground(new Color(78, 45, 17));
+
+            //staffLayer
+            staffLabel.setBackground(new Color(78, 45, 17));
+            staffActive.setBackground(new Color(78, 45, 17));
+
+            userPnl.setBackground(new Color(78, 45, 17));
+            userActive.setBackground(new Color(78, 45, 17));
+
+            dashPnl.setBackground(new Color(78, 45, 17));
+            dashActive.setBackground(new Color(78, 45, 17));
+
+            supplierPnl.setBackground(new Color(78, 45, 17));
+            supplierActive.setBackground(new Color(78, 45, 17));
+
+            //stockLayer
+            stockLabel.setBackground(new Color(102, 51, 0));
+            stockLayer.add(stockBlink, 1);
+            stockLayer.add(stockActive, 0);
+            stockActive.setBackground(new Color(255, 255, 255));
+            stockLabel.setBackground(new Color(102, 51, 0));
+        }
     }//GEN-LAST:event_stockLabelMouseClicked
 
     private void stockLabelMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_stockLabelMouseEntered
@@ -8139,62 +8187,66 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void userPnlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userPnlMouseClicked
         // TODO add your handling code here:
-        com = false;
-        bra = false;
-        prod = false;
-        stocks = false;
-        staffs = false;
-        user = true;
-        dash = false;
-        sup = false;
+        if(ordering) {
+            AppHelper.orderMessage();
+        } else {
+            com = false;
+            bra = false;
+            prod = false;
+            stocks = false;
+            staffs = false;
+            user = true;
+            dash = false;
+            sup = false;
 
-        //dynamicPanel
-        dynamicPanel.removeAll();
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicPanel.add(userPanel);
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
-        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
-        dynamicLabel.setText("USER");
-        showUsers(getAllUsers());
-        JTableHeader header = userTbl.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        header.setOpaque(false);
-        header.setForeground(Color.WHITE);
-        header.setBackground(Color.black);
+            //dynamicPanel
+            dynamicPanel.removeAll();
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicPanel.add(userPanel);
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
+            dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
+            dynamicLabel.setText("USER");
+            showUsers(getAllUsers());
+            JTableHeader header = userTbl.getTableHeader();
+            header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+            header.setOpaque(false);
+            header.setForeground(Color.WHITE);
+            header.setBackground(Color.black);
 
-        //braLayer
-        branchLabel.setBackground(new Color(78, 45, 17));
-        braActive.setBackground(new Color(78, 45, 17));
+            //braLayer
+            branchLabel.setBackground(new Color(78, 45, 17));
+            braActive.setBackground(new Color(78, 45, 17));
 
-        //comLayer
-        comLabel.setBackground(new Color(78, 45, 17));
-        comActive.setBackground(new Color(78, 45, 17));
+            //comLayer
+            comLabel.setBackground(new Color(78, 45, 17));
+            comActive.setBackground(new Color(78, 45, 17));
 
-        //proLayer
-        proLabel.setBackground(new Color(78, 45, 17));
-        proActive.setBackground(new Color(78, 45, 17));
+            //proLayer
+            proLabel.setBackground(new Color(78, 45, 17));
+            proActive.setBackground(new Color(78, 45, 17));
 
-        //staffLayer
-        staffLabel.setBackground(new Color(78, 45, 17));
-        staffActive.setBackground(new Color(78, 45, 17));
+            //staffLayer
+            staffLabel.setBackground(new Color(78, 45, 17));
+            staffActive.setBackground(new Color(78, 45, 17));
 
-        stockLabel.setBackground(new Color(78, 45, 17));
-        stockActive.setBackground(new Color(78, 45, 17));
+            stockLabel.setBackground(new Color(78, 45, 17));
+            stockActive.setBackground(new Color(78, 45, 17));
 
-        dashPnl.setBackground(new Color(78, 45, 17));
-        dashActive.setBackground(new Color(78, 45, 17));
+            dashPnl.setBackground(new Color(78, 45, 17));
+            dashActive.setBackground(new Color(78, 45, 17));
 
-        supplierPnl.setBackground(new Color(78, 45, 17));
-        supplierActive.setBackground(new Color(78, 45, 17));
+            supplierPnl.setBackground(new Color(78, 45, 17));
+            supplierActive.setBackground(new Color(78, 45, 17));
 
-        userPnl.setBackground(new Color(102, 51, 0));
-        userLayp.add(userBlink, 1);
-        userLayp.add(userActive, 0);
-        userActive.setBackground(new Color(255, 255, 255));
-        userPnl.setBackground(new Color(102, 51, 0));
+            userPnl.setBackground(new Color(102, 51, 0));
+            userLayp.add(userBlink, 1);
+            userLayp.add(userActive, 0);
+            userActive.setBackground(new Color(255, 255, 255));
+            userPnl.setBackground(new Color(102, 51, 0));
+        }
     }//GEN-LAST:event_userPnlMouseClicked
 
     private void userPnlMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_userPnlMouseEntered
@@ -8214,62 +8266,66 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void dashPnlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashPnlMouseClicked
         // TODO add your handling code here:
-        com = false;
-        bra = false;
-        prod = false;
-        stocks = false;
-        staffs = false;
-        user = false;
-        dash = true;
-        sup = false;
-        
-        //dynamicPanel
-        dynamicPanel.removeAll();
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicPanel.add(dashPanel);
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
-        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
-        dynamicLabel.setText("ORDER");
-        showPendingOrder(getAllPendingOrder());
-        JTableHeader header = tblOrderPending.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        header.setOpaque(false);
-        header.setForeground(Color.WHITE);
-        header.setBackground(Color.black);
-        
-        //braLayer
-        branchLabel.setBackground(new Color(78, 45, 17));
-        braActive.setBackground(new Color(78, 45, 17));
-        
-        //comLayer
-        comLabel.setBackground(new Color(78, 45, 17));
-        comActive.setBackground(new Color(78, 45, 17));
-        
-        //proLayer
-        proLabel.setBackground(new Color(78, 45, 17));
-        proActive.setBackground(new Color(78, 45, 17));
-        
-        //staffLayer
-        staffLabel.setBackground(new Color(78, 45, 17));
-        staffActive.setBackground(new Color(78, 45, 17));
-        
-        stockLabel.setBackground(new Color(78, 45, 17));
-        stockActive.setBackground(new Color(78, 45, 17));
-        
-        userPnl.setBackground(new Color(78, 45, 17));
-        userActive.setBackground(new Color(78, 45, 17));
-        
-        supplierPnl.setBackground(new Color(78, 45, 17));
-        supplierActive.setBackground(new Color(78, 45, 17));
-        
-        dashPnl.setBackground(new Color(102, 51, 0));
-        dashLayp.add(dashBlink, 1);
-        dashLayp.add(dashActive, 0);
-        dashActive.setBackground(new Color(255, 255, 255));
-        dashPnl.setBackground(new Color(102, 51, 0));
+        if(ordering) {
+            AppHelper.orderMessage();
+        } else {
+            com = false;
+            bra = false;
+            prod = false;
+            stocks = false;
+            staffs = false;
+            user = false;
+            dash = true;
+            sup = false;
+
+            //dynamicPanel
+            dynamicPanel.removeAll();
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicPanel.add(dashPanel);
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
+            dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
+            dynamicLabel.setText("ORDER");
+            showPendingOrder(getAllPendingOrder());
+            JTableHeader header = tblOrderPending.getTableHeader();
+            header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+            header.setOpaque(false);
+            header.setForeground(Color.WHITE);
+            header.setBackground(Color.black);
+
+            //braLayer
+            branchLabel.setBackground(new Color(78, 45, 17));
+            braActive.setBackground(new Color(78, 45, 17));
+
+            //comLayer
+            comLabel.setBackground(new Color(78, 45, 17));
+            comActive.setBackground(new Color(78, 45, 17));
+
+            //proLayer
+            proLabel.setBackground(new Color(78, 45, 17));
+            proActive.setBackground(new Color(78, 45, 17));
+
+            //staffLayer
+            staffLabel.setBackground(new Color(78, 45, 17));
+            staffActive.setBackground(new Color(78, 45, 17));
+
+            stockLabel.setBackground(new Color(78, 45, 17));
+            stockActive.setBackground(new Color(78, 45, 17));
+
+            userPnl.setBackground(new Color(78, 45, 17));
+            userActive.setBackground(new Color(78, 45, 17));
+
+            supplierPnl.setBackground(new Color(78, 45, 17));
+            supplierActive.setBackground(new Color(78, 45, 17));
+
+            dashPnl.setBackground(new Color(102, 51, 0));
+            dashLayp.add(dashBlink, 1);
+            dashLayp.add(dashActive, 0);
+            dashActive.setBackground(new Color(255, 255, 255));
+            dashPnl.setBackground(new Color(102, 51, 0));
+        }
     }//GEN-LAST:event_dashPnlMouseClicked
 
     private void dashPnlMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_dashPnlMouseEntered
@@ -8378,69 +8434,77 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void btnLogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLogoutMouseClicked
         // TODO add your handling code here:
-        this.dispose();
-        new Login().setVisible(true);
-        JOptionPane.showMessageDialog(null, "You have logged out!");
+        if(ordering) {
+            AppHelper.orderMessage();
+        } else {
+            this.dispose();
+            new Login().setVisible(true);
+            JOptionPane.showMessageDialog(null, "You have logged out!");
+        }
     }//GEN-LAST:event_btnLogoutMouseClicked
 
     private void supplierPnlMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierPnlMouseClicked
         // TODO add your handling code here:
-        com = false;
-        bra = false;
-        prod = false;
-        stocks = false;
-        staffs = false;
-        user = false;
-        dash = true;
-        sup = false;
-        
-        //dynamicPanel
-        dynamicPanel.removeAll();
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicPanel.add(supplierPanel);
-        dynamicPanel.repaint();
-        dynamicPanel.revalidate();
-        dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
-        dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
-        dynamicLabel.setText("SUPPLIER");
-        showSup(getSupList());
-        JTableHeader header = tblSup.getTableHeader();
-        header.setFont(new Font("Segoe UI", Font.BOLD, 26));
-        header.setOpaque(false);
-        header.setForeground(Color.WHITE);
-        header.setBackground(Color.black);
-        
-        //braLayer
-        branchLabel.setBackground(new Color(78, 45, 17));
-        braActive.setBackground(new Color(78, 45, 17));
-        
-        //comLayer
-        comLabel.setBackground(new Color(78, 45, 17));
-        comActive.setBackground(new Color(78, 45, 17));
-        
-        //proLayer
-        proLabel.setBackground(new Color(78, 45, 17));
-        proActive.setBackground(new Color(78, 45, 17));
-        
-        //staffLayer
-        staffLabel.setBackground(new Color(78, 45, 17));
-        staffActive.setBackground(new Color(78, 45, 17));
-        
-        stockLabel.setBackground(new Color(78, 45, 17));
-        stockActive.setBackground(new Color(78, 45, 17));
-        
-        userPnl.setBackground(new Color(78, 45, 17));
-        userActive.setBackground(new Color(78, 45, 17));
-        
-        dashPnl.setBackground(new Color(78, 45, 17));
-        dashActive.setBackground(new Color(78, 45, 17));
-        
-        supplierPnl.setBackground(new Color(102, 51, 0));
-        supplierLayp.add(supplierBlink, 1);
-        supplierLayp.add(supplierActive, 0);
-        supplierActive.setBackground(new Color(255, 255, 255));
-        supplierPnl.setBackground(new Color(102, 51, 0));
+        if(ordering) {
+            AppHelper.orderMessage();
+        } else {
+            com = false;
+            bra = false;
+            prod = false;
+            stocks = false;
+            staffs = false;
+            user = false;
+            dash = true;
+            sup = false;
+
+            //dynamicPanel
+            dynamicPanel.removeAll();
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicPanel.add(supplierPanel);
+            dynamicPanel.repaint();
+            dynamicPanel.revalidate();
+            dynamicLabel.setFont(new java.awt.Font("Segoe UI", 0, 36));
+            dynamicLabel.setForeground(new java.awt.Color(255, 255, 255));
+            dynamicLabel.setText("SUPPLIER");
+            showSup(getSupList());
+            JTableHeader header = tblSup.getTableHeader();
+            header.setFont(new Font("Segoe UI", Font.BOLD, 26));
+            header.setOpaque(false);
+            header.setForeground(Color.WHITE);
+            header.setBackground(Color.black);
+
+            //braLayer
+            branchLabel.setBackground(new Color(78, 45, 17));
+            braActive.setBackground(new Color(78, 45, 17));
+
+            //comLayer
+            comLabel.setBackground(new Color(78, 45, 17));
+            comActive.setBackground(new Color(78, 45, 17));
+
+            //proLayer
+            proLabel.setBackground(new Color(78, 45, 17));
+            proActive.setBackground(new Color(78, 45, 17));
+
+            //staffLayer
+            staffLabel.setBackground(new Color(78, 45, 17));
+            staffActive.setBackground(new Color(78, 45, 17));
+
+            stockLabel.setBackground(new Color(78, 45, 17));
+            stockActive.setBackground(new Color(78, 45, 17));
+
+            userPnl.setBackground(new Color(78, 45, 17));
+            userActive.setBackground(new Color(78, 45, 17));
+
+            dashPnl.setBackground(new Color(78, 45, 17));
+            dashActive.setBackground(new Color(78, 45, 17));
+
+            supplierPnl.setBackground(new Color(102, 51, 0));
+            supplierLayp.add(supplierBlink, 1);
+            supplierLayp.add(supplierActive, 0);
+            supplierActive.setBackground(new Color(255, 255, 255));
+            supplierPnl.setBackground(new Color(102, 51, 0));
+        }
     }//GEN-LAST:event_supplierPnlMouseClicked
 
     private void supplierPnlMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_supplierPnlMouseEntered
@@ -10140,7 +10204,7 @@ public class Main_Menu extends javax.swing.JFrame {
             AppHelper.permissionMessage();
         } else {
             if(ordering) {
-                JOptionPane.showMessageDialog(null, "You can't make another order!");
+                AppHelper.orderMessage();
             } else {
                 dynamicDashPane.removeAll();
                 dynamicDashPane.repaint();
@@ -10154,24 +10218,67 @@ public class Main_Menu extends javax.swing.JFrame {
                 header.setForeground(Color.WHITE);
                 header.setBackground(Color.black);
                 cbOrderProduct.removeAllItems();
-                AppHelper.getCombos("name", "products", "user_id", userId)
-                    .forEach((r) -> cbOrderProduct.addItem(r));
+                String sql = "SELECT name FROM products "
+                    + "WHERE branch_id IN (" + branchIds + ") "
+                    + "ORDER BY name";
+                try {
+                    ResultSet rs = AppHelper.selectQuery(sql);
+                    while(rs.next())
+                        cbOrderProduct.addItem(rs.getString("name"));
+                } catch (SQLException ex) {
+                    Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+                }
                 cbOrderProduct.setSelectedIndex(0);
+                
+                cbOrderSize.removeAllItems();
+                String sqlSize = "SELECT product_variants.size FROM product_variants "
+                    + "INNER JOIN products ON product_variants.product_id = products.id "                        
+                    + "WHERE LOWER(products.name) = ?";
+                try {
+                    ResultSet rsSize = AppHelper.selectQuery(sqlSize, String.valueOf(cbOrderProduct.getSelectedItem()));
+                    while(rsSize.next())
+                        cbOrderSize.addItem(rsSize.getString("size"));
+                } catch (SQLException ex) {
+                    Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                cbOrderSize.setSelectedIndex(0);
+                
+                int pId = AppHelper.getId(
+                    String.valueOf(cbOrderProduct.getSelectedItem()), 
+                    "id", 
+                    "products", 
+                    "name"
+                );
+                String pSize = String.valueOf(cbOrderSize.getSelectedItem());               
+
+                ImageIcon img = new ImageIcon(System.getProperty("user.dir") + AppHelper.getImage(pId, pSize));
+                Image newImg = img.getImage().getScaledInstance(orderProImg.getWidth(), orderProImg.getHeight(), Image.SCALE_SMOOTH);
+                ImageIcon myImg = new ImageIcon(newImg);
+                orderProImg.setIcon(myImg);               
+                
                 Date currentDate = new Date();
 
                 DateFormat dtf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 myOrder.setDate(dtf.format(currentDate));
                 myOrder.setStatus("pending");
-                myOrder.setUserId(userId);
+                myOrder.setUserId(userId);                
                 int waitNum;
+                int oNum;
                 if(AppHelper.getLastRecordId("orders") == 0) {
-                    waitNum = AppHelper.getLastRecordId("orders");
+                    waitNum = AppHelper.getLastRecordId("orders");                   
                     waitNum++;
+                    oNum = AppHelper.getLastRecordId("orders");
+                    oNum++;
                 } else {
                     waitNum = AppHelper.getWaitNum();
+                    if(waitNum >= 100)
+                        waitNum = 0;
                     waitNum++;
+                    oNum = AppHelper.getLastRecordId("orders");
+                    oNum++;
                 }
                 myOrder.setWaitingNum(waitNum);
+                myOrder.setNumber(String.format("%06d", oNum));
                 myOrder.insert();
                 ordering = true;
             }
@@ -10239,6 +10346,38 @@ public class Main_Menu extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Order have been paid!");
         }
     }//GEN-LAST:event_btnOrderPaidMouseClicked
+
+    private void cbOrderProductItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbOrderProductItemStateChanged
+        // TODO add your handling code here:
+        if(String.valueOf(cbOrderProduct.getSelectedItem()) == null)
+            System.out.println(String.valueOf(cbOrderProduct.getSelectedItem()));
+//        if(String.valueOf(cbOrderProduct.getSelectedItem()) != null) {
+//            cbOrderSize.removeAllItems();
+//            String sqlSize = "SELECT product_variants.size FROM product_variants "
+//                + "INNER JOIN products ON product_variants.product_id = products.id "                        
+//                + "WHERE LOWER(products.name) = ?";
+//            try {
+//                ResultSet rsSize = AppHelper.selectQuery(sqlSize, String.valueOf(cbOrderProduct.getSelectedItem()));
+//                while(rsSize.next())
+//                    cbOrderSize.addItem(rsSize.getString("size"));
+//            } catch (SQLException ex) {
+//                Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//            System.out.println(String.valueOf(cbOrderProduct.getSelectedItem()));
+//            int pId = AppHelper.getId(
+//                String.valueOf(cbOrderProduct.getSelectedItem()), 
+//                "id", 
+//                "products", 
+//                "name"
+//            );
+//            String pSize = String.valueOf(cbOrderSize.getSelectedItem());               
+//    
+//            ImageIcon img = new ImageIcon(System.getProperty("user.dir") + AppHelper.getImage(pId, pSize));
+//            Image newImg = img.getImage().getScaledInstance(orderProImg.getWidth(), orderProImg.getHeight(), Image.SCALE_SMOOTH);
+//            ImageIcon myImg = new ImageIcon(newImg);
+//            orderProImg.setIcon(myImg); 
+//        }   
+    }//GEN-LAST:event_cbOrderProductItemStateChanged
 
     /**
      * @param args the command line arguments

@@ -82,6 +82,18 @@ public class AppHelper {
         return null;
     }
     
+    public static ResultSet selectQuery(String sql, String frtData) {
+        PreparedStatement stmt = null;
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setString(1, frtData);
+            return stmt.executeQuery();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+        return null;
+    }
+    
     public static ResultSet selectQuery(String sql, int frtData, int secData) {
         PreparedStatement stmt = null;
         try {
@@ -191,6 +203,10 @@ public class AppHelper {
         JOptionPane.showMessageDialog(null, "Data already existed!");
     }
     
+    public static void orderMessage() {
+        JOptionPane.showMessageDialog(null, "You're in ordering mode!");
+    }
+    
     public static ArrayList<String> getCombos(String col, String tblName) {
         ArrayList<String> list = new ArrayList<>();
         PreparedStatement st;
@@ -231,6 +247,26 @@ public class AppHelper {
         return null;
     }
     
+    public static String getImage(int proId, String size) {
+        PreparedStatement st;
+        ResultSet rs;
+        String sql = "SELECT product_variants.image FROM product_variants "
+            + "INNER JOIN products ON product_variants.product_id = products.id "
+            + "WHERE products.id = ? "
+            + "AND LOWER(product_variants.size) = ?";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
+            st.setInt(1, proId);
+            st.setString(2, size.toLowerCase());
+            rs = st.executeQuery();
+            if(rs.next())
+                return rs.getString("image");
+        } catch (SQLException ex) {
+            Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     public static ArrayList<String> getCombos(String col, String tblName, String whereCol, int id) {
         ArrayList<String> list = new ArrayList<>();
         PreparedStatement st;
@@ -251,6 +287,25 @@ public class AppHelper {
         return null;
     }
     
+    public static ArrayList<String> getCombos(String col, String tblName, String whereCol, String ids) {
+        System.out.println(ids);
+        ArrayList<String> list = new ArrayList<>();
+        PreparedStatement st;
+        ResultSet rs;
+        String sql = "SELECT `" + col + "` FROM `" + tblName + "` "
+            + "WHERE `" + whereCol + "` IN (?)";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
+            st.setString(1, ids);
+            rs = st.executeQuery();
+            while(rs.next())
+                list.add(rs.getString(col));
+        } catch (SQLException ex) {
+            Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return list;
+    }
+    
     public static Integer getId(String data, String colName, String tblName, String colWhere) {
         PreparedStatement st;
         ResultSet rs;
@@ -266,6 +321,25 @@ public class AppHelper {
             Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
+    }
+    
+    public static ArrayList<Integer> getIds(int data, String colName, String tblName, String colWhere) {
+        ArrayList<Integer> ids = new ArrayList<>();
+        PreparedStatement st;
+        ResultSet rs;
+        String sql = "SELECT " + colName + " FROM " + tblName
+            + " WHERE " + colWhere + " = ?";
+        try {
+            st = DbConn.getConnection().prepareStatement(sql);
+            st.setInt(1, data);
+            rs = st.executeQuery();
+            while(rs.next()) {
+                ids.add(rs.getInt(colName));   
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return ids;
     }
     
     public static String getName(int id, String colName, String tblName, String colWhere) {

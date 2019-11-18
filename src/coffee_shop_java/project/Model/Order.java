@@ -28,6 +28,7 @@ public class Order extends Action {
     PreparedStatement stmt;
     private int id;
     private int tblId;
+    private String number;
     private int waitingNum;
     private String status;
     private String date;
@@ -37,9 +38,10 @@ public class Order extends Action {
     private int branchId;
     private int inserted;
     
-    public Order(int tblId, int id, int waitingNum, String status) {
+    public Order(int tblId, int id, String number, int waitingNum, String status) {
         this.tblId = tblId;
         this.id = id;
+        this.number = number;
         this.waitingNum = waitingNum;
         this.status = status;        
     }
@@ -50,14 +52,16 @@ public class Order extends Action {
             + "`date`, "
             + "`status`, "
             + "`user_id`, "
+            + "`number`, "
             + "`waiting_number`"
-            + ") VALUES(?, ?, ?, ?)";
+            + ") VALUES(?, ?, ?, ?, ?)";
         try {        
             stmt = DbConn.getConnection().prepareStatement(sql);
             stmt.setString(1, date);
             stmt.setString(2, status);
             stmt.setInt(3, userId);
-            stmt.setInt(4, waitingNum);
+            stmt.setString(4, number);
+            stmt.setInt(5, waitingNum);
             int i = stmt.executeUpdate();
             if(i > 0) {
                 this.id = AppHelper.getLastRecordId("orders");
