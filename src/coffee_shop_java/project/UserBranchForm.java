@@ -26,15 +26,19 @@ public class UserBranchForm extends javax.swing.JFrame {
      * Creates new form UserBranchForm
      */
     private int userId;
+    private int roleId;
+    private String companyIds;
     UserBranch myUB = new UserBranch();
     
     public UserBranchForm() {
         initComponents();
     }
     
-    public UserBranchForm(int uId) {
+    public UserBranchForm(int uId, int rId, String comIds) {
         initComponents();
         userId = uId;
+        roleId = rId;
+        companyIds = comIds;
     }
     
     private void showUserBranch(ArrayList<UserBranch> list) {
@@ -431,30 +435,70 @@ public class UserBranchForm extends javax.swing.JFrame {
 
     private void btnAddUserBranchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddUserBranchMouseClicked
         // TODO add your handling code here:
-        int uId = AppHelper.getId(
-            String.valueOf(cbUser.getSelectedItem()), 
-            "id", 
-            "users", 
-            "fullname"
-        );
-        int bId = AppHelper.getId(
-            String.valueOf(cbBranch.getSelectedItem()), 
-            "id", 
-            "branches", 
-            "name"
-        );
-        
-        if(bId <= 0 || uId <= 0) {
-            JOptionPane.showMessageDialog(null, "Wrong user id or branch id!");
+        if(!AppHelper.currentUserCan(roleId, "user_branches", "create")) {
+            AppHelper.permissionMessage();
         } else {
-            myUB.setUserId(uId);
-            myUB.setBranchId(bId);
-            myUB.insert();
+            int uId = AppHelper.getId(
+                String.valueOf(cbUser.getSelectedItem()), 
+                "id", 
+                "users", 
+                "fullname"
+            );
+            int bId = AppHelper.getId(
+                String.valueOf(cbBranch.getSelectedItem()), 
+                "id", 
+                "branches", 
+                "name"
+            );
+            
+            Boolean checkExist = false;
+            String sql = "SELECT * FROM `user_branches` "
+                + "WHERE `user_id` = ? AND `branch_id` = ?";
+            ResultSet rs = AppHelper.selectQuery(sql, uId, bId);
+            try {
+                if(rs.next())
+                    checkExist = true;
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+            if(checkExist.equals(true)) {
+                JOptionPane.showMessageDialog(null, "User branch already exist!");
+                checkExist = false;
+            } else {
+                if(bId <= 0 || uId <= 0) {
+                    JOptionPane.showMessageDialog(null, "Wrong user id or branch id!");
+                } else {
+                    myUB.setUserId(uId);
+                    myUB.setBranchId(bId);
+                    myUB.insert();
+                }
+            }
         }
     }//GEN-LAST:event_btnAddUserBranchMouseClicked
 
     private void btnDelUserBranchMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDelUserBranchMouseClicked
         // TODO add your handling code here:
+        if(!AppHelper.currentUserCan(roleId, "user_branches", "delete")) {
+            AppHelper.permissionMessage();
+        } else {
+            int row = tblUserBranch.getSelectedRow();
+            if(row < 0)
+                JOptionPane.showMessageDialog(null, "Please select any user branch first to delete!");
+            else {
+                int id = (int)tblUserBranch.getValueAt(row, 3);
+                int res = JOptionPane.showConfirmDialog(
+                    this, 
+                    "Are you sure you want to delete this?", 
+                    "Confirm message", 
+                    JOptionPane.YES_NO_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE
+                );
+                if(res == JOptionPane.YES_OPTION) {
+                    myUB.delete(id);
+                    showUserBranch(getAllUserBranches());
+                }
+            }
+        }
     }//GEN-LAST:event_btnDelUserBranchMouseClicked
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
@@ -469,7 +513,7 @@ public class UserBranchForm extends javax.swing.JFrame {
         header.setForeground(Color.WHITE);
         header.setBackground(Color.black);
         cbBranch.removeAllItems();
-        AppHelper.getComboBranch(userId)
+        AppHelper.getComboBranch(companyIds)
             .forEach((r) -> cbBranch.addItem(AppHelper.toCapitalize(r)));
         cbUser.removeAllItems();
         AppHelper.getCombos("fullname", "users")

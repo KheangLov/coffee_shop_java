@@ -225,7 +225,7 @@ public class AppHelper {
         return null;
     }
     
-    public static ArrayList<String> getComboBranch(int userId) {
+    public static ArrayList<String> getComboBranch(String companyIds) {
         ArrayList<String> list = new ArrayList<>();
         PreparedStatement st;
         ResultSet rs;
@@ -233,10 +233,9 @@ public class AppHelper {
             + "INNER JOIN companies ON branches.company_id = companies.id "
             + "INNER JOIN user_branches ON branches.id = user_branches.branch_id "
             + "INNER JOIN users ON user_branches.user_id = users.id "
-            + "WHERE users.id = ?";
+            + "WHERE companies.id IN (" + companyIds + ")";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
-            st.setInt(1, userId);
             rs = st.executeQuery();
             while(rs.next())
                 list.add(rs.getString("name"));

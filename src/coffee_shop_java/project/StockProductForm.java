@@ -46,6 +46,7 @@ public class StockProductForm extends javax.swing.JFrame {
         header.setOpaque(false);
         header.setForeground(Color.WHITE);
         header.setBackground(Color.black);
+        
         cbStock.removeAllItems();
         AppHelper.getCombos("name", "stocks", "user_id", userId)
             .forEach((r) -> cbStock.addItem(AppHelper.toCapitalize(r)));
@@ -95,13 +96,13 @@ public class StockProductForm extends javax.swing.JFrame {
                 ResultSet rs = AppHelper.selectQuery(sql, userId, proVarId);
                 StockProduct stockPro;
                 int i = 0;            
-                if(rs.next()) {
+                while (rs.next()) {
                     i++;
                     stockPro = new StockProduct(
                         i,
                         rs.getString("stock_name"),
                         rs.getString("product_name"),
-                        rs.getDouble("usage"),
+                        rs.getDouble("usages"),
                         rs.getInt("id")
                     );
                     System.out.print(stockPro);
@@ -129,14 +130,14 @@ public class StockProductForm extends javax.swing.JFrame {
         pnlWrapper = new javax.swing.JPanel();
         pnlFormAdd = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        btnAddStockPro = new javax.swing.JPanel();
+        btnStockProActions = new javax.swing.JPanel();
         lblPer = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         txtUsage = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         cbStock = new javax.swing.JComboBox<>();
-        btnUpdateStockPro = new javax.swing.JPanel();
+        btnDelStockPro = new javax.swing.JPanel();
         lblPer3 = new javax.swing.JLabel();
         pnlContent = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -177,10 +178,10 @@ public class StockProductForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel1.setText("Stock:");
 
-        btnAddStockPro.setBackground(new java.awt.Color(144, 202, 249));
-        btnAddStockPro.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnStockProActions.setBackground(new java.awt.Color(144, 202, 249));
+        btnStockProActions.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnAddStockProMouseClicked(evt);
+                btnStockProActionsMouseClicked(evt);
             }
         });
 
@@ -188,18 +189,18 @@ public class StockProductForm extends javax.swing.JFrame {
         lblPer.setForeground(new java.awt.Color(255, 255, 255));
         lblPer.setText("ADD");
 
-        javax.swing.GroupLayout btnAddStockProLayout = new javax.swing.GroupLayout(btnAddStockPro);
-        btnAddStockPro.setLayout(btnAddStockProLayout);
-        btnAddStockProLayout.setHorizontalGroup(
-            btnAddStockProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddStockProLayout.createSequentialGroup()
+        javax.swing.GroupLayout btnStockProActionsLayout = new javax.swing.GroupLayout(btnStockProActions);
+        btnStockProActions.setLayout(btnStockProActionsLayout);
+        btnStockProActionsLayout.setHorizontalGroup(
+            btnStockProActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnStockProActionsLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(lblPer)
                 .addContainerGap(25, Short.MAX_VALUE))
         );
-        btnAddStockProLayout.setVerticalGroup(
-            btnAddStockProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnAddStockProLayout.createSequentialGroup()
+        btnStockProActionsLayout.setVerticalGroup(
+            btnStockProActionsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnStockProActionsLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblPer)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -255,29 +256,29 @@ public class StockProductForm extends javax.swing.JFrame {
         cbStock.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(255, 255, 255), 0));
         cbStock.setLightWeightPopupEnabled(false);
 
-        btnUpdateStockPro.setBackground(new java.awt.Color(19, 132, 150));
-        btnUpdateStockPro.addMouseListener(new java.awt.event.MouseAdapter() {
+        btnDelStockPro.setBackground(new java.awt.Color(200, 35, 51));
+        btnDelStockPro.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                btnUpdateStockProMouseClicked(evt);
+                btnDelStockProMouseClicked(evt);
             }
         });
 
         lblPer3.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
         lblPer3.setForeground(new java.awt.Color(255, 255, 255));
-        lblPer3.setText("UPDATE");
+        lblPer3.setText("DELETE");
 
-        javax.swing.GroupLayout btnUpdateStockProLayout = new javax.swing.GroupLayout(btnUpdateStockPro);
-        btnUpdateStockPro.setLayout(btnUpdateStockProLayout);
-        btnUpdateStockProLayout.setHorizontalGroup(
-            btnUpdateStockProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnUpdateStockProLayout.createSequentialGroup()
+        javax.swing.GroupLayout btnDelStockProLayout = new javax.swing.GroupLayout(btnDelStockPro);
+        btnDelStockPro.setLayout(btnDelStockProLayout);
+        btnDelStockProLayout.setHorizontalGroup(
+            btnDelStockProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnDelStockProLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addComponent(lblPer3)
                 .addGap(25, 25, 25))
         );
-        btnUpdateStockProLayout.setVerticalGroup(
-            btnUpdateStockProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(btnUpdateStockProLayout.createSequentialGroup()
+        btnDelStockProLayout.setVerticalGroup(
+            btnDelStockProLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnDelStockProLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lblPer3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -293,9 +294,9 @@ public class StockProductForm extends javax.swing.JFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, pnlFormAddLayout.createSequentialGroup()
-                        .addComponent(btnAddStockPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                        .addComponent(btnUpdateStockPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnStockProActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
+                        .addComponent(btnDelStockPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtUsage, javax.swing.GroupLayout.Alignment.LEADING)
@@ -319,8 +320,8 @@ public class StockProductForm extends javax.swing.JFrame {
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(pnlFormAddLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(btnAddStockPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnUpdateStockPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnStockProActions, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnDelStockPro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25))
         );
 
@@ -465,7 +466,7 @@ public class StockProductForm extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_exitIconMouseClicked
 
-    private void btnAddStockProMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAddStockProMouseClicked
+    private void btnStockProActionsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnStockProActionsMouseClicked
         // TODO add your handling code here:        
         if(txtUsage.getText().trim().equals("")) {
             AppHelper.fieldRequiredMsg();
@@ -478,23 +479,60 @@ public class StockProductForm extends javax.swing.JFrame {
                 "stocks", 
                 "name"
             );
+            Boolean checkExist = false;
             
-            myStockPro.setUsage(usage);
-            myStockPro.setStockId(sId);
-            myStockPro.setProVarId(proVarId);
-            myStockPro.setUserId(userId);
-            myStockPro.insert();
-            this.dispose();
+            String sql = "SELECT * FROM stock_products "
+                + "WHERE stock_id = ? AND product_variant_id = ?";
+            
+            ResultSet rs = AppHelper.selectQuery(sql, sId, proVarId);
+            try {
+                if(rs.next())
+                    checkExist = true;
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, ex);
+            }
+            if(checkExist.equals(true)) {
+                JOptionPane.showMessageDialog(null, "Stock products already exist!");
+                checkExist = false;
+            } else {
+                myStockPro.setUsage(usage);
+                myStockPro.setStockId(sId);
+                myStockPro.setProVarId(proVarId);
+                myStockPro.setUserId(userId);
+                myStockPro.insert();
+                this.dispose();
+            }
         }
-    }//GEN-LAST:event_btnAddStockProMouseClicked
+    }//GEN-LAST:event_btnStockProActionsMouseClicked
 
     private void txtUsageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsageActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsageActionPerformed
 
-    private void btnUpdateStockProMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnUpdateStockProMouseClicked
+    private void btnDelStockProMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnDelStockProMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnUpdateStockProMouseClicked
+        if(!AppHelper.currentUserCan(roleId, "stock_products", "delete")) {
+            AppHelper.permissionMessage();
+        } else {
+            int row = tblStockPro.getSelectedRow();
+            if(row < 0)
+                JOptionPane.showMessageDialog(null, "Please select any stock product first to delete!");
+            else {
+                int id = (int)tblStockPro.getValueAt(row, 4);
+                int res = JOptionPane.showConfirmDialog(
+                    this, 
+                    "Are you sure you want to delete this?", 
+                    "Confirm message", 
+                    JOptionPane.YES_NO_OPTION, 
+                    JOptionPane.QUESTION_MESSAGE
+                );
+                if(res == JOptionPane.YES_OPTION) {
+                    myStockPro.delete(id);
+                    showStockProduct(getAllStockProducts());
+                }
+            }
+        }
+    }//GEN-LAST:event_btnDelStockProMouseClicked
 
     private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
         // TODO add your handling code here:
@@ -546,8 +584,8 @@ public class StockProductForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel btnAddStockPro;
-    private javax.swing.JPanel btnUpdateStockPro;
+    private javax.swing.JPanel btnDelStockPro;
+    private javax.swing.JPanel btnStockProActions;
     private javax.swing.JComboBox<String> cbStock;
     private javax.swing.JLabel exitIcon;
     private javax.swing.JLabel jLabel1;

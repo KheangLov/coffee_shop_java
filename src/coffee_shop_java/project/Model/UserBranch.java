@@ -68,7 +68,19 @@ public class UserBranch extends Action {
 
     @Override
     public void delete(int id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        String sql = "DELETE FROM `user_branches` WHERE `id` = ?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setInt(1, id);
+            int i = stmt.executeUpdate();
+            if(i > 0) {
+                JOptionPane.showMessageDialog(null, "Data deleted!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data failed to delete!");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
     }
     
 }

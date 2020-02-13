@@ -8,6 +8,7 @@ package coffee_shop_java.project.Model;
 import coffee_shop_java.project.Action.Action;
 import coffee_shop_java.project.Helper.AppHelper;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -90,7 +91,40 @@ public class Stock extends Action {
 
     @Override
     public void update(int id) {
-        
+        String sql = "UPDATE stocks SET "
+            + "`name` = ?, "
+            + "`expired_date` = ?, "
+            + "`qty` = ?, "
+            + "`measure_unit` = ?, "
+            + "`alert_qty` = ?, "
+            + "`alerted` = ?, "
+            + "`stock_category_id` = ?, "
+            + "`company_id` = ?, "
+            + "`branch_id` = ?, "
+            + "`user_id` = ? "
+            + "WHERE `id` = ?";
+        try {        
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setString(1, name);
+            stmt.setString(2, expiredDate);
+            stmt.setDouble(3, qty);
+            stmt.setString(4, measureUnit);
+            stmt.setDouble(5, alertQty);
+            stmt.setInt(6, alerted);
+            stmt.setInt(7, stockCateId);
+            stmt.setInt(8, companyId);
+            stmt.setInt(9, branchId);
+            stmt.setInt(10, userId);
+            stmt.setInt(11, id);
+            int i = stmt.executeUpdate();
+            if(i > 0) {
+                JOptionPane.showMessageDialog(null, "Data saved!");
+            } else {
+                JOptionPane.showMessageDialog(null, "Data failed to save!");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Stock.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

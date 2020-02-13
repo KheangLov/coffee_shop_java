@@ -143,9 +143,9 @@
                           <Component id="jPanel2" alignment="1" pref="290" max="32767" attributes="0"/>
                           <Component id="jPanel1" alignment="0" pref="290" max="32767" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
-                              <Component id="btnAddStockPro" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="42" max="32767" attributes="0"/>
-                              <Component id="btnUpdateStockPro" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnStockProActions" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace pref="54" max="32767" attributes="0"/>
+                              <Component id="btnDelStockPro" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="jLabel1" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -173,8 +173,8 @@
                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="btnAddStockPro" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnUpdateStockPro" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnStockProActions" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnDelStockPro" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                   </Group>
@@ -190,14 +190,14 @@
                 <Property name="text" type="java.lang.String" value="Stock:"/>
               </Properties>
             </Component>
-            <Container class="javax.swing.JPanel" name="btnAddStockPro">
+            <Container class="javax.swing.JPanel" name="btnStockProActions">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                   <Color blue="f9" green="ca" red="90" type="rgb"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnAddStockProMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnStockProActionsMouseClicked"/>
               </Events>
 
               <Layout>
@@ -329,14 +329,14 @@
                 <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
               </AuxValues>
             </Component>
-            <Container class="javax.swing.JPanel" name="btnUpdateStockPro">
+            <Container class="javax.swing.JPanel" name="btnDelStockPro">
               <Properties>
                 <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-                  <Color blue="96" green="84" red="13" type="rgb"/>
+                  <Color blue="33" green="23" red="c8" type="rgb"/>
                 </Property>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnUpdateStockProMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="btnDelStockProMouseClicked"/>
               </Events>
 
               <Layout>
@@ -368,7 +368,7 @@
                     <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="ff" green="ff" red="ff" type="rgb"/>
                     </Property>
-                    <Property name="text" type="java.lang.String" value="UPDATE"/>
+                    <Property name="text" type="java.lang.String" value="DELETE"/>
                   </Properties>
                 </Component>
               </SubComponents>
