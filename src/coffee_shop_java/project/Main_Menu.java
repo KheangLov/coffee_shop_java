@@ -2144,7 +2144,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(lineSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 653, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -2517,7 +2517,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGroup(comPanelLayout.createSequentialGroup()
                     .addGap(25, 25, 25)
                     .addGroup(comPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(dynamicComPnl, javax.swing.GroupLayout.DEFAULT_SIZE, 1103, Short.MAX_VALUE)
+                        .addComponent(dynamicComPnl)
                         .addGroup(comPanelLayout.createSequentialGroup()
                             .addComponent(btnComAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
@@ -2643,7 +2643,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(lineSearch1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -2916,7 +2916,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addComponent(LineTxtAddress1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btnBranch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(222, Short.MAX_VALUE))
+                .addContainerGap(233, Short.MAX_VALUE))
         );
 
         dynamicBranchPnl.add(pnlBranchAction, "card2");
@@ -3090,7 +3090,7 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGroup(branchPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(branchPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dynamicBranchPnl, javax.swing.GroupLayout.DEFAULT_SIZE, 1103, Short.MAX_VALUE)
+                    .addComponent(dynamicBranchPnl)
                     .addGroup(branchPanelLayout.createSequentialGroup()
                         .addComponent(btnBranchAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -3214,7 +3214,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 642, Short.MAX_VALUE)
+                .addComponent(jScrollPane10, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -3559,7 +3559,7 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addGroup(pnlProLayout.createSequentialGroup()
                         .addComponent(jLabel44)
                         .addGap(63, 63, 63)))
-                .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                .addComponent(jScrollPane13, javax.swing.GroupLayout.DEFAULT_SIZE, 213, Short.MAX_VALUE)
                 .addGap(25, 25, 25))
         );
 
@@ -3849,7 +3849,7 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGap(3, 3, 3)
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 326, Short.MAX_VALUE)
+                        .addComponent(jScrollPane11, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                         .addGap(25, 25, 25))
                     .addGroup(pnlProCateLayout.createSequentialGroup()
                         .addComponent(btnEditProCate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -4303,8 +4303,8 @@ public class Main_Menu extends javax.swing.JFrame {
                             .addGroup(pnlProVarLayout.createSequentialGroup()
                                 .addComponent(jLabel42)
                                 .addGap(63, 63, 63)))
-                        .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 227, Short.MAX_VALUE))
-                    .addComponent(jDesktopPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
+                        .addComponent(jScrollPane12, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE))
+                    .addComponent(jDesktopPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 533, Short.MAX_VALUE))
                 .addGap(25, 25, 25))
         );
 
@@ -4479,7 +4479,7 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGroup(proPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(proPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dynamicProPane, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(dynamicProPane, javax.swing.GroupLayout.DEFAULT_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(proPanelLayout.createSequentialGroup()
                         .addComponent(btnProduct, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -4517,7 +4517,7 @@ public class Main_Menu extends javax.swing.JFrame {
         );
         staffPanelLayout.setVerticalGroup(
             staffPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 881, Short.MAX_VALUE)
+            .addGap(0, 884, Short.MAX_VALUE)
         );
 
         dynamicPanel.add(staffPanel, "card5");
@@ -4967,7 +4967,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
+                .addComponent(jScrollPane14, javax.swing.GroupLayout.DEFAULT_SIZE, 660, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -5312,7 +5312,7 @@ public class Main_Menu extends javax.swing.JFrame {
                     .addGroup(pnlPro1Layout.createSequentialGroup()
                         .addComponent(jLabel46)
                         .addGap(63, 63, 63)))
-                .addComponent(jScrollPane15, javax.swing.GroupLayout.DEFAULT_SIZE, 215, Short.MAX_VALUE)
+                .addComponent(jScrollPane15, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
                 .addGap(25, 25, 25))
         );
 
@@ -5602,7 +5602,7 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGap(3, 3, 3)
                         .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
+                        .addComponent(jScrollPane16, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
                         .addGap(25, 25, 25))
                     .addGroup(pnlProCate1Layout.createSequentialGroup()
                         .addComponent(btnEditProCate1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -5720,6 +5720,11 @@ public class Main_Menu extends javax.swing.JFrame {
 
         cbOrderSize.setFont(new java.awt.Font("Segoe UI", 0, 26)); // NOI18N
         cbOrderSize.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Large", "Medium", "Small" }));
+        cbOrderSize.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                cbOrderSizeItemStateChanged(evt);
+            }
+        });
 
         jLabel54.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel54.setText("Product:");
@@ -6049,12 +6054,12 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jLabel57)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane17, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)
+                        .addComponent(jScrollPane17, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addGroup(pnlMakeOrderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jDesktopPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 620, Short.MAX_VALUE))
+                    .addComponent(jDesktopPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 622, Short.MAX_VALUE))
                 .addGap(28, 28, 28))
         );
 
@@ -6130,7 +6135,7 @@ public class Main_Menu extends javax.swing.JFrame {
             .addGroup(dashPanelLayout.createSequentialGroup()
                 .addGap(25, 25, 25)
                 .addGroup(dashPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(dynamicDashPane, javax.swing.GroupLayout.DEFAULT_SIZE, 1103, Short.MAX_VALUE)
+                    .addComponent(dynamicDashPane)
                     .addGroup(dashPanelLayout.createSequentialGroup()
                         .addComponent(btnMakeOrder, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -6242,7 +6247,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 652, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -6532,7 +6537,7 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addGap(3, 3, 3)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 336, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 339, Short.MAX_VALUE)
                         .addGap(25, 25, 25))
                     .addGroup(pnlStockCateLayout.createSequentialGroup()
                         .addComponent(btnEditStockCate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -6806,7 +6811,7 @@ public class Main_Menu extends javax.swing.JFrame {
                         .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(26, 26, 26)
                 .addComponent(btnStock, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(392, Short.MAX_VALUE))
+                .addContainerGap(395, Short.MAX_VALUE))
         );
 
         dynamicStockPane.add(pnlStockImport, "card2");
@@ -7141,7 +7146,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGap(0, 0, 0)
                 .addComponent(lineSearch2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 650, Short.MAX_VALUE)
+                .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 655, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -7399,7 +7404,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addComponent(LineTxtAddress2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnSup, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         dynamicSupPnl.add(pnlSupAction, "card2");
@@ -7542,7 +7547,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 .addGroup(supplierPanelLayout.createSequentialGroup()
                     .addGap(25, 25, 25)
                     .addGroup(supplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(dynamicSupPnl, javax.swing.GroupLayout.DEFAULT_SIZE, 1103, Short.MAX_VALUE)
+                        .addComponent(dynamicSupPnl)
                         .addGroup(supplierPanelLayout.createSequentialGroup()
                             .addComponent(btnSupAdd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(18, 18, 18)
@@ -7555,7 +7560,7 @@ public class Main_Menu extends javax.swing.JFrame {
         );
         supplierPanelLayout.setVerticalGroup(
             supplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 881, Short.MAX_VALUE)
+            .addGap(0, 884, Short.MAX_VALUE)
             .addGroup(supplierPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(supplierPanelLayout.createSequentialGroup()
                     .addGap(25, 25, 25)
@@ -10280,20 +10285,20 @@ public class Main_Menu extends javax.swing.JFrame {
 
     private void cbOrderProductItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbOrderProductItemStateChanged
         // TODO add your handling code here:
-        if(String.valueOf(cbOrderProduct.getSelectedItem()) != null)
-            System.out.println(String.valueOf(cbOrderProduct.getSelectedItem()));
-//        if(String.valueOf(cbOrderProduct.getSelectedItem()) != null) {
-//            cbOrderSize.removeAllItems();
-//            String sqlSize = "SELECT product_variants.size FROM product_variants "
-//                + "INNER JOIN products ON product_variants.product_id = products.id "                        
-//                + "WHERE LOWER(products.name) = ?";
-//            try {
-//                ResultSet rsSize = AppHelper.selectQuery(sqlSize, String.valueOf(cbOrderProduct.getSelectedItem()));
-//                while(rsSize.next())
-//                    cbOrderSize.addItem(rsSize.getString("size"));
-//            } catch (SQLException ex) {
-//                Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
-//            }
+        if(String.valueOf(cbOrderProduct.getSelectedItem()) != null) {
+            String selectedProduct = String.valueOf(cbOrderProduct.getSelectedItem());
+            String sqlSize = "SELECT product_variants.size FROM product_variants "
+                + "INNER JOIN products ON product_variants.product_id = products.id "                        
+                + "WHERE LOWER(products.name) = ?";
+            try {
+                ResultSet rsSize = AppHelper.selectQuery(sqlSize, selectedProduct);
+                cbOrderSize.removeAllItems();
+                while(rsSize.next()) {
+                    cbOrderSize.addItem(rsSize.getString("size"));
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+            }
 //            System.out.println(String.valueOf(cbOrderProduct.getSelectedItem()));
 //            int pId = AppHelper.getId(
 //                String.valueOf(cbOrderProduct.getSelectedItem()), 
@@ -10307,7 +10312,7 @@ public class Main_Menu extends javax.swing.JFrame {
 //            Image newImg = img.getImage().getScaledInstance(orderProImg.getWidth(), orderProImg.getHeight(), Image.SCALE_SMOOTH);
 //            ImageIcon myImg = new ImageIcon(newImg);
 //            orderProImg.setIcon(myImg); 
-//        }   
+        } 
     }//GEN-LAST:event_cbOrderProductItemStateChanged
 
     private void btnImpStockMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnImpStockMouseClicked
@@ -10333,6 +10338,30 @@ public class Main_Menu extends javax.swing.JFrame {
     private void cbProVarProductPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_cbProVarProductPropertyChange
         // TODO add your handling code here:
     }//GEN-LAST:event_cbProVarProductPropertyChange
+
+    private void cbOrderSizeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_cbOrderSizeItemStateChanged
+        // TODO add your handling code here:
+        if(String.valueOf(cbOrderSize.getSelectedItem()) != null && String.valueOf(cbOrderProduct.getSelectedItem()) != null) {
+            String selectedSize = String.valueOf(cbOrderSize.getSelectedItem());
+            String selectedProduct = String.valueOf(cbOrderProduct.getSelectedItem());
+            String sql = "SELECT product_variants.image, product_variants.size, products.id FROM product_variants "
+                + "INNER JOIN products ON product_variants.product_id = products.id "
+                + "WHERE LOWER(products.name) = ? AND LOWER(product_variants.size) = ?";
+            
+            ResultSet rs = AppHelper.selectQuery(sql, selectedProduct, selectedSize);
+            
+            try {
+                if (rs.next()) {
+                    ImageIcon img = new ImageIcon(System.getProperty("user.dir") + AppHelper.getImage(rs.getInt("id"), rs.getString("size")));
+                    Image newImg = img.getImage().getScaledInstance(orderProImg.getWidth(), orderProImg.getHeight(), Image.SCALE_SMOOTH);
+                    ImageIcon myImg = new ImageIcon(newImg);
+                    orderProImg.setIcon(myImg); 
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(AppHelper.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_cbOrderSizeItemStateChanged
 
     /**
      * @param args the command line arguments

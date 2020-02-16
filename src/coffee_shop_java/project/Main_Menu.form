@@ -4573,7 +4573,7 @@
                                           </Group>
                                           <Component id="jScrollPane12" pref="234" max="32767" attributes="0"/>
                                       </Group>
-                                      <Component id="jDesktopPane2" pref="531" max="32767" attributes="0"/>
+                                      <Component id="jDesktopPane2" pref="533" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
@@ -7493,7 +7493,7 @@
                                               <Component id="jLabel55" min="-2" pref="42" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <Component id="jDesktopPane3" pref="620" max="32767" attributes="0"/>
+                                      <Component id="jDesktopPane3" pref="622" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
                               </Group>
@@ -7682,6 +7682,9 @@
                               </StringArray>
                             </Property>
                           </Properties>
+                          <Events>
+                            <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="cbOrderSizeItemStateChanged"/>
+                          </Events>
                           <AuxValues>
                             <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
                           </AuxValues>
