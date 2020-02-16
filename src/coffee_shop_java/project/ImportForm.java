@@ -350,6 +350,7 @@ public class ImportForm extends javax.swing.JFrame {
             
             Double newQty = myStock.getQty() + qty;
             myStock.update(sId, "qty", newQty);
+            myStock.update(sId, "alerted", 0);
 
             JOptionPane.showMessageDialog(null, myImpDetail.getMessage());
             this.dispose();

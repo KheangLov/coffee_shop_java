@@ -287,15 +287,13 @@ public class AppHelper {
     }
     
     public static ArrayList<String> getCombos(String col, String tblName, String whereCol, String ids) {
-        System.out.println(ids);
         ArrayList<String> list = new ArrayList<>();
         PreparedStatement st;
         ResultSet rs;
         String sql = "SELECT `" + col + "` FROM `" + tblName + "` "
-            + "WHERE `" + whereCol + "` IN (?)";
+            + "WHERE `" + whereCol + "` IN (" + ids + ")";
         try {
             st = DbConn.getConnection().prepareStatement(sql);
-            st.setString(1, ids);
             rs = st.executeQuery();
             while(rs.next())
                 list.add(rs.getString(col));

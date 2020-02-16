@@ -40,6 +40,7 @@ public class Stock extends Action {
     private int userId;
     private String stockCateName;
     private boolean inserted;
+    private boolean outOfStock;
 
     public Stock(int tblId, String name, double qty, String measureUnit, String stockCateName, int id) {
         this.tblId = tblId;

@@ -3,9 +3,15 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/kheang/java/coffee_shop_java/src/coffee_shop_java/project/Login.java</file>
-            <file>file:/D:/kheang/java/coffee_shop_java/src/coffee_shop_java/report/receipt.jrxml</file>
-            <file>file:/D:/kheang/java/coffee_shop_java/src/coffee_shop_java/project/ImportForm.java</file>
+            <file>file:/D:/Kheang/coffee_shop_java/src/coffee_shop_java/project/Model/OrderDetail.java</file>
+            <file>file:/D:/Kheang/coffee_shop_java/src/coffee_shop_java/project/Main_Menu.java</file>
+            <file>file:/D:/Kheang/coffee_shop_java/src/coffee_shop_java/project/ImportForm.java</file>
+            <file>file:/D:/Kheang/coffee_shop_java/src/coffee_shop_java/project/Login.java</file>
+            <file>file:/D:/Kheang/coffee_shop_java/src/coffee_shop_java/report/receipt.jrxml</file>
+            <file>file:/D:/Kheang/coffee_shop_java/src/coffee_shop_java/project/Model/Order.java</file>
+            <file>file:/D:/Kheang/coffee_shop_java/src/coffee_shop_java/project/Helper/AppHelper.java</file>
+            <file>file:/D:/Kheang/coffee_shop_java/src/coffee_shop_java/project/Payment.java</file>
+            <file>file:/D:/Kheang/coffee_shop_java/src/coffee_shop_java/project/Model/Stock.java</file>
         </group>
     </open-files>
 </project-private>

@@ -37,6 +37,7 @@ public class Order extends Action {
     private int companyId;    
     private int branchId;
     private int inserted;
+    private boolean updated = false;
     
     public Order(int tblId, int id, String number, int waitingNum, String status) {
         this.tblId = tblId;
@@ -109,6 +110,27 @@ public class Order extends Action {
                 JOptionPane.showMessageDialog(null, "Order completed!");
             } else {
                 JOptionPane.showMessageDialog(null, "Data failed to delete!");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, ex);
+        }
+    }
+    
+    public void updateBC(int id) {
+        String sql = "UPDATE orders SET "
+            + "company_id = ?, "
+            + "branch_id = ? "
+            + "WHERE id = ?";
+        try {
+            stmt = DbConn.getConnection().prepareStatement(sql);
+            stmt.setInt(1, companyId);
+            stmt.setInt(2, branchId);
+            stmt.setInt(3, id);
+            int i = stmt.executeUpdate();
+            if(i > 0) {
+                this.updated = true;
+            } else {
+                this.updated = false;
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex);
