@@ -3196,7 +3196,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="txtSearchPro" alignment="1" pref="1478" max="32767" attributes="0"/>
                               <Component id="jScrollPane10" alignment="0" pref="1463" max="32767" attributes="0"/>
-                              <Component id="jPanel5" alignment="0" pref="1468" max="32767" attributes="0"/>
+                              <Component id="jPanel5" alignment="0" pref="1463" max="32767" attributes="0"/>
                               <Component id="jLabel31" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                         </DimensionLayout>
@@ -3379,14 +3379,14 @@
                                       <Component id="jSeparator4" max="32767" attributes="0"/>
                                       <Group type="102" alignment="1" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jPanel14" alignment="0" pref="693" max="32767" attributes="0"/>
+                                              <Component id="jPanel14" alignment="0" pref="691" max="32767" attributes="0"/>
                                               <Component id="lblProAction" alignment="0" min="-2" max="-2" attributes="0"/>
                                               <Component id="txtProName" alignment="0" max="32767" attributes="0"/>
                                               <Component id="jLabel20" alignment="0" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
-                                              <Component id="jPanel34" pref="707" max="32767" attributes="0"/>
+                                              <Component id="jPanel34" pref="704" max="32767" attributes="0"/>
                                               <Component id="txtProDesc" alignment="0" pref="705" max="32767" attributes="0"/>
                                               <Component id="jLabel38" alignment="0" pref="705" max="32767" attributes="0"/>
                                           </Group>
@@ -3398,13 +3398,13 @@
                                       <Group type="102" alignment="1" attributes="0">
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="cbProBranch" alignment="0" pref="705" max="32767" attributes="0"/>
-                                              <Component id="jPanel26" alignment="0" pref="700" max="32767" attributes="0"/>
+                                              <Component id="jPanel26" alignment="0" pref="697" max="32767" attributes="0"/>
                                               <Component id="jLabel26" alignment="0" pref="705" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Component id="cbProCate" alignment="0" pref="705" max="32767" attributes="0"/>
-                                              <Component id="jPanel23" alignment="0" pref="700" max="32767" attributes="0"/>
+                                              <Component id="jPanel23" alignment="0" pref="698" max="32767" attributes="0"/>
                                               <Component id="jLabel23" alignment="0" pref="705" max="32767" attributes="0"/>
                                           </Group>
                                       </Group>
@@ -3417,7 +3417,7 @@
                                           <Component id="btnProDel" min="-2" max="-2" attributes="0"/>
                                       </Group>
                                       <Component id="txtProSearch" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jPanel28" alignment="0" pref="1418" max="32767" attributes="0"/>
+                                      <Component id="jPanel28" alignment="0" pref="1413" max="32767" attributes="0"/>
                                       <Component id="jLabel44" alignment="0" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
@@ -3964,7 +3964,7 @@
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jPanel31" alignment="0" pref="626" max="32767" attributes="0"/>
+                                                      <Component id="jPanel31" alignment="0" pref="624" max="32767" attributes="0"/>
                                                       <Group type="102" alignment="0" attributes="0">
                                                           <Component id="jLabel33" pref="429" max="32767" attributes="0"/>
                                                           <EmptySpace min="-2" pref="194" max="-2" attributes="0"/>
@@ -3973,7 +3973,7 @@
                                                   </Group>
                                                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jPanel32" alignment="0" pref="653" max="32767" attributes="0"/>
+                                                      <Component id="jPanel32" alignment="0" pref="650" max="32767" attributes="0"/>
                                                       <Component id="txtProCateDesc" alignment="0" pref="651" max="32767" attributes="0"/>
                                                       <Component id="jLabel34" alignment="0" min="-2" pref="228" max="-2" attributes="0"/>
                                                   </Group>
@@ -3981,7 +3981,7 @@
                                                   <Component id="btnAddProCate" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <Component id="jScrollPane11" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jPanel6" alignment="0" pref="1418" max="32767" attributes="0"/>
+                                              <Component id="jPanel6" alignment="0" pref="1413" max="32767" attributes="0"/>
                                               <Component id="jLabel35" alignment="0" max="32767" attributes="0"/>
                                               <Component id="jSeparator2" alignment="0" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
@@ -4450,7 +4450,7 @@
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jPanel25" alignment="0" pref="516" max="32767" attributes="0"/>
+                                                      <Component id="jPanel25" alignment="0" pref="513" max="32767" attributes="0"/>
                                                       <Component id="txtProVarPrice" alignment="0" pref="521" max="32767" attributes="0"/>
                                                       <Component id="jLabel39" alignment="0" pref="521" max="32767" attributes="0"/>
                                                   </Group>
@@ -4458,20 +4458,20 @@
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="txtProVarSellingPrice" alignment="0" pref="521" max="32767" attributes="0"/>
                                                       <Component id="jLabel25" alignment="0" pref="521" max="32767" attributes="0"/>
-                                                      <Component id="jPanel35" alignment="0" pref="516" max="32767" attributes="0"/>
+                                                      <Component id="jPanel35" alignment="0" pref="514" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="cbProVarSize" alignment="0" pref="521" max="32767" attributes="0"/>
                                                       <Component id="jLabel40" alignment="0" pref="521" max="32767" attributes="0"/>
-                                                      <Component id="jPanel36" alignment="0" pref="516" max="32767" attributes="0"/>
+                                                      <Component id="jPanel36" alignment="0" pref="513" max="32767" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="jLabel41" alignment="1" pref="521" max="32767" attributes="0"/>
                                                       <Component id="cbProVarProduct" alignment="1" pref="521" max="32767" attributes="0"/>
-                                                      <Component id="jPanel37" alignment="1" pref="516" max="32767" attributes="0"/>
+                                                      <Component id="jPanel37" alignment="1" pref="514" max="32767" attributes="0"/>
                                                       <Component id="btnProVar" alignment="1" min="-2" max="-2" attributes="0"/>
                                                   </Group>
                                               </Group>
@@ -4487,7 +4487,7 @@
                                                   <Component id="btnProVarDel" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <Component id="txtProVarSearch" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jPanel27" pref="1050" max="32767" attributes="0"/>
+                                              <Component id="jPanel27" pref="1045" max="32767" attributes="0"/>
                                               <Component id="jLabel42" alignment="0" max="32767" attributes="0"/>
                                           </Group>
                                           <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
@@ -4573,7 +4573,7 @@
                                           </Group>
                                           <Component id="jScrollPane12" pref="234" max="32767" attributes="0"/>
                                       </Group>
-                                      <Component id="jDesktopPane2" pref="526" max="32767" attributes="0"/>
+                                      <Component id="jDesktopPane2" pref="531" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
@@ -5478,7 +5478,7 @@
                           <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jScrollPane1" alignment="1" max="32767" attributes="0"/>
-                              <Component id="jPanel1" alignment="1" pref="1409" max="32767" attributes="0"/>
+                              <Component id="jPanel1" alignment="1" pref="1399" max="32767" attributes="0"/>
                               <Component id="txtSearchUser" alignment="0" max="32767" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
@@ -7494,7 +7494,7 @@
                                               <Component id="jLabel55" min="-2" pref="42" max="-2" attributes="0"/>
                                           </Group>
                                       </Group>
-                                      <Component id="jDesktopPane3" pref="618" max="32767" attributes="0"/>
+                                      <Component id="jDesktopPane3" pref="623" max="32767" attributes="0"/>
                                   </Group>
                                   <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
                               </Group>
@@ -7738,14 +7738,14 @@
                                               <Component id="jLabel58" alignment="1" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jPanel46" alignment="0" pref="144" max="32767" attributes="0"/>
+                                                      <Component id="jPanel46" alignment="0" pref="146" max="32767" attributes="0"/>
                                                       <Component id="cbOrderProduct1" alignment="0" max="32767" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="cbOrderSize1" alignment="0" max="32767" attributes="0"/>
                                                       <Component id="jLabel56" alignment="0" max="32767" attributes="0"/>
-                                                      <Component id="jPanel45" alignment="0" pref="148" max="32767" attributes="0"/>
+                                                      <Component id="jPanel45" alignment="0" pref="150" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -8232,14 +8232,14 @@
                                               <Component id="jLabel60" alignment="1" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jPanel49" alignment="0" pref="146" max="32767" attributes="0"/>
+                                                      <Component id="jPanel49" alignment="0" pref="148" max="32767" attributes="0"/>
                                                       <Component id="cbOrderProduct2" alignment="0" pref="141" max="32767" attributes="0"/>
                                                   </Group>
                                                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
                                                       <Component id="cbOrderSize2" alignment="0" pref="143" max="32767" attributes="0"/>
                                                       <Component id="jLabel59" alignment="0" max="32767" attributes="0"/>
-                                                      <Component id="jPanel48" alignment="0" pref="146" max="32767" attributes="0"/>
+                                                      <Component id="jPanel48" alignment="0" pref="148" max="32767" attributes="0"/>
                                                   </Group>
                                               </Group>
                                           </Group>
@@ -8603,7 +8603,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="txtSearchStock" alignment="1" pref="1378" max="32767" attributes="0"/>
                               <Component id="jScrollPane2" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jPanel3" alignment="0" pref="1385" max="32767" attributes="0"/>
+                              <Component id="jPanel3" alignment="0" pref="1378" max="32767" attributes="0"/>
                               <Component id="jLabel5" alignment="0" min="-2" max="-2" attributes="0"/>
                           </Group>
                         </DimensionLayout>
@@ -8791,7 +8791,7 @@
                                           <Group type="103" groupAlignment="0" attributes="0">
                                               <Group type="102" attributes="0">
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jPanel20" alignment="0" pref="582" max="32767" attributes="0"/>
+                                                      <Component id="jPanel20" alignment="0" pref="579" max="32767" attributes="0"/>
                                                       <Group type="102" attributes="0">
                                                           <Component id="jLabel19" pref="384" max="32767" attributes="0"/>
                                                           <EmptySpace min="-2" pref="194" max="-2" attributes="0"/>
@@ -8800,7 +8800,7 @@
                                                   </Group>
                                                   <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
                                                   <Group type="103" groupAlignment="0" attributes="0">
-                                                      <Component id="jPanel30" alignment="0" pref="614" max="32767" attributes="0"/>
+                                                      <Component id="jPanel30" alignment="0" pref="610" max="32767" attributes="0"/>
                                                       <Component id="txtStockCateDesc" alignment="0" pref="611" max="32767" attributes="0"/>
                                                       <Component id="jLabel29" min="-2" pref="228" max="-2" attributes="0"/>
                                                   </Group>
@@ -8808,7 +8808,7 @@
                                                   <Component id="btnAddStockCate" min="-2" max="-2" attributes="0"/>
                                               </Group>
                                               <Component id="jScrollPane3" alignment="0" max="32767" attributes="0"/>
-                                              <Component id="jPanel4" alignment="0" pref="1335" max="32767" attributes="0"/>
+                                              <Component id="jPanel4" alignment="0" pref="1328" max="32767" attributes="0"/>
                                               <Component id="jLabel7" alignment="0" max="32767" attributes="0"/>
                                               <Component id="jSeparator1" alignment="0" max="32767" attributes="0"/>
                                               <Group type="102" alignment="0" attributes="0">

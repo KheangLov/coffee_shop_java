@@ -1,23 +1,86 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="receipt" language="groovy" pageWidth="226" pageHeight="566" whenNoDataType="AllSectionsNoDetail" columnWidth="186" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Key" uuid="f6ec8725-dc2f-4ef6-86da-af02f28949dd">
-	<property name="ireport.zoom" value="2.8531167061100033"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="receipt" language="groovy" pageWidth="226" pageHeight="425" whenNoDataType="AllSectionsNoDetail" columnWidth="186" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" whenResourceMissingType="Key" uuid="f6ec8725-dc2f-4ef6-86da-af02f28949dd">
+	<property name="ireport.zoom" value="3.7974983358324153"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="61"/>
-	<queryString language="SQL">
-		<![CDATA[SELECT order_details.*, 
+	<property name="ireport.y" value="0"/>
+	<subDataset name="New Dataset 1" uuid="762eb69f-e02b-48e0-93f7-f1904b05c3a4">
+		<queryString language="SQL">
+			<![CDATA[SELECT order_details.*, 
 products.name, 
 product_variants.size, product_variants.selling_price,
-orders.*,
-users.fullname,
-companies.name as company_name,
-branches.name as branch_name
+orders.*
 FROM order_details
 INNER JOIN product_variants ON order_details.product_variant_id = product_variants.id
 INNER JOIN products ON product_variants.product_id = products.id
-INNER JOIN orders ON order_details.order_id = orders.id
-INNER JOIN users ON orders.user_id = users.id
-INNER JOIN companies ON orders.company_id = companies.id
-INNER JOIN branches ON orders.branch_id = branches.id;]]>
+INNER JOIN orders ON order_details.order_id = orders.id;]]>
+		</queryString>
+		<field name="id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="qty" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="price" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="discount" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="total" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="order_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="product_variant_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="name" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="size" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="selling_price" class="java.math.BigDecimal">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="number" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="waiting_number" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="date" class="java.sql.Timestamp">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="status" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="user_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="member_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="company_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="branch_id" class="java.lang.Integer">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+		<field name="description" class="java.lang.String">
+			<fieldDescription><![CDATA[]]></fieldDescription>
+		</field>
+	</subDataset>
+	<queryString>
+		<![CDATA[SELECT order_details.*, 
+products.name, 
+product_variants.size, product_variants.selling_price,
+orders.*
+FROM order_details
+INNER JOIN product_variants ON order_details.product_variant_id = product_variants.id
+INNER JOIN products ON product_variants.product_id = products.id
+INNER JOIN orders ON order_details.order_id = orders.id;]]>
 	</queryString>
 	<field name="qty" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -99,23 +162,22 @@ INNER JOIN branches ON orders.branch_id = branches.id;]]>
 			</textField>
 			<line>
 				<reportElement x="0" y="0" width="186" height="1" uuid="b25048f2-b81f-44dc-8486-9998711c4f9f"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 			<line>
 				<reportElement x="0" y="43" width="186" height="1" uuid="88157654-704f-4c63-b649-fb0ac495c7f5"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 		</band>
 	</title>
 	<pageHeader>
 		<band height="35" splitType="Stretch">
 			<textField>
-				<reportElement x="35" y="0" width="82" height="23" uuid="f34713c8-2108-4844-b368-e89257c91c06"/>
-				<textElement>
-					<font fontName="Century Gothic" size="18" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[RECEIPT #]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="117" y="0" width="44" height="23" uuid="920ca817-68be-4882-93a8-f59bea2af54b"/>
+				<reportElement x="117" y="0" width="46" height="23" uuid="920ca817-68be-4882-93a8-f59bea2af54b"/>
 				<textElement>
 					<font fontName="Century Gothic" size="18"/>
 				</textElement>
@@ -135,12 +197,22 @@ INNER JOIN branches ON orders.branch_id = branches.id;]]>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{date}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="35" y="0" width="82" height="23" uuid="212a70e6-3d36-4d77-b28d-68408f6b340c"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Century Gothic" size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[RECEIPT #]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
 		<band height="1" splitType="Stretch">
 			<line>
 				<reportElement x="0" y="0" width="186" height="1" uuid="dd467071-89fe-4778-91ef-fd2b6be88d3f"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 		</band>
 	</columnHeader>
@@ -170,56 +242,59 @@ INNER JOIN branches ON orders.branch_id = branches.id;]]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="60" splitType="Stretch">
+		<band height="65" splitType="Stretch">
 			<line>
 				<reportElement x="0" y="0" width="186" height="1" uuid="a0327081-5729-4f0c-9da6-df389c25afcc"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
-			<textField>
-				<reportElement x="0" y="11" width="91" height="13" uuid="dc8299d4-cd17-438b-b709-59efd631260b"/>
+			<staticText>
+				<reportElement x="0" y="11" width="91" height="15" uuid="18f811c4-0e3c-4e8a-8b99-14dd7aa36b7d"/>
 				<textElement>
-					<font fontName="Century Gothic"/>
+					<font fontName="Century Gothic" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[SUBTOTAL:]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="91" y="11" width="95" height="13" uuid="0b11aa9f-a783-4584-a218-2bf4d2fccbef"/>
+				<text><![CDATA[SUBTOTAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="91" y="11" width="95" height="15" uuid="3b69c24d-3139-4da4-94ff-df917f656c8c"/>
 				<textElement textAlignment="Right">
-					<font fontName="Century Gothic"/>
+					<font fontName="Century Gothic" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[SUBTOTAL]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="24" width="91" height="13" uuid="1dfd043d-8556-4292-b235-43d48bbb85ad"/>
+				<text><![CDATA[SUBTOTAL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="26" width="91" height="15" uuid="39b19f0b-7579-4689-bbeb-f363526b742d"/>
 				<textElement>
-					<font fontName="Century Gothic"/>
+					<font fontName="Century Gothic" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[DISCOUNT:$F{discount}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="91" y="24" width="95" height="13" uuid="9bf980df-be85-4a5c-be29-a00f72a3ea23"/>
+				<text><![CDATA[DISCOUNT:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="91" y="26" width="95" height="15" uuid="0180f227-8eb0-4f7c-ac97-ed4849ad00d1"/>
 				<textElement textAlignment="Right">
-					<font fontName="Century Gothic"/>
+					<font fontName="Century Gothic" size="12" isBold="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{discount}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="91" y="37" width="95" height="13" uuid="b0f901c5-6136-4d90-ad73-0592a7872cf0"/>
-				<textElement textAlignment="Right">
-					<font fontName="Century Gothic" isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[TOTAL]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="0" y="37" width="91" height="13" uuid="b1fc182f-d864-4a42-8d33-8a2f5b9ff01d"/>
+				<text><![CDATA[DISCOUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="41" width="91" height="15" uuid="41908194-4038-4ecc-8fe1-ee4c69bd78bc"/>
 				<textElement>
-					<font fontName="Century Gothic" isBold="true"/>
+					<font fontName="Century Gothic" size="12" isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[TOTAL:]]></textFieldExpression>
-			</textField>
+				<text><![CDATA[TOTAL:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="91" y="41" width="95" height="15" uuid="bbe5041b-4099-491c-bca6-8dd84f8bffd7"/>
+				<textElement textAlignment="Right">
+					<font fontName="Century Gothic" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
 		</band>
 	</columnFooter>
 	<pageFooter>
-		<band height="47" splitType="Stretch">
+		<band height="66" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="10" width="186" height="14" uuid="295124cf-d4aa-41cd-ba41-44b903d6d3da"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
@@ -229,6 +304,9 @@ INNER JOIN branches ON orders.branch_id = branches.id;]]>
 			</staticText>
 			<line>
 				<reportElement x="0" y="0" width="186" height="1" uuid="876398d0-d0a2-458d-8e02-3197923e5dc2"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 			<staticText>
 				<reportElement x="0" y="24" width="186" height="14" uuid="e118ea68-6b8e-4d6f-ae78-89635913d209"/>
@@ -239,21 +317,20 @@ INNER JOIN branches ON orders.branch_id = branches.id;]]>
 			</staticText>
 			<line>
 				<reportElement x="0" y="46" width="186" height="1" uuid="4f7f25fa-4cd5-47b9-918e-308aff6b5214"/>
-			</line>
-		</band>
-	</pageFooter>
-	<summary>
-		<band height="21" splitType="Stretch">
-			<line>
-				<reportElement x="0" y="20" width="186" height="1" uuid="0f17a919-926f-4574-a88a-aba0f4620550"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="0" y="0" width="186" height="19" uuid="627e64ec-dd21-463f-9262-9ed5fe44042c"/>
+				<reportElement x="0" y="47" width="186" height="19" uuid="627e64ec-dd21-463f-9262-9ed5fe44042c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="Century Gothic" size="8"/>
 				</textElement>
 				<text><![CDATA[wifi password: not4youbro]]></text>
 			</staticText>
 		</band>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
 	</summary>
 </jasperReport>

@@ -5,8 +5,24 @@
  */
 package coffee_shop_java.project;
 
+import coffee_shop_java.project.Helper.AppHelper;
+import coffee_shop_java.project.Model.Field;
 import coffee_shop_java.project.Model.Order;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -18,20 +34,58 @@ public class Payment extends javax.swing.JFrame {
      * Creates new form Payment
      */
     
+    private double subTotal;
     private double totalPrice;
     private int orderId;
+    private double discount;
+    private double disPrice;
+    private int companyId;
+    private int branchId;
+    private int userId;
+    private String orderDate;
     Order myOrder = new Order();
     
     public Payment() {
         initComponents();
     }
 
-    public Payment(double total, int oId) {
+    public Payment(double total, int oId, double dis, int cId, int bId, int uId, String d) {
         initComponents();
         totalPrice = total;
         orderId = oId;
+        discount = dis;
+        companyId = cId;
+        branchId = bId;
+        userId = uId;
+        orderDate = d;
         String totalText = String.format("$%.2f", total).replace("$0.", "$.");
         txtTotal.setText(totalText);
+    }
+    
+    public Collection orderData() {    
+        ArrayList<Field> arr = new ArrayList<>();
+        String sql = "SELECT * FROM order_details "
+            + "INNER JOIN orders ON order_details.order_id = orders.id "
+            + "INNER JOIN product_variants ON order_details.product_variant_id = product_variants.id "
+            + "INNER JOIN products ON product_variants.product_id = products.id "
+            + "WHERE order_details.order_id = ?";
+        ResultSet rs = AppHelper.selectQuery(sql, orderId);
+        try {
+            while (rs.next()) {
+                String name = rs.getString("name");
+                double qty = rs.getDouble("qty");
+                double price = rs.getDouble("price");
+                subTotal += price;              
+                double total = rs.getDouble("total");
+                int waiting_number = rs.getInt("waiting_number");
+                Field f = new Field(name, qty, price, total, waiting_number);
+                arr.add(f);
+            }
+            return arr;
+        } catch (SQLException ex) {
+            Logger.getLogger(Payment.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
     /**
@@ -361,6 +415,27 @@ public class Payment extends javax.swing.JFrame {
             txtReceive.requestFocus();
         } else {
             myOrder.update(orderId, "status", "paid");
+            String username = AppHelper.getName(userId, "fullname", "users", "id");
+            String companyName = AppHelper.getName(companyId, "name", "companies", "id");
+            String branchName = AppHelper.getName(branchId, "name", "branches", "id");
+            try {
+                JasperReport jp = JasperCompileManager.compileReport("src/coffee_shop_java/report/invoice.jrxml");
+                JRBeanCollectionDataSource jcd = new JRBeanCollectionDataSource(orderData());
+                disPrice = (subTotal * discount) / 100;
+                HashMap param = new HashMap();
+                param.put("company_name", companyName);
+                param.put("branch_name", branchName);
+                param.put("cashier", username);
+                param.put("date", orderDate);
+                param.put("subtotal", subTotal);
+                param.put("discount", discount);
+                param.put("dis_price", disPrice);
+                param.put("total", totalPrice);
+                JasperPrint print = JasperFillManager.fillReport(jp, param, jcd);
+                JasperViewer.viewReport(print, false);
+            } catch (JRException ex) {
+                Logger.getLogger(Payment.class.getName()).log(Level.SEVERE, null, ex);
+            }
             this.dispose();
         }
     }//GEN-LAST:event_btnPayMouseClicked

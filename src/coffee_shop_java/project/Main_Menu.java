@@ -10227,9 +10227,14 @@ public class Main_Menu extends javax.swing.JFrame {
                 double total = rs.getDouble("selling_price") * qty;
                 double dis = (total * discount) / 100;
                 double subTotal = total - dis;
-                String totalText = String.format("$%.2f", subTotal).replace("$0.", "$.");
-                txtTotal.setText(totalText);
+                if (myOD.getAllTotal() > 0) {
+                    myOD.setAllTotal(subTotal + myOD.getTotal());
+                } else {
+                    myOD.setAllTotal(subTotal);
+                }
                 myOD.setTotal(subTotal);
+                String totalText = String.format("$%.2f", myOD.getAllTotal()).replace("$0.", "$.");
+                txtTotal.setText(totalText);
                 myOD.insert();
                 
                 myCart.setName(rs.getString("name"));
@@ -10386,6 +10391,8 @@ public class Main_Menu extends javax.swing.JFrame {
                         "Discount"
                     }
                 ));
+                txtOrderQty.setText("");
+                txtOrderDis.setText("");
 
                 cbOrderSize.setSelectedIndex(0);
                 cbOrderBranch.removeAllItems();
@@ -10485,7 +10492,7 @@ public class Main_Menu extends javax.swing.JFrame {
         if(!canPay) {
             JOptionPane.showMessageDialog(null, "You haven't place your order yet!");
         } else {
-            new Payment(myOD.getTotal(), myOrder.getId()).setVisible(true);
+            new Payment(myOD.getAllTotal(), myOrder.getId(), myOD.getDiscount(), myOrder.getCompanyId(), myOrder.getBranchId(), myOrder.getUserId(), myOrder.getDate()).setVisible(true);
         }
     }//GEN-LAST:event_btnOrderPayMouseClicked
 

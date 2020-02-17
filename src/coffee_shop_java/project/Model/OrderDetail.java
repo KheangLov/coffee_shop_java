@@ -32,6 +32,7 @@ public class OrderDetail extends Action {
     private double discount;
     private int orderId;
     private double total;
+    private double allTotal;
     private boolean inserted;
 
     @Override
