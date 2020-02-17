@@ -15,6 +15,7 @@ import coffee_shop_java.project.Model.StockCategory;
 import coffee_shop_java.project.Model.StockProduct;
 import coffee_shop_java.project.Model.Company;
 import coffee_shop_java.project.Model.DbConn;
+import coffee_shop_java.project.Model.Field;
 import coffee_shop_java.project.Model.Order;
 import coffee_shop_java.project.Model.OrderDetail;
 import coffee_shop_java.project.Model.Product;
@@ -10393,6 +10394,7 @@ public class Main_Menu extends javax.swing.JFrame {
                 ));
                 txtOrderQty.setText("");
                 txtOrderDis.setText("");
+                txtTotal.setText("");
 
                 cbOrderSize.setSelectedIndex(0);
                 cbOrderBranch.removeAllItems();

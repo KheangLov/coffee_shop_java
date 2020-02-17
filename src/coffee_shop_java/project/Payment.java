@@ -10,6 +10,7 @@ import coffee_shop_java.project.Model.Field;
 import coffee_shop_java.project.Model.Order;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

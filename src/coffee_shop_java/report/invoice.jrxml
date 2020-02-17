@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice" language="groovy" pageWidth="226" pageHeight="354" whenNoDataType="AllSectionsNoDetail" columnWidth="186" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="1b3dc3f7-2d67-49ed-85e5-cce6b1014bed">
 	<property name="ireport.zoom" value="4.177248169415658"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="336"/>
+	<property name="ireport.y" value="288"/>
 	<parameter name="company_name" class="java.lang.String"/>
 	<parameter name="branch_name" class="java.lang.String"/>
 	<parameter name="cashier" class="java.lang.String"/>
@@ -95,7 +95,7 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="49" splitType="Stretch">
+		<band height="52" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="12" width="97" height="16" uuid="df366502-9186-4b00-9d66-e18ec23deee3"/>
 				<textElement>
@@ -104,14 +104,14 @@
 				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="97" y="12" width="89" height="16" uuid="f3e52463-4874-4426-a324-2a39ac46ea02"/>
+				<reportElement x="144" y="12" width="42" height="16" uuid="f3e52463-4874-4426-a324-2a39ac46ea02"/>
 				<textElement textAlignment="Right">
 					<font fontName="Century Gothic"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="26" y="28" width="29" height="10" uuid="9086c7e4-29fa-4874-9850-742aa960ac33"/>
+				<reportElement x="26" y="28" width="13" height="10" uuid="9086c7e4-29fa-4874-9850-742aa960ac33"/>
 				<textElement>
 					<font fontName="Century Gothic" size="8"/>
 				</textElement>
@@ -125,19 +125,26 @@
 				<text><![CDATA[x]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="55" y="28" width="21" height="10" uuid="4040230d-2f1c-452d-ba02-a0e95624b802"/>
+				<reportElement x="39" y="28" width="21" height="10" uuid="4040230d-2f1c-452d-ba02-a0e95624b802"/>
 				<textElement textAlignment="Right">
 					<font fontName="Century Gothic" size="8"/>
 				</textElement>
 				<text><![CDATA[@ $]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="76" y="28" width="47" height="10" uuid="f9e354f9-2ebc-414f-a074-7666e998304c"/>
+				<reportElement x="60" y="28" width="47" height="10" uuid="f9e354f9-2ebc-414f-a074-7666e998304c"/>
 				<textElement>
 					<font fontName="Century Gothic" size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{price}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="97" y="12" width="47" height="16" uuid="beabf3e6-6c17-4ea2-8830-940f37e58256"/>
+				<textElement textAlignment="Right">
+					<font fontName="Century Gothic"/>
+				</textElement>
+				<text><![CDATA[$]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>
